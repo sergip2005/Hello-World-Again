@@ -364,7 +364,9 @@ $config['modules_locations'] = array(
 		APPPATH.'modules/' => '../modules/',
 	);
 
+/** layouts dirs */
 $config['layout_dir'] = 'layout/default/';
+$config['layout_ap_dir'] = 'layout/admin/';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

@@ -29,7 +29,7 @@ class Auth extends MY_Controller {
 
 			//list the users
 			$this->data['users'] = $this->ion_auth->get_users_array();
-			$this->load->view('auth/index', $this->data);
+			$this->load->view('pages/auth/index', $this->data);
 		}
 	}
 
@@ -75,7 +75,7 @@ class Auth extends MY_Controller {
 				'type' => 'password',
 			);
 
-			$this->load->view('auth/login', $this->data);
+			$this->load->view('pages/auth/login', $this->data);
 		}
 	}
 
@@ -128,7 +128,7 @@ class Auth extends MY_Controller {
 			);
 
 			//render
-			$this->load->view('auth/change_password', $this->data);
+			$this->load->view('pages/auth/change_password', $this->data);
 		}
 		else
 		{
@@ -161,7 +161,7 @@ class Auth extends MY_Controller {
 			);
 			//set any errors and display the form
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-			$this->load->view('auth/forgot_password', $this->data);
+			$this->load->view('pages/auth/forgot_password', $this->data);
 		}
 		else
 		{
@@ -236,7 +236,7 @@ class Auth extends MY_Controller {
 			// insert csrf check
 			$this->data['csrf'] = $this->_get_csrf_nonce();
 			$this->data['user'] = $this->ion_auth->get_user_array($id);
-			$this->load->view('auth/deactivate_user', $this->data);
+			$this->load->view('pages/auth/deactivate_user', $this->data);
 		}
 		else
 		{
@@ -350,7 +350,7 @@ class Auth extends MY_Controller {
 				'type' => 'password',
 				'value' => $this->form_validation->set_value('password_confirm'),
 			);
-			$this->load->view('auth/create_user', $this->data);
+			$this->load->view('pages/auth/create_user', $this->data);
 		}
 	}
 

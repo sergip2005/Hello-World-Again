@@ -39,6 +39,11 @@ class Pages extends MY_Controller {
 		$this->load->view($this->config->item('layout_dir') . 'index', $data);
 	}
 
+	public function _return_ap_page($data)
+	{
+		$this->load->view($this->config->item('layout_ap_dir') . 'index', $data);
+	}
+
 	/**
 	 * 
 	 */
