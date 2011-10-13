@@ -41,7 +41,7 @@ class Pages extends MY_Controller {
 
 	public function _return_ap_page($data)
 	{
-		$data['title'] = ($data['title'] ? ' - ' : '' ) . 'Админ панель';
+		$data['title'] .= ($data['title'] ? ' - ' : '' ) . 'Админ панель';
 		$this->load->view($this->config->item('layout_ap_dir') . 'index', $data);
 	}
 

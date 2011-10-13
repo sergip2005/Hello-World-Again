@@ -249,7 +249,10 @@ body {
 	color: #333;
 }
  
- 
+.user-menu  ul li {
+	float: left;
+	width: 150px;
+}
  
  
  
