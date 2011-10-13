@@ -21,7 +21,7 @@
 		<link rel="shortcut icon" href="/favicon.ico">
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-		<link rel="stylesheet" href="/assets/css/style.css?v=2">
+		<link rel="stylesheet" href="/assets/css/admin_style.css?v=1">
 
 		<!-- Uncomment if you are specifically targeting less enabled mobile browsers
 		<link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
