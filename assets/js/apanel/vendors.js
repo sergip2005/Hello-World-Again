@@ -9,16 +9,8 @@ $(document).ready(function () {
 					{
 						id: 0,
 						item: '',
-						points: '',
-						name: '',
-						login: '',
-						email: '',
-						phone: '',
-						title: '',
-						point_id: '',
-						login_allowed: '',
-						role: '',
-						note: ''
+						name: ''
+
 					}
 				));
 				pc.submit(function(e){
@@ -32,9 +24,9 @@ $(document).ready(function () {
 							if (resp.status === 1) {
 								app.showMessage({html: resp.message});
 								// update cache
-								app.cache.vendors[resp.item.id] = resp.item;
-								vendors.append(_.template(app.templates.vendors.ul, resp.item));
-								sii.html(_.template(app.templates.vendors.show, resp.item));
+								app.cache.vendors[resp.item.id] = resp;
+								vendors.append(_.template(app.templates.vendors.ul, resp));
+								sii.html(_.template(app.templates.vendors.show, resp));
 							} else {
 								app.showMessage({html: resp.error});
 							}
@@ -169,7 +161,26 @@ $(document).ready(function () {
 				// show received cats data
 				sii.html(_.template(app.templates.vendors.show, item));
 			});
-		});
+		}).delegate('input.vendor-show', 'click', function (e) {
+			
+            var a = $(this).next();
+            $.ajax({
+					url: app.urls.checkboxVendor,
+					type: 'post',
+					dataType: 'json',
+					data: {
+						id: a.attr('id').substr(1),
+                        show: $(this).val()
+					},
+					success: function(resp){
+						if (resp.status === 1) {
+                            $(this).val() == 0 ? $(this).val() = 1 : $(this).val() = 0
+						} else {
+							
+						}
+					}
+				});
+        });
 
 	sii.delegate('span.edit', 'click', function(e){
 		/** EDIT CATEGORY

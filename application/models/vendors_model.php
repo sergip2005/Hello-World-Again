@@ -29,6 +29,12 @@ class Vendors_model extends CI_Model
 		return $this->db->get(self::TABLE, $n * self::PER_PAGE, self::PER_PAGE)->result_array();
 	}
 
+    public function get($id)
+	{
+        $res = $this->db->where('id', $id)->get(self::TABLE)->result_array();
+        return $res[0];
+    }
+
 	public function getAll($format = 'array')
 	{
 		$res = $this->db->get(self::TABLE)->result_array();
@@ -54,4 +60,26 @@ class Vendors_model extends CI_Model
 		return $res;
 	}
 
+    public function remove($id)
+	{
+        $error = false;
+        if (isset($id) && intval($id) > 0) {
+            if (!$this->db->where('id', $id)->delete(self::TABLE)) {
+				$error = true;
+			}
+        }
+        return $error ? false : true;
+    }
+
+    public function checkbox($id, $data)
+    {
+        $error = false;
+        if (isset($id) && intval($id) > 0) {
+            if (!$this->db->where('id', $id)->update(self::TABLE, $data)) {
+				$error = true;
+			}
+        }
+        return $error ? false : true;
+    }
+   
 }
