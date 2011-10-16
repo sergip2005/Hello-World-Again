@@ -71,10 +71,24 @@ var app = {
 			clb();
 		}
 	},
+	initMessages: function(){
+		this.message = $('#message');
+		this.messageContent = $('#message-content');
+
+		var ap = this;
+		ap.message.contents('img.close').click(function(){
+			ap.message.fadeOut();
+		});
+	},
 
 	/** shows "loading.." content in container waiting for data */
 	showLoading: function(elm){
 		$(elm).html(this.text.loading);
+	},
+
+	/** @TODO INIT */
+	init: function(){
+		this.initMessages();
 	},
 
 	templates: {
@@ -121,3 +135,7 @@ var app = {
 		}
 	}
 };
+
+$(document).ready(function(){
+	app.init();
+});

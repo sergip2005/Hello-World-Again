@@ -368,5 +368,12 @@ $config['modules_locations'] = array(
 $config['layout_dir'] = 'layout/default/';
 $config['layout_ap_dir'] = 'layout/admin/';
 
+/** assets versioning */
+$config['js_version'] = 1;
+$config['css_version'] = 1;
+
+$config['apanel_js_version'] = 1;
+$config['apanel_css_version'] = 1;
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */

@@ -22,11 +22,25 @@
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 		<link rel="stylesheet" href="/assets/css/style.css?v=2">
+		<?php
+			if (isset($css) && count($css) > 0) {
+				foreach ($css as $name) {
+					echo '<link rel="stylesheet" href="/assets/css/' . $name . '?v=' . $this->config->item('css_version') . '">';
+				}
+			}
+		?>
 
 		<!-- Uncomment if you are specifically targeting less enabled mobile browsers
 		<link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
 
 		<script src="/assets/js/libs/jquery.1.6.4.min.js"></script>
+		<?php
+			if (isset($js) && count($js) > 0) {
+				foreach ($js as $name) {
+					echo '<script src="/assets/js/' . $name . '?v=' . $this->config->item('js_version') . '"></script>';
+				}
+			}
+		?>
 	</head>
 	<body>
 		<div class="container">
