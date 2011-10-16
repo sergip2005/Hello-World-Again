@@ -35,7 +35,6 @@ class Vendors extends MY_Controller {
 	public function save()
 	{
         $id = intval($this->input->post('id'));
-        ob_start();
         $name = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('name'));
         $data = array('name' => $name);
 
