@@ -21,6 +21,9 @@ class Vendors extends MY_Controller {
 		$vendors  = $this->_m->getAll();
 		$template = array(
 			'title'			=> '',
+			'description'	=> '',
+			'keywords'		=> '',
+			'js'			=> array('js' => 'apanel/vendors.js'),
 			'body'			=> $this->load->view('pages/vendors/index', array('vendors' => $vendors), true),
 		);
 	

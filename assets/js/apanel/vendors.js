@@ -49,6 +49,9 @@ $(document).ready(function () {
 
 		/** */
 		editVendor = function (elm) {
+			$(elm).next().next().hide();
+			$(elm).next().next().next().hide();
+			$(elm).next().next().next().next().hide();
 			var a = $(elm).parent(),
 				name = a.contents('span.name'),
 				title = $.trim(name.text()),
@@ -72,6 +75,9 @@ $(document).ready(function () {
 									app.showMessage({html: resp.message});
 									name.html(resp.item.name);
 									$(elm).show();
+									$(elm).next().next().show();
+									$(elm).next().next().next().show();
+									$(elm).next().next().next().next().show();
 								} else {
 									app.showMessage({html: resp.error});
 								}
@@ -82,6 +88,9 @@ $(document).ready(function () {
 						e.preventDefault();
 						name.html(title);
 						$(elm).show();
+						$(elm).next().next().show();
+						$(elm).next().next().next().show();
+						$(elm).next().next().next().next().show();
 					});
 
 			$(elm).hide();
@@ -100,7 +109,13 @@ $(document).ready(function () {
 					},
 					success: function(resp){
 						if (resp.status === 1) {
-                            $(elm).val() == 0 ? $(elm).val( 1) : $(elm).val(0)
+                           if($(elm).val() == 0) {
+	                          $(elm).val(1);
+	                          $(elm).prev().html(' (активно');
+                           } else{
+	                          $(elm).val(0);
+	                          $(elm).prev().html(' (не активно');
+                           }
 						} else {
 
 						}

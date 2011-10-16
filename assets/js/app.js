@@ -105,11 +105,11 @@ var app = {
 						'<span title="Удалить регион \'<%= item.name %>\'" class="remove-item icon-container fr">' +
 							'<span class="ui-icon ui-icon-close"></span>' +
 						'</span>' +
-						'<span title="Редактировать оегион \'<%= item.name %>\'" class="edit-item icon-container fr">' +
+						'<span title="Редактировать регион \'<%= item.name %>\'" class="edit-item icon-container fr">' +
 							'<span class="ui-icon ui-icon-pencil"></span>' +
 						'</span>' +
 						'<span class="name"><%= item.name %></span>' +
-						' (по умолчнию <input type="radio" class="region-default" name="default" value="<%= item.id %>" >)' +
+						' <span> (</span> <input type="radio" class="region-default" name="default" value="<%= item.id %>" ><span>)</span>' +
 					'</span></li>' +
 				'<% }); %>'
 		},
@@ -122,14 +122,14 @@ var app = {
 					'</form>',
 			item: '<% _.each(items, function(item){ %>' +
 					'<li><span id="v<%= item.id %>">' +
-						'<span title="Удалить поставщика \'<%= item.name %>\'" class="remove-item icon-container fr">' +
+						'<span title="Удалить вендора \'<%= item.name %>\'" class="remove-item icon-container fr">' +
 							'<span class="ui-icon ui-icon-close"></span>' +
 						'</span>' +
-						'<span title="Редактировать поставщика \'<%= item.name %>\'" class="edit-item icon-container fr">' +
+						'<span title="Редактировать вендора \'<%= item.name %>\'" class="edit-item icon-container fr">' +
 							'<span class="ui-icon ui-icon-pencil"></span>' +
 						'</span>' +
 						'<span class="name"><%= item.name %></span>' +
-						' (активно <input type="checkbox" class="vendor-show" name="show" value="0" >)' +
+						'<span> (не активно</span> <input type="checkbox" class="vendor-show" name="show" value="0" ><span>)</span> '+
 					'</span></li>' +
 				'<% }); %>'
 		}

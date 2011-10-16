@@ -23,10 +23,8 @@ class Content extends MY_Controller {
 			'title'			=> '',
 			'description'	=> '',
 			'keywords'		=> '',
-			'top_menu'		=> $this->load->view($this->config->item('layout_ap_dir') . 'partials/top_menu', '', true),
-			'user_menu'		=> $this->load->view($this->config->item('layout_ap_dir') . 'partials/user_menu', '', true),
+			'js'			=> array('js' => 'apanel/content.js'),
 			'body'			=> $this->load->view('pages/content/index', array('pages' => $pages), true),
-			'bottom_menu'	=> $this->load->view($this->config->item('layout_ap_dir') . 'partials/bottom_menu', '', true),
 		);
 	
 		Modules::run('pages/_return_ap_page', $template);
@@ -34,15 +32,13 @@ class Content extends MY_Controller {
 
 	public function editor()
 	{
-		$pages  = $this->_m->get();
+	
+		$page  = $this->_m->get(intval($this->input->post('page_id')));
 		$template = array(
 			'title'			=> '',
 			'description'	=> '',
 			'keywords'		=> '',
-			'top_menu'		=> $this->load->view($this->config->item('layout_ap_dir') . 'partials/top_menu', '', true),
-			'user_menu'		=> $this->load->view($this->config->item('layout_ap_dir') . 'partials/user_menu', '', true),
 			'body'			=> $this->load->view('pages/content/editor', array('page' => $page), true),
-			'bottom_menu'	=> $this->load->view($this->config->item('layout_ap_dir') . 'partials/bottom_menu', '', true),
 		);
 
 		Modules::run('pages/_return_ap_page', $template);
