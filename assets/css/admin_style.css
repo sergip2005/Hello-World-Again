@@ -453,22 +453,21 @@ body {
 	box-shadow: 0 0 3px #999;
 	margin-top: 5px;
 }
-#vendors-list, #regions-list {
-	height: 250px;
-	overflow-y: scroll;
-}
+
 #vendors-list ul , #regions-list ul { padding: 0; margin: 0.2em 0 }
-#vendors a, #regions a{
+#vendors > span, #regions > span{
 	font-size: 12px;
 	color: #000;
 	text-decoration: none;
 	display: block;
 	line-height: 16px;
 }
-#vendors a:hover, #regions a:hover  { background: #FFFFA3 }
+#vendors li:hover, #regions li:hover  { background: #FFFFA3 }
 #vendors a.selected, #regions a.selected  { font-weight: bold }
 #vendors li, #regions li { list-style-type: none }
-#vendors a, #regions a  { padding-left: 5px }
+#vendors li > span, #regions li > span  { padding-left: 5px }
+#vendors .ui-icon, #regions .ui-icon { cursor: pointer }
+#vendors form, #regions form { display: inline }
 #vendors .ui-icon, #regions .ui-icon  {
 	display: block;
 	float: left;
@@ -528,3 +527,29 @@ body {
 .ui-icon-plusthick { background-position: -32px -128px; }
 .ui-icon-close { background-position: -80px -128px; }
 .ui-icon-pencil { background-position: -64px -112px; }
+#message {
+	background: #FFF;
+	border: 1px solid #F97272;
+	border-radius: 5px;
+	box-shadow: 0 0 5px #FC9999;
+	padding: 8px 30px 10px 10px;
+	position: fixed;
+	right: 10px;
+	top: 10px;
+	width: 250px;
+	z-index: 100;
+	display: none;
+}
+#message .close {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	cursor: pointer;
+}
+
+#loading {
+	position: fixed;
+	top: 5px;
+	left: 5px;
+	display: none;
+}

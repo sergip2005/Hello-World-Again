@@ -4,35 +4,31 @@ vendors_html_list
 <script src="/assets/js/script.js"></script>
 <script src="/assets/js/plugins.js"></script>
 <script src="/assets/js/apanel/vendors.js"></script>
-<div class="top-icons tar clearfix">
-	<form class="fl" id="search-vendor">
-		<input type="text" name="text" class="text" />
-		<input type="submit" value="Искать" />
-		<input type="button" id="cancel-search-vendor" value="Отменить" />
-	</form>
+<div class="vendors top-icons tar">
 	<a id="create-vendor" class="icon-container" href="#" title="Создать нового поставщика">
 		<span class="ui-icon ui-icon-plusthick"></span>
 	</a>
 </div>
-<div id="vendors-list" class="v-expand">
+
+<div id="vendors-list">
 	<ul id="vendors">
-	<?php foreach ($vendors as $v) { ?>
+		<?php foreach ($vendors as $vendor) { ?>
 		<li>
-            <input type="checkbox" class="vendor-show fl" name="show" value="<?php echo $v['show']; ?>"<?php echo $v['show'] == 1 ?  'checked' : "" ?>>
-			<a href="#" id="c<?php echo $v['id'] ?>">
-				<span class="name"><?php echo $v['name'] ?></span>
-            </a>
+			<span id="v<?php echo $vendor['id']; ?>">
+				<span class="remove-item icon-container fr" title="Удалить поставщик '<?php echo $vendor['name']; ?>'">
+					<span class="ui-icon ui-icon-close"></span>
+				</span>
+				<span class="edit-item icon-container fr" title="Редактировать поставщика '<?php echo $vendor['name']; ?>'">
+					<span class="ui-icon ui-icon-pencil"></span>
+				</span>
+				<span class="name"><?php echo $vendor['name']; ?>
+				</span>
+				(активно
+                <input type="checkbox" class="vendor-show" name="show" value="<?php echo $vendor['show']; ?>"<?php echo $vendor['show'] == 1 ?  'checked' : "" ?>>)
+			</span>
 		</li>
-	<?php } ?>
+		<?php } ?>
 	</ul>
 </div>
-<div class="bottom-icons tar">
-	<a id="ivendors-list" class="icon-container decrease-action" href="#" title="Уменьшить область отображения">
-		<span class="ui-icon ui-icon-arrowstop-1-n"></span>
-	</a>
-	<a id="dvendors-list" class="icon-container increase-action" href="#" title="Увеличить область отображения">
-		<span class="ui-icon ui-icon-arrowstop-1-s"></span>
-	</a>
-</div>
 
-<div id="selected-item-info"></div>
+ 

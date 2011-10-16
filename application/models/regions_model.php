@@ -3,7 +3,11 @@
 class Regions_model extends CI_Model
 {
 	const TABLE = 'regions';
-	
+	const SAVE_SUCCESS = 'Регион успешно сохранен';
+	const CREATE_SUCCESS = 'Регион успешно создан';
+	const REMOVE_SUCCESS = 'Регион успешно удален';
+	const APP_SUBMIT_ERROR = 'Извините, но возникла проблема с обработкой полученных данных. Пожалуйста, попробуйте еще раз.';
+
 	public function save($id, $data)
 	{
 		$error = false;
@@ -25,9 +29,9 @@ class Regions_model extends CI_Model
 
     public function get($id)
 	{
-        $res = $this->db->where('id', $id)->get(self::TABLE)->result_array();
-        return $res[0];
-    }
+       return $this->db->where('id', $id)->get(self::TABLE)->row_array();
+
+	}
 
 	public function getAll($format = 'array')
 	{
@@ -61,7 +65,23 @@ class Regions_model extends CI_Model
             if (!$this->db->where('id', $id)->delete(self::TABLE)) {
 				$error = true;
 			}
+        } else {
+         $error = true;
         }
+        return $error ? false : true;
+    }
+
+	public function set_default($id)
+	{
+        $error = false;
+        if (isset($id) && intval($id) > 0) {
+            if (!$this->db->update(self::TABLE, array('default' => 0)) || !$this->db->where('id', $id)->update(self::TABLE, array('default' => 1))) {
+				$error = true;
+			}
+        } else {
+         $error = true;
+        }
+
         return $error ? false : true;
     }
 
