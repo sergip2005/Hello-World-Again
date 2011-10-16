@@ -50,6 +50,11 @@
 				<p>Все права защищены www.originalspareparts.com</p>
 			</div></div>
 		</div>
+		<div id="message">
+        <img title="Закрыть" class="close" src="/assets/images/icons/close.png">
+        <div id="message-content"></div>
+        </div>
+        <div id="loading"><img src="/assets/images/loaders/loader.gif" alt="loading..." /></div>
 		<!-- JavaScript at the bottom for fast page loading -->
 
 		<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary

@@ -3,7 +3,7 @@
 class Regions extends MY_Controller {
 
 	private $_m;
-
+	
 	function __construct()
 	{
 		parent::__construct();
@@ -41,41 +41,52 @@ class Regions extends MY_Controller {
 
         $data['id'] = $this->_m->save($id, $data );
         if ($data['id'] > 0) {
-            echo json_encode(array(
+            $this->output->set_output(json_encode(array(
                 'status'  => 1,
                 'item'    => $data,
-                'message' => 'SAVE SUCCESS'
-				));
+                'message' => Regions_model::SAVE_SUCCESS
+				)));
         }else {
-			echo json_encode(array('status' => 0, 'error' => 'APP_SUBMIT_ERROR'));
+			echo json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR));
 		}
 	}
 
     public function get()
 	{
         $id = intval($this->input->post('id'));
-        ob_start();
         if ($id > 0) {
 			$data = $this->_m->get($id);
-			echo json_encode(array(
+			$this->output->set_output( json_encode(array(
                 'status'  => 1,
                 'item'    => $data,
-                'message' => 'SAVE SUCCESS'
-				));
+                'message' => Regions_model::SAVE_SUCCESS
+				)));
 		} else {
-			echo json_encode(array('status' => 0, 'error' => 'APP_SUBMIT_ERROR'));
+			$this->output->set_output(json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR)));
 		}
 	}
     public function remove()
 	{
         $id = intval($this->input->post('id'));
-        ob_start();
         if ($this->_m->remove($id)) {
-			echo json_encode(array('status' => 1, 'message' => 'REMOVE_SUCCESS'));
+			$this->output->set_output(json_encode(array('status' => 1, 'message' => Regions_model::REMOVE_SUCCESS)));
 		} else {
-			echo json_encode(array('status' => 0, 'error' => 'APP_SUBMIT_ERROR'));
+			$this->output->set_output(json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR)));
 		}
 
+    }
+
+	public function set_default()
+    {
+        $id = intval($this->input->post('id'));
+
+        $data = array('show' => $this->input->post('show') == 0 ? '1' : '0');
+
+        if ($this->_m->set_default($id, $data)) {
+			$this->output->set_output(json_encode(array('status' => 1, 'message' => Regions_model::SAVE_SUCCESS)));
+		} else {
+			$this->output->set_output(json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR)));
+		}
     }
 
 }

@@ -21,11 +21,10 @@ var app = {
 	urls: {
         saveRegion: '/apanel/regions/save/',
 		removeRegion: '/apanel/regions/remove/',
-		getRegion: '/apanel/regions/get/',
+		set_defaultRegion: '/apanel/regions/set_default/',
 		saveVendor: '/apanel/vendors/save/',
 		removeVendor: '/apanel/vendors/remove/',
-		getVendor: '/apanel/vendors/get/',
-        checkboxVendor: '/apanel/vendors/checkbox/'
+        set_visibleVendor: '/apanel/vendors/set_visible/'
 	},
 
 	text: {
@@ -81,51 +80,44 @@ var app = {
 	templates: {
 
         regions: {
-			edit: '<form action="<%= app.urls.saveRegion %>" class="item-info regions-item">' +
-					'<h1><%= item.id > 0 ? ("Редактирование региона №"  + item.id) : ("Создание нового региона") %></h1>' +
-					'<input type="hidden" name="id" value="<%= item.id %>" />' +
-					'<table>' +
-						'<tr><td>Название:</td><td><input type="text" class="text" value="<%= item.name %>" name="name" /></td></tr>' +
-						'<tr><td colspan="2" class="tar"><button name="cancel">Отменить</button> <button type="submit" disabled="disabled">Сохранить</button></td></tr>' +
-					'</table>' +
-				'</form>',
-			show: '<div class="item-info" id="s<%= item.id %>">' +
-					'<div class="top-icons">' +
-						'<span class="remove icon-container fr" title="Удалить регион \'<%= item.name %>\'">' +
+			edit: '<form action="<%= app.urls.saveRegion %>">' +
+						'<input type="hidden" name="id" value="<%= id %>" />' +
+						'<input type="text" name="name" class="w250" value="<%= title %>" />' +
+						'<button name="save" type="submit">Сохранить</button>' +
+						'<button name="cancel">Отменить</button>' +
+					'</form>',
+			item: '<% _.each(items, function(item){ %>' +
+					'<li><span id="r<%= item.id %>">' +
+						'<span title="Удалить регион \'<%= item.name %>\'" class="remove-item icon-container fr">' +
 							'<span class="ui-icon ui-icon-close"></span>' +
 						'</span>' +
-						'<span class="edit icon-container fr" title="Редактировать регион \'<%= item.name %>\'">' +
+						'<span title="Редактировать оегион \'<%= item.name %>\'" class="edit-item icon-container fr">' +
 							'<span class="ui-icon ui-icon-pencil"></span>' +
 						'</span>' +
-					'</div>' +
-					'<h1 id="name"><%= item.name %></h1>' +
-					'<span class="label">Название</span>: <span id="name"><%= item.name %></span><br />' +
-					'</div>',
-			ul: '<li><a id="c<%= item.id %>" href="#"><span class="name"><%= item.name %></span></a></li>'
+						'<span class="name"><%= item.name %></span>' +
+						' (по умолчнию <input type="radio" class="region-default" name="default" value="<%= item.id %>" >)' +
+					'</span></li>' +
+				'<% }); %>'
 		},
-
 		vendors: {
-			edit: '<form action="<%= app.urls.saveVendor %>" class="item-info users-item">' +
-					'<h1><%= item.id > 0 ? ("Редактирование профиля поставщика №"  + item.id) : ("Создание нового поставщик") %></h1>' +
-					'<input type="hidden" name="id" value="<%= item.id %>" />' +
-					'<table>' +
-						'<tr><td>Название:</td><td><input type="text" class="text" value="<%= item.name %>" name="name" /></td></tr>' +
-						'<tr><td colspan="2" class="tar"><button name="cancel">Отменить</button> <button type="submit" disabled="disabled">Сохранить</button></td></tr>' +
-					'</table>' +
-				'</form>',
-			show: '<div class="item-info" id="s<%= item.id %>">' +
-					'<div class="top-icons">' +
-						'<span class="remove icon-container fr" title="Удалить поставщик \'<%= item.name %>\'">' +
+			edit: '<form action="<%= app.urls.saveVendor %>">' +
+						'<input type="hidden" name="id" value="<%= id %>" />' +
+						'<input type="text" name="name" class="w250" value="<%= title %>" />' +
+						'<button name="save" type="submit">Сохранить</button>' +
+						'<button name="cancel">Отменить</button>' +
+					'</form>',
+			item: '<% _.each(items, function(item){ %>' +
+					'<li><span id="v<%= item.id %>">' +
+						'<span title="Удалить поставщика \'<%= item.name %>\'" class="remove-item icon-container fr">' +
 							'<span class="ui-icon ui-icon-close"></span>' +
 						'</span>' +
-						'<span class="edit icon-container fr" title="Редактировать поставщика \'<%= item.name %>\'">' +
+						'<span title="Редактировать поставщика \'<%= item.name %>\'" class="edit-item icon-container fr">' +
 							'<span class="ui-icon ui-icon-pencil"></span>' +
 						'</span>' +
-					'</div>' +
-					'<h1 id="name"><%= item.name %></h1>' +
-					'<span class="label">Название</span>: <span id="name"><%= item.name %></span><br />' +
-					'</div>',
-			ul: '<li><a id="c<%= item.id %>" href="#"><span class="name"><%= item.name %></span></a></li>'
+						'<span class="name"><%= item.name %></span>' +
+						' (активно <input type="checkbox" class="vendor-show" name="show" value="0" >)' +
+					'</span></li>' +
+				'<% }); %>'
 		}
 	}
 };

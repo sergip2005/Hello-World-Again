@@ -1,97 +1,115 @@
 $(document).ready(function () {
-	var sii = $('#selected-item-info'),
-		regions = $('#regions'),
+	var sil = $('#selected-items-list'),
+		sii = $('#selected-item-info'),
 
-		/** shows popup and hadles ajax call to create new top level cat */
+		/** */
 		createRegion = function (elm) {
-			var pc = $(_.template(
-					app.templates.regions.edit,
-					{
-						id: 0,
-						item: '',
-						name: ''
-
-					}
-				));
-				pc.submit(function(e){
-					e.preventDefault();
-					$.ajax({
-						url: this.action,
-						type: 'post',
-						dataType: 'json',
-						data: $(this).serialize(),
-						success: function(resp){
-							if (resp.status === 1) {
-								app.showMessage({html: resp.message});
-								// update cache
-								app.cache.regions[resp.item.id] = resp;
-								regions.append(_.template(app.templates.regions.ul, resp));
-								sii.html(_.template(app.templates.regions.show, resp));
-							} else {
-								app.showMessage({html: resp.error});
-							}
+			var a = $(elm).parent(),
+				name = a.contents('span.name'),
+				title = $.trim(name.text()),
+				pc = $(_.template(
+						app.templates.regions.edit,
+						{
+							title: '',
+							id: 0
 						}
-					});
-				}).find('input[type="submit"]').prop('disabled', true).end()
-				.find('button[name="cancel"]').click(function(e){
+					)),
+				cr_html = $('<li></li>').html(pc);
+
+			pc.contents('button[name="save"]').click(function(e){
 						e.preventDefault();
-						sii.empty();
+						if (pc.get(0).name.value.length > 0) {
+							$.ajax({
+								url: app.urls.saveRegion,
+								type: 'post',
+								dataType: 'json',
+								data: pc.serialize(),
+								success: function(resp){
+									if (resp.status === 1) {
+										app.showMessage({html: resp.message});
+										cr_html.replaceWith(_.template(app.templates.regions.item, {items: [resp.item]}));
+										$(elm).show();
+									} else {
+										app.showMessage({html: resp.error});
+									}
+								}
+							});
+						}
 					}).end()
-				.find(':text').bind('keyup', function(){
-						pc.find(':submit').prop('disabled', false);
-					}).end();
-			sii.html(pc).find('input[name="name"]').focus();
+				.contents('button[name="cancel"]').click(function(e){
+						e.preventDefault();
+						cr_html.remove();
+						$(elm).show();
+					});
+
+			$(elm).hide();
+			$('#regions').prepend(cr_html);
+			pc.contents('input[name="name"]').focus().select();
 		},
 
 		/** */
 		editRegion = function (elm) {
-			var form = $(elm).parent().parent(),
-				id = form.attr('id').substr(1);
-			getRegion(id, function(item){
-				var pc = $(_.template(app.templates.regions.edit, item));
+			var a = $(elm).parent(),
+				name = a.contents('span.name'),
+				title = $.trim(name.text()),
+				pc = $(_.template(
+						app.templates.regions.edit,
+						{
+							title: title,
+							id: a.attr('id').substr(1)
+						}
+					));
 
-				// bind form actions
-				pc.submit(function(e){
+			pc.contents('button[name="save"]').click(function(e){
 						e.preventDefault();
 						$.ajax({
-							url: this.action,
+							url: app.urls.saveRegion,
 							type: 'post',
 							dataType: 'json',
-							data: $(this).serialize(),
+							data: pc.serialize(),
 							success: function(resp){
 								if (resp.status === 1) {
 									app.showMessage({html: resp.message});
-									// update cache
-									app.cache.regions[resp.item.id] = resp;
-									regions.find('#c' + resp.item.id).replaceWith(_.template(app.templates.regions.ul, resp));
-									sii.html(_.template(app.templates.regions.show, resp));
+									name.html(resp.item.name);
+									$(elm).show();
 								} else {
 									app.showMessage({html: resp.error});
 								}
-								app.popup.add(app.splash).hide();
 							}
 						});
-					}).find('input[type="submit"]').prop('disabled', true).end()
-					.find('button[name="cancel"]').click(function(e){
-							e.preventDefault();
-							getRegion(id, function(item){
-								sii.html(_.template(app.templates.regions.show, item));
-							});
-						}).end()
-					.find(':text').bind('keyup', function(){
-							pc.find(':submit').prop('disabled', false);
-						});
+					}).end()
+				.contents('button[name="cancel"]').click(function(e){
+						e.preventDefault();
+						name.html(title);
+						$(elm).show();
+					});
 
-				sii.html(pc);
-				pc.find('input[name="title"]').focus().select();
+			$(elm).hide();
+			name.html(pc);
+			pc.contents('input[name="name"]').focus().select();
+		},
+		set_defaultRegion = function(elm){
+			$.ajax({
+					url: app.urls.set_defaultRegion,
+					type: 'post',
+					dataType: 'json',
+					data: {
+						id: $(elm).val()
+                       	},
+					success: function(resp){
+						if (resp.status === 1) {
+                            
+						} else {
 
-			});
+						}
+					}
+				});
 		},
 
 		/** */
 		removeRegion = function (elm) {
-			var a = $(elm).parent().parent();
-			if (confirm('Вы действительно хотите удалить поставщика \'' + $.trim(a.text()) + '\'')) {
+			var a = $(elm).parent();
+			if (confirm('Вы действительно хотите удалить регион \'' + $.trim(a.contents('span.name').text()) + '\'')) {
 				$.ajax({
 					url: app.urls.removeRegion,
 					type: 'post',
@@ -103,77 +121,32 @@ $(document).ready(function () {
 						if (resp.status === 1) {
 							app.showMessage({html: resp.message});
 							// remove item li
-							$('#c' + a.attr('id').substr(1)).remove();
-							sii.empty();
+							a.parent().remove();
 						} else {
 							app.showMessage({html: resp.error});
 						}
 					}
 				});
 			}
-		},
-
-		searchRegion = function(text){
-			if (text !== false) {
-				var reg = new RegExp(text, "i");
-				regions.find('span.name').each(function(){
-					$(this).parent().parent().css('display', this.innerHTML.search(reg) >= 0 ? 'block' : 'none');
-				});
-			} else {
-				regions.contents('li').css('display', 'block');
-				$('#search-region').get(0).text.value = '';
-			}
-		},
-
-		getRegion = function(id, callback){
-			if (typeof app.cache.regions[id] === 'undefined') {
-				$.ajax({
-					url: app.urls.getRegion,
-					type: 'post',
-					dataType: 'json',
-					data: { id: id },
-					success: function (resp) {
-						if (resp.status === 1) {
-							app.cache.regions[id] = resp;
-							if (_.isFunction(callback)) {
-								callback(resp);
-							}
-						} else {
-							app.showMessage(resp.error);
-						}
-					}
-				});
-			} else {
-				if (_.isFunction(callback)) {
-					callback(app.cache.regions[id]);
-				}
-			}
 		};
 
 	// INIT CATS NAVIGATION
-	regions.delegate('a', 'click', function (e) {
-			e.preventDefault();
-			regions.find('a.selected').removeClass('selected');
-			var a = $(this).addClass('selected'), id = parseInt(this.id.substr(1), 10);
-
-			// load item's descendants if this information was not already loaded or cache expired
-			getRegion(id, function(item){
-				// show received cats data
-				sii.html(_.template(app.templates.regions.show, item));
-			});
-		});
-
-	sii.delegate('span.edit', 'click', function(e){
+	$('#regions')
+		/** VIEW ITEM
+		   ----------------------------------------------*/
+		.delegate('span.remove-item', 'click', function (e) {
+			e.stopPropagation();e.preventDefault();
+			removeRegion(this);
 		/** EDIT CATEGORY
 		   ----------------------------------------------*/
-			e.stopPropagation();
+		}).delegate('span.edit-item', 'click', function(e){
+			e.stopPropagation();e.preventDefault();
 			editRegion(this);
-		/** REMOVE CAT
+		/** CREATE SUBCAT
 		   ----------------------------------------------*/
-		}).delegate('span.remove', 'click', function(e){
-			e.stopPropagation();
-			removeRegion(this);
-		});
+		}).delegate('input.region-default', 'click', function (e) {
+            set_defaultRegion(this);
+        });
 
 	// INIT UNIQUE BUTTONS ACTIONS
 	/** CREATE TOP CAT
@@ -182,15 +155,4 @@ $(document).ready(function () {
 		e.preventDefault();
 		createRegion(this);
 	});
-
-	$('#search-region').submit(function(e){
-		e.preventDefault();
-		searchRegion(this.text.value);
-	});
-
-	$('#cancel-search-region').click(function(e){
-		e.preventDefault();
-		searchRegion(false);
-	});
-
 });

@@ -4,7 +4,11 @@ class Vendors_model extends CI_Model
 {
 	const TABLE = 'vendors';
 	const PER_PAGE = 25;
-
+	const SAVE_SUCCESS = 'Поставщик успешно сохранен';
+	const CREATE_SUCCESS = 'Поставщик успешно создан';
+	const REMOVE_SUCCESS = 'Поставщик успешно удален';
+	const APP_SUBMIT_ERROR = 'Извините, но возникла проблема с обработкой полученных данных. Пожалуйста, попробуйте еще раз.';
+	
 	public function save($id, $data)
 	{
 		$error = false;
@@ -31,8 +35,8 @@ class Vendors_model extends CI_Model
 
     public function get($id)
 	{
-        $res = $this->db->where('id', $id)->get(self::TABLE)->result_array();
-        return $res[0];
+       
+        return $this->db->where('id', $id)->get(self::TABLE, 1)->row_array();
     }
 
 	public function getAll($format = 'array')
@@ -67,19 +71,11 @@ class Vendors_model extends CI_Model
             if (!$this->db->where('id', $id)->delete(self::TABLE)) {
 				$error = true;
 			}
+        } else {
+         $error = true;
         }
+
         return $error ? false : true;
     }
 
-    public function checkbox($id, $data)
-    {
-        $error = false;
-        if (isset($id) && intval($id) > 0) {
-            if (!$this->db->where('id', $id)->update(self::TABLE, $data)) {
-				$error = true;
-			}
-        }
-        return $error ? false : true;
-    }
-   
 }

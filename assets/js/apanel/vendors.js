@@ -1,97 +1,117 @@
 $(document).ready(function () {
-	var sii = $('#selected-item-info'),
-		vendors = $('#vendors'),
+	var sil = $('#selected-items-list'),
+		sii = $('#selected-item-info'),
 
-		/** shows popup and hadles ajax call to create new top level cat */
+		/** */
 		createVendor = function (elm) {
-			var pc = $(_.template(
-					app.templates.vendors.edit,
-					{
-						id: 0,
-						item: '',
-						name: ''
-
-					}
-				));
-				pc.submit(function(e){
-					e.preventDefault();
-					$.ajax({
-						url: this.action,
-						type: 'post',
-						dataType: 'json',
-						data: $(this).serialize(),
-						success: function(resp){
-							if (resp.status === 1) {
-								app.showMessage({html: resp.message});
-								// update cache
-								app.cache.vendors[resp.item.id] = resp;
-								vendors.append(_.template(app.templates.vendors.ul, resp));
-								sii.html(_.template(app.templates.vendors.show, resp));
-							} else {
-								app.showMessage({html: resp.error});
-							}
+			var a = $(elm).parent(),
+				name = a.contents('span.name'),
+				title = $.trim(name.text()),
+				pc = $(_.template(
+						app.templates.vendors.edit,
+						{
+							title: '',
+							id: 0
 						}
-					});
-				}).find('input[type="submit"]').prop('disabled', true).end()
-				.find('button[name="cancel"]').click(function(e){
+					)),
+				cr_html = $('<li></li>').html(pc);
+
+			pc.contents('button[name="save"]').click(function(e){
 						e.preventDefault();
-						sii.empty();
+						if (pc.get(0).name.value.length > 0) {
+							$.ajax({
+								url: app.urls.saveVendor,
+								type: 'post',
+								dataType: 'json',
+								data: pc.serialize(),
+								success: function(resp){
+									if (resp.status === 1) {
+										app.showMessage({html: resp.message});
+										cr_html.replaceWith(_.template(app.templates.vendors.item, {items: [resp.item]}));
+										$(elm).show();
+									} else {
+										app.showMessage({html: resp.error});
+									}
+								}
+							});
+						}
 					}).end()
-				.find(':text').bind('keyup', function(){
-						pc.find(':submit').prop('disabled', false);
-					}).end();
-			sii.html(pc).find('input[name="name"]').focus();
+				.contents('button[name="cancel"]').click(function(e){
+						e.preventDefault();
+						cr_html.remove();
+						$(elm).show();
+					});
+
+			$(elm).hide();
+			$('#vendors').prepend(cr_html);
+			pc.contents('input[name="name"]').focus().select();
 		},
 
 		/** */
 		editVendor = function (elm) {
-			var form = $(elm).parent().parent(),
-				id = form.attr('id').substr(1);
-			getVendor(id, function(item){
-				var pc = $(_.template(app.templates.vendors.edit, item));
+			var a = $(elm).parent(),
+				name = a.contents('span.name'),
+				title = $.trim(name.text()),
+				pc = $(_.template(
+						app.templates.vendors.edit,
+						{
+							title: title,
+							id: a.attr('id').substr(1)
+						}
+					));
 
-				// bind form actions
-				pc.submit(function(e){
+			pc.contents('button[name="save"]').click(function(e){
 						e.preventDefault();
 						$.ajax({
-							url: this.action,
+							url: app.urls.saveVendor,
 							type: 'post',
 							dataType: 'json',
-							data: $(this).serialize(),
+							data: pc.serialize(),
 							success: function(resp){
 								if (resp.status === 1) {
 									app.showMessage({html: resp.message});
-									// update cache
-									app.cache.vendors[resp.item.id] = resp;
-									vendors.find('#c' + resp.item.id).replaceWith(_.template(app.templates.vendors.ul, resp));
-									sii.html(_.template(app.templates.vendors.show, resp));
+									name.html(resp.item.name);
+									$(elm).show();
 								} else {
 									app.showMessage({html: resp.error});
 								}
-								app.popup.add(app.splash).hide();
 							}
 						});
-					}).find('input[type="submit"]').prop('disabled', true).end()
-					.find('button[name="cancel"]').click(function(e){
-							e.preventDefault();
-							getVendor(id, function(item){
-								sii.html(_.template(app.templates.vendors.show, item));
-							});
-						}).end()
-					.find(':text').bind('keyup', function(){
-							pc.find(':submit').prop('disabled', false);
-						});
+					}).end()
+				.contents('button[name="cancel"]').click(function(e){
+						e.preventDefault();
+						name.html(title);
+						$(elm).show();
+					});
 
-				sii.html(pc);
-				pc.find('input[name="title"]').focus().select();
+			$(elm).hide();
+			name.html(pc);
+			pc.contents('input[name="name"]').focus().select();
+		},
+		set_visibleVendor = function(elm){
+			var a = $(elm).parent();
+            $.ajax({
+					url: app.urls.set_visibleVendor,
+					type: 'post',
+					dataType: 'json',
+					data: {
+						id: a.attr('id').substr(1),
+                        show: $(elm).val()
+					},
+					success: function(resp){
+						if (resp.status === 1) {
+                            $(elm).val() == 0 ? $(elm).val( 1) : $(elm).val(0)
+						} else {
 
-			});
+						}
+					}
+				});
 		},
 
 		/** */
 		removeVendor = function (elm) {
-			var a = $(elm).parent().parent();
-			if (confirm('Вы действительно хотите удалить поставщика \'' + $.trim(a.text()) + '\'')) {
+			var a = $(elm).parent();
+			if (confirm('Вы действительно хотите удалить поставщика \'' + $.trim(a.contents('span.name').text()) + '\'')) {
 				$.ajax({
 					url: app.urls.removeVendor,
 					type: 'post',
@@ -103,96 +123,32 @@ $(document).ready(function () {
 						if (resp.status === 1) {
 							app.showMessage({html: resp.message});
 							// remove item li
-							$('#c' + a.attr('id').substr(1)).remove();
-							sii.empty();
+							a.parent().remove();
 						} else {
 							app.showMessage({html: resp.error});
 						}
 					}
 				});
 			}
-		},
-
-		searchVendor = function(text){
-			if (text !== false) {
-				var reg = new RegExp(text, "i");
-				vendors.find('span.name').each(function(){
-					$(this).parent().parent().css('display', this.innerHTML.search(reg) >= 0 ? 'block' : 'none');
-				});
-			} else {
-				vendors.contents('li').css('display', 'block');
-				$('#search-vendor').get(0).text.value = '';
-			}
-		},
-
-		getVendor = function(id, callback){
-			if (typeof app.cache.vendors[id] === 'undefined') {
-				$.ajax({
-					url: app.urls.getVendor,
-					type: 'post',
-					dataType: 'json',
-					data: { id: id },
-					success: function (resp) {
-						if (resp.status === 1) {
-							app.cache.vendors[id] = resp;
-							if (_.isFunction(callback)) {
-								callback(resp);
-							}
-						} else {
-							app.showMessage(resp.error);
-						}
-					}
-				});
-			} else {
-				if (_.isFunction(callback)) {
-					callback(app.cache.vendors[id]);
-				}
-			}
 		};
 
 	// INIT CATS NAVIGATION
-	vendors.delegate('a', 'click', function (e) {
-			e.preventDefault();
-			vendors.find('a.selected').removeClass('selected');
-			var a = $(this).addClass('selected'), id = parseInt(this.id.substr(1), 10);
-
-			// load item's descendants if this information was not already loaded or cache expired
-			getVendor(id, function(item){
-				// show received cats data
-				sii.html(_.template(app.templates.vendors.show, item));
-			});
-		}).delegate('input.vendor-show', 'click', function (e) {
-			
-            var a = $(this).next();
-            $.ajax({
-					url: app.urls.checkboxVendor,
-					type: 'post',
-					dataType: 'json',
-					data: {
-						id: a.attr('id').substr(1),
-                        show: $(this).val()
-					},
-					success: function(resp){
-						if (resp.status === 1) {
-                            $(this).val() == 0 ? $(this).val() = 1 : $(this).val() = 0
-						} else {
-							
-						}
-					}
-				});
-        });
-
-	sii.delegate('span.edit', 'click', function(e){
+	$('#vendors')
+		/** VIEW ITEM
+		   ----------------------------------------------*/
+		.delegate('span.remove-item', 'click', function (e) {
+			e.stopPropagation();e.preventDefault();
+			removeVendor(this);
 		/** EDIT CATEGORY
 		   ----------------------------------------------*/
-			e.stopPropagation();
+		}).delegate('span.edit-item', 'click', function(e){
+			e.stopPropagation();e.preventDefault();
 			editVendor(this);
-		/** REMOVE CAT
+		/** CREATE SUBCAT
 		   ----------------------------------------------*/
-		}).delegate('span.remove', 'click', function(e){
-			e.stopPropagation();
-			removeVendor(this);
-		});
+		}).delegate('input.vendor-show', 'click', function (e) {
+            set_visibleVendor(this);
+        });
 
 	// INIT UNIQUE BUTTONS ACTIONS
 	/** CREATE TOP CAT
@@ -201,15 +157,4 @@ $(document).ready(function () {
 		e.preventDefault();
 		createVendor(this);
 	});
-
-	$('#search-vendor').submit(function(e){
-		e.preventDefault();
-		searchVendor(this.text.value);
-	});
-
-	$('#cancel-search-vendor').click(function(e){
-		e.preventDefault();
-		searchVendor(false);
-	});
-
 });
