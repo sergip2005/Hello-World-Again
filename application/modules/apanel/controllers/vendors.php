@@ -21,12 +21,7 @@ class Vendors extends MY_Controller {
 		$vendors  = $this->_m->getAll();
 		$template = array(
 			'title'			=> '',
-			'description'	=> '',
-			'keywords'		=> '',
-			'top_menu'		=> $this->load->view($this->config->item('layout_ap_dir') . 'partials/top_menu', '', true),
-			'user_menu'		=> $this->load->view($this->config->item('layout_ap_dir') . 'partials/user_menu', '', true),
 			'body'			=> $this->load->view('pages/vendors/index', array('vendors' => $vendors), true),
-			'bottom_menu'	=> $this->load->view($this->config->item('layout_ap_dir') . 'partials/bottom_menu', '', true),
 		);
 	
 		Modules::run('pages/_return_ap_page', $template);
