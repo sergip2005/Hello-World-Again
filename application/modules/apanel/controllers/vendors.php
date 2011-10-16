@@ -35,19 +35,19 @@ class Vendors extends MY_Controller {
 	public function save()
 	{
         $id = intval($this->input->post('id'));
-        ob_start();
+        //ob_start();
         $name = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('name'));
         $data = array('name' => $name);
 
         $data['id'] = $this->_m->save($id, $data );
         if ($data['id'] > 0) {
-            echo json_encode(array(
+            $this->output->set_output(json_encode(array(
                 'status'  => 1,
                 'item'    => $data,
                 'message' => 'SAVE SUCCESS'
-				));
+				)));
         }else {
-			echo json_encode(array('status' => 0, 'error' => 'APP_SUBMIT_ERROR'));
+			echo $this->output->set_output(json_encode(array('status' => 0, 'error' => 'APP_SUBMIT_ERROR')));
 		}
 	}
 

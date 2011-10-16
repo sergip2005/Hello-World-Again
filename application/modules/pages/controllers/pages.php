@@ -8,17 +8,11 @@ class Pages extends MY_Controller {
 		$this->load->model('pages_m');
 	}
 
-	/**
-	 * 
-	 */
 	public function index()
 	{
 		$this->_return_404('pages');
 	}
 
-	/**
-	 * 
-	 */
 	public function _serve_page($uri)
 	{
 		$page = $this->pages_m->get_page($uri);
@@ -31,23 +25,26 @@ class Pages extends MY_Controller {
 		}
 	}
 
-	/**
-	 * 
-	 */
 	public function _return_page($data)
 	{
+		$data['top_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/top_menu', '', true);
+		$data['user_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/user_menu', '', true);
+		$data['bottom_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/bottom_menu', '', true);
+
 		$this->load->view($this->config->item('layout_dir') . 'index', $data);
 	}
 
 	public function _return_ap_page($data)
 	{
 		$data['title'] .= ($data['title'] ? ' - ' : '' ) . 'Админ панель';
+		$data['bottom_menu'] = $this->load->view($this->config->item('layout_ap_dir') . 'partials/bottom_menu', '', true);
+		$data['top_menu'] = $this->load->view($this->config->item('layout_ap_dir') . 'partials/top_menu', '', true);
+		$data['user_menu'] = $this->load->view($this->config->item('layout_ap_dir') . 'partials/user_menu', '', true);
+		$data['flashmessage'] = $this->session->flashdata('message');
+
 		$this->load->view($this->config->item('layout_ap_dir') . 'index', $data);
 	}
 
-	/**
-	 * 
-	 */
 	public function _return_404($uri)
 	{
 		header('HTTP/1.0 404 Not Found');

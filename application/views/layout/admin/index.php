@@ -22,11 +22,28 @@
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 		<link rel="stylesheet" href="/assets/css/admin_style.css?v=1">
+		<?php
+			if (isset($css) && count($css) > 0) {
+				foreach ($css as $name) {
+					echo '<link rel="stylesheet" href="/assets/css/' . $name . '?v=' . $this->config->item('apanel_css_version') . '">';
+				}
+			}
+		?>
 
 		<!-- Uncomment if you are specifically targeting less enabled mobile browsers
 		<link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
 
 		<script src="/assets/js/libs/jquery.1.6.4.min.js"></script>
+		<script src="/assets/js/libs/underscore-min.js"></script>
+		<script src="/assets/js/plugins.js"></script>
+		<script src="/assets/js/app.js"></script>
+		<?php
+			if (isset($js) && count($js) > 0) {
+				foreach ($js as $name) {
+					echo '<script src="/assets/js/' . $name . '?v=' . $this->config->item('apanel_js_version') . '"></script>';
+				}
+			}
+		?>
 	</head>
 	<body>
 		<div class="container">
@@ -35,10 +52,11 @@
 			<div class="main-menu clearfix"><div class="wrapper clearfix">
 				<?php echo $top_menu ?>
 			</div></div>
+
 			<div class="user-menu clearfix"><div class="wrapper clearfix">
 				<?php echo $user_menu ?>
 			</div></div>
-			
+
 			<div class="content"><div class="wrapper"><?php echo $body; ?></div></div>
 
 			<div class="footer clearfix"><div class="wrapper clearfix">
@@ -75,6 +93,20 @@
 		</script>
 		-->
 
+		<div id="message"<?php echo !empty($flashmessage) ? ' style="display:block"' : '' ?>>
+			<img title="Закрыть" class="close" src="/assets/images/icons/close.png">
+			<div id="message-content"><?php // echo flash message, if any
+				if (!empty($flashmessage)) {
+					echo $flashmessage;
+				}
+			?></div>
+		</div>
+		<div id="loading"><img src="/assets/images/loaders/loader.gif" alt="loading..." /></div>
+		<div id="popup">
+			<img src="/assets/images/icons/close.png" class="close" title="Закрыть" />
+			<div id="popup-content"></div>
+		</div>
+		<div id="splash"></div>
 		<noscript>
 			<div id="noscript-warning"><?php echo lang('noscript', array('vars' => array('domain' => $this->config->item('domain')))); ?></div>
 		</noscript>

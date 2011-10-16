@@ -36,7 +36,7 @@ class MY_Controller extends MX_Controller {
 				'uri_string'		=> FALSE //The URI of the current request	TRUE
 			);
 			$this->output->set_profiler_sections($sections);
-			$this->output->enable_profiler(TRUE);
+			$this->output->enable_profiler(FALSE);
 		}
 	}
 }

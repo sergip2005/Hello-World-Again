@@ -31,8 +31,7 @@ class Vendors_model extends CI_Model
 
     public function get($id)
 	{
-        $res = $this->db->where('id', $id)->get(self::TABLE)->result_array();
-        return $res[0];
+        return $this->db->where('id', $id)->limit(1)->get(self::TABLE)->row_array();
     }
 
 	public function getAll($format = 'array')
@@ -67,6 +66,8 @@ class Vendors_model extends CI_Model
             if (!$this->db->where('id', $id)->delete(self::TABLE)) {
 				$error = true;
 			}
+        } else {
+	        $error = true;
         }
         return $error ? false : true;
     }
