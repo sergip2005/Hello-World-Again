@@ -284,6 +284,33 @@ body {
 	text-align: right;
 }
 
+/** SHEETS
+   ==============================*/
+#sheets {
+	list-style: none;
+	margin: 0;
+}
+
+#sheets li {
+	margin: 10px 0 0 0;
+}
+
+#sheets li label {
+	color: blue;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.sheet-info {
+	border-left: 1px solid #666666;
+	margin: 10px 10px 10px 30px;
+	padding: 5px;
+}
+
+.sheet-info .sheet-cols-values td {
+	padding: 5px;
+}
+
 /** HELPERS
    ==============================*/
 #message {
@@ -527,29 +554,3 @@ body {
 .ui-icon-plusthick { background-position: -32px -128px; }
 .ui-icon-close { background-position: -80px -128px; }
 .ui-icon-pencil { background-position: -64px -112px; }
-#message {
-	background: #FFF;
-	border: 1px solid #F97272;
-	border-radius: 5px;
-	box-shadow: 0 0 5px #FC9999;
-	padding: 8px 30px 10px 10px;
-	position: fixed;
-	right: 10px;
-	top: 10px;
-	width: 250px;
-	z-index: 100;
-	display: none;
-}
-#message .close {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	cursor: pointer;
-}
-
-#loading {
-	position: fixed;
-	top: 5px;
-	left: 5px;
-	display: none;
-}

@@ -76,7 +76,7 @@ var app = {
 		this.messageContent = $('#message-content');
 
 		var ap = this;
-		ap.message.contents('img.close').click(function(){
+		ap.message.contents('img').click(function(){
 			ap.message.fadeOut();
 		});
 	},
@@ -93,7 +93,7 @@ var app = {
 
 	templates: {
 
-        regions: {
+		regions: {
 			edit: '<form action="<%= app.urls.saveRegion %>">' +
 						'<input type="hidden" name="id" value="<%= id %>" />' +
 						'<input type="text" name="name" class="w250" value="<%= title %>" />' +
