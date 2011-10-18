@@ -21,12 +21,10 @@ class Content extends MY_Controller {
 		$pages  = $this->_m->getAllPages();
 		$template = array(
 			'title'			=> '',
-			'description'	=> '',
-			'keywords'		=> '',
 			'js'			=> array('js' => 'apanel/content.js'),
 			'body'			=> $this->load->view('pages/content/index', array('pages' => $pages), true),
 		);
-	
+
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
@@ -34,14 +32,12 @@ class Content extends MY_Controller {
 	{
 		$page_id = intval($this->input->post('page_id'));
 		$page = array('type' => '');
-		if($page_id > 0 )
+		if($page_id > 0)
 		{
 			$page  = $this->_m->get(intval($this->input->post('page_id')));
 		}
 		$template = array(
 			'title'			=> '',
-			'description'	=> '',
-			'keywords'		=> '',
 			'js'			=> array('js' => 'apanel/tiny_mce/tiny_mce.js', 'js2' => 'apanel/editor.js'),
 			'body'			=> $this->load->view('pages/content/editor', array('page' => $page), true),
 		);
