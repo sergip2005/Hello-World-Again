@@ -1,9 +1,3 @@
-regions_html_list
-<script src="/assets/js/libs/underscore-min.js"></script>
-<script src="/assets/js/app.js"></script>
-<script src="/assets/js/script.js"></script>
-<script src="/assets/js/plugins.js"></script>
-<script src="/assets/js/apanel/regions.js"></script>
 <div class="regions top-icons tar">
 	<a id="create-region" class="icon-container" href="#" title="Создать новый регион">
 		<span class="ui-icon ui-icon-plusthick"></span>
@@ -23,8 +17,8 @@ regions_html_list
 				</span>
 				<span class="name"><?php echo $region['name']; ?>
 				</span>
-				(по умолчанию
-                <input type="radio" class="region-default" name="default" value="<?php echo $region['id']; ?>"<?php echo $region['default'] == 1 ?  'checked' : "" ?>>)
+				<?php echo $region['default'] == 1 ? '<span> (по умолчанию</span>' : '<span> (</span>' ?>
+                <input type="radio" class="region-default" name="default" value="<?php echo $region['id']; ?>"<?php echo $region['default'] == 1 ?  'checked' : "" ?>><span> )</span>
 			</span>
 		</li>
 		<?php } ?>

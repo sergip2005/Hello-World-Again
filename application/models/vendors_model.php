@@ -1,13 +1,13 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+п»ї<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Vendors_model extends CI_Model
 {
 	const TABLE = 'vendors';
 	const PER_PAGE = 25;
-	const SAVE_SUCCESS = 'Поставщик успешно сохранен';
-	const CREATE_SUCCESS = 'Поставщик успешно создан';
-	const REMOVE_SUCCESS = 'Поставщик успешно удален';
-	const APP_SUBMIT_ERROR = 'Извините, но возникла проблема с обработкой полученных данных. Пожалуйста, попробуйте еще раз.';
+	const SAVE_SUCCESS = 'Р’РµРЅРґРѕСЂ СѓСЃРїРµС€РЅРѕ СЃРѕС…СЂР°РЅРµРЅ';
+	const CREATE_SUCCESS = 'Р’РµРЅРґРѕСЂ СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅ';
+	const REMOVE_SUCCESS = 'Р’РµРЅРґРѕСЂ СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅ';
+	const APP_SUBMIT_ERROR = 'РР·РІРёРЅРёС‚Рµ, РЅРѕ РІРѕР·РЅРёРєР»Р° РїСЂРѕР±Р»РµРјР° СЃ РѕР±СЂР°Р±РѕС‚РєРѕР№ РїРѕР»СѓС‡РµРЅРЅС‹С… РґР°РЅРЅС‹С…. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РїРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰Рµ СЂР°Р·.';
 	
 	public function save($id, $data)
 	{
