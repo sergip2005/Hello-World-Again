@@ -1,3 +1,8 @@
+<div class="regions top-icons tar">
+	<a id="create-region" class="icon-container" href="/apanel/content/editor" title="Создать новую страницу">
+		<span class="ui-icon ui-icon-plusthick"></span>
+	</a>
+</div>
 <form method="post" id="form" action="/apanel/content/editor">
 	<input type=hidden name="page_id" value="">
 </form>

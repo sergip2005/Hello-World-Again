@@ -32,12 +32,17 @@ class Content extends MY_Controller {
 
 	public function editor()
 	{
-	
-		$page  = $this->_m->get(intval($this->input->post('page_id')));
+		$page_id = intval($this->input->post('page_id'));
+		$page = array('type' => '');
+		if($page_id > 0 )
+		{
+			$page  = $this->_m->get(intval($this->input->post('page_id')));
+		}
 		$template = array(
 			'title'			=> '',
 			'description'	=> '',
 			'keywords'		=> '',
+			'js'			=> array('js' => 'apanel/tiny_mce/tiny_mce.js', 'js2' => 'apanel/editor.js'),
 			'body'			=> $this->load->view('pages/content/editor', array('page' => $page), true),
 		);
 
@@ -46,35 +51,21 @@ class Content extends MY_Controller {
 
 	public function save()
 	{
-        $id = intval($this->input->post('id'));
-
-        $name = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('name'));
-        $data = array('name' => $name);
-        $data['id'] = $this->_m->save($id, $data );
-        if ($data['id'] > 0) {
-            $this->output->set_output(json_encode(array(
-                'status'  => 1,
-                'item'    => $data,
-                'message' => Regions_model::SAVE_SUCCESS
-				)));
-        }else {
-			echo json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR));
-		}
+		if($this->input->post('save') == 'Submit'){
+			$now = unix_to_human(time(), TRUE, 'eu');
+			$id = intval($this->input->post('id'));
+			$data = array(
+				'body'        => htmlspecialchars_decode($this->input->post('body')),
+				'title'       => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '',$this->input->post('title')),
+				'uri'         => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '',$this->input->post('uri')),
+				'keywords'    => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\,\-\/ ]/', '',$this->input->post('keywords')),
+				'description' => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\,\-\/ ]/', '',$this->input->post('description')),
+				'type'        => intval($this->input->post('type')),
+				'last_edited' => $now,
+			);
+			if(isset($id)) $data['created'] = $now;
+			$this->_m->save($id, $data);
+		};
+		redirect('apanel/content', 'refresh');
 	}
-
-    public function get()
-	{
-        $id = intval($this->input->post('id'));
-        if ($id > 0) {
-			$data = $this->_m->get($id);
-			$this->output->set_output( json_encode(array(
-                'status'  => 1,
-                'item'    => $data,
-                'message' => Regions_model::SAVE_SUCCESS
-				)));
-		} else {
-			$this->output->set_output(json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR)));
-		}
-	}
-
 }
