@@ -32,14 +32,12 @@ class Content extends MY_Controller {
 	public function editor()
 	{
 		$page_id = intval($this->input->post('page_id'));
-		$page = array('type' => '');
-		if($page_id > 0 ){
+		$page = array('type' => '', 'status' => '');
+		if($page_id > 0){
 			$page  = $this->_m->get(intval($this->input->post('page_id')));
 		}
 		$template = array(
 			'title'			=> '',
-			'description'	=> '',
-			'keywords'		=> '',
 			'js'			=> array('js' => 'apanel/tiny_mce/tiny_mce.js', 'js2' => 'apanel/editor.js'),
 			'body'			=> $this->load->view('pages/content/editor', array('page' => $page), true),
 		);
@@ -57,10 +55,13 @@ class Content extends MY_Controller {
 				'uri'         => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '',$this->input->post('uri')),
 				'keywords'    => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\,\-\/ ]/', '',$this->input->post('keywords')),
 				'description' => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\,\-\/ ]/', '',$this->input->post('description')),
-				'type'        => intval($this->input->post('type')),
+				'status'      => intval($this->input->post('status')),
 				'last_edited' => $now,
 			);
-			if(!isset($id)) $data['created'] = $now;
+			if(empty($id)) {
+				$data['created'] = $now;
+				$data['type'] = 1;
+			}
 			$this->_m->save($id, $data);
 		};
 		redirect('apanel/content', 'refresh');

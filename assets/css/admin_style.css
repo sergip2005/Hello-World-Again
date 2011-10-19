@@ -553,3 +553,38 @@ body {
 	left: 5px;
 	display: none;
 }
+/* editor form */
+.editor-form{
+	border: 1px solid #BBB;
+	padding: 15px 4px;
+	background: #EEE;
+	color: #203360;
+	font-family: Tahoma, Verdana, sans-serif;
+}
+.editor-form input, textarea, select{
+	border: 1px solid #BBB;
+	padding: 3px;
+	margin-top: 2px;
+}
+.editor-form table{
+	width: 100%;
+	border-collapse: separate;
+}
+
+.editor-form .label{
+	text-align: right;
+	vertical-align: middle;
+	width: 150px;
+}
+.editor-form .label2{
+	text-align: right;
+	vertical-align: middle;
+	width: 205px;
+}
+.editor-form .l{
+	text-align: left;
+	width: 160px;
+}
+.editor-form select, textarea{
+padding: 0px;
+}
