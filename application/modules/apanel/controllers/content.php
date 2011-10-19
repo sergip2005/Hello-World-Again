@@ -26,7 +26,6 @@ class Content extends MY_Controller {
 			'js'			=> array('js' => 'apanel/content.js'),
 			'body'			=> $this->load->view('pages/content/index', array('pages' => $pages), true),
 		);
-	
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
@@ -34,8 +33,7 @@ class Content extends MY_Controller {
 	{
 		$page_id = intval($this->input->post('page_id'));
 		$page = array('type' => '');
-		if($page_id > 0 )
-		{
+		if($page_id > 0 ){
 			$page  = $this->_m->get(intval($this->input->post('page_id')));
 		}
 		$template = array(
@@ -45,14 +43,13 @@ class Content extends MY_Controller {
 			'js'			=> array('js' => 'apanel/tiny_mce/tiny_mce.js', 'js2' => 'apanel/editor.js'),
 			'body'			=> $this->load->view('pages/content/editor', array('page' => $page), true),
 		);
-
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
 	public function save()
 	{
-		if($this->input->post('save') == 'Submit'){
-			$now = unix_to_human(time(), TRUE, 'eu');
+		if($this->input->post('save') == 'Сохранить'){
+			$now = date('Y-m-d H:i:s');
 			$id = intval($this->input->post('id'));
 			$data = array(
 				'body'        => htmlspecialchars_decode($this->input->post('body')),
@@ -63,7 +60,7 @@ class Content extends MY_Controller {
 				'type'        => intval($this->input->post('type')),
 				'last_edited' => $now,
 			);
-			if(isset($id)) $data['created'] = $now;
+			if(!isset($id)) $data['created'] = $now;
 			$this->_m->save($id, $data);
 		};
 		redirect('apanel/content', 'refresh');

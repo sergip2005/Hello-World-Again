@@ -33,7 +33,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colsan = "4"><input type="submit" name="save" value="Submit" /><br /></a><input type="submit" name="cancel" value="Cancel" /></td>
+		<td colsan = "4"><input type="submit" name="save" value="Сохранить" /><br /></a><input type="submit" name="cancel" value="Отмена" /></td>
 	</tr>
 </table>
 <input type="hidden" name="id" value="<?php echo isset($page['id']) ? $page['id'] : '' ?>" />

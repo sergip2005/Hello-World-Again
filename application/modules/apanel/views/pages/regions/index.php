@@ -17,8 +17,8 @@
 				</span>
 				<span class="name"><?php echo $region['name']; ?>
 				</span>
-				<?php echo $region['default'] == 1 ? '<span> (по умолчанию</span>' : '<span> (</span>' ?>
-                <input type="radio" class="region-default" name="default" value="<?php echo $region['id']; ?>"<?php echo $region['default'] == 1 ?  'checked' : "" ?>><span> )</span>
+				<span class="reg-default"><?php echo $region['default'] == 1 ? '( по умолчанию' : ' ( ' ?>
+                <input type="radio" class="region-default" name="default" value="<?php echo $region['id']; ?>"<?php echo $region['default'] == 1 ?  'checked' : "" ?>> )</span>
 			</span>
 		</li>
 		<?php } ?>

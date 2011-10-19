@@ -17,8 +17,8 @@
 				</span>
 				<span class="name"><?php echo $vendor['name']; ?>
 				</span>
-				<?php echo $vendor['show'] == 1 ? '<span> (активно</span>' : '<span> (не активно</span>' ?>
-                <input type="checkbox" class="vendor-show" name="show" value="<?php echo $vendor['show']; ?>"<?php echo $vendor['show'] == 1 ?  'checked' : "" ?>><span>)</span>
+				<span class = "vendors-activity"><?php echo $vendor['show'] == 1 ? ' (активно' : ' (не активно' ?>
+                <input type="checkbox" class="vendor-show" name="show" value="<?php echo $vendor['show']; ?>"<?php echo $vendor['show'] == 1 ?  'checked' : "" ?>>)</span>
 			</span>
 		</li>
 		<?php } ?>

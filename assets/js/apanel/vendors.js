@@ -49,9 +49,7 @@ $(document).ready(function () {
 
 		/** */
 		editVendor = function (elm) {
-			$(elm).next().next().hide();
-			$(elm).next().next().next().hide();
-			$(elm).next().next().next().next().hide();
+			$(elm).parent().find('.vendors-activity').hide();
 			var a = $(elm).parent(),
 				name = a.contents('span.name'),
 				title = $.trim(name.text()),
@@ -74,10 +72,7 @@ $(document).ready(function () {
 								if (resp.status === 1) {
 									app.showMessage({html: resp.message});
 									name.html(resp.item.name);
-									$(elm).show();
-									$(elm).next().next().show();
-									$(elm).next().next().next().show();
-									$(elm).next().next().next().next().show();
+									$(elm).parent().find('.vendors-activity').show();
 								} else {
 									app.showMessage({html: resp.error});
 								}
@@ -88,9 +83,7 @@ $(document).ready(function () {
 						e.preventDefault();
 						name.html(title);
 						$(elm).show();
-						$(elm).next().next().show();
-						$(elm).next().next().next().show();
-						$(elm).next().next().next().next().show();
+						$(elm).parent().find('.vendors-activity').show();
 					});
 
 			$(elm).hide();
@@ -98,7 +91,7 @@ $(document).ready(function () {
 			pc.contents('input[name="name"]').focus().select();
 		},
 		set_visibleVendor = function(elm){
-			var a = $(elm).parent();
+			var a = $(elm).parent().parent();
             $.ajax({
 					url: app.urls.set_visibleVendor,
 					type: 'post',
@@ -111,10 +104,10 @@ $(document).ready(function () {
 						if (resp.status === 1) {
                            if($(elm).val() == 0) {
 	                          $(elm).val(1);
-	                          $(elm).prev().html(' (активно');
+	                          $(elm).parent().html(' (активно <input type="checkbox" class="vendor-show" name="show" value="1" checked>)');
                            } else{
 	                          $(elm).val(0);
-	                          $(elm).prev().html(' (не активно');
+	                          $(elm).parent().html(' (не активно <input type="checkbox" class="vendor-show" name="show" value="0">)');
                            }
 						} else {
 
