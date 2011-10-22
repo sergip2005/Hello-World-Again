@@ -24,13 +24,14 @@ class Content extends MY_Controller {
 			'js'			=> array('js' => 'apanel/content.js'),
 			'body'			=> $this->load->view('pages/content/index', array('pages' => $pages), true),
 		);
+
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
 	public function editor()
 	{
 		$page_id = intval($this->input->post('page_id'));
-		$page = array('type' => '', 'status' => '');
+		$page = array('type' => '');
 		if($page_id > 0)
 		{
 			$page  = $this->_m->get(intval($this->input->post('page_id')));
