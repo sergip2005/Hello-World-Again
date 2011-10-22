@@ -21,8 +21,6 @@ class Content extends MY_Controller {
 		$pages  = $this->_m->getAllPages();
 		$template = array(
 			'title'			=> '',
-			'description'	=> '',
-			'keywords'		=> '',
 			'js'			=> array('js' => 'apanel/content.js'),
 			'body'			=> $this->load->view('pages/content/index', array('pages' => $pages), true),
 		);
@@ -33,7 +31,8 @@ class Content extends MY_Controller {
 	{
 		$page_id = intval($this->input->post('page_id'));
 		$page = array('type' => '', 'status' => '');
-		if($page_id > 0){
+		if($page_id > 0)
+		{
 			$page  = $this->_m->get(intval($this->input->post('page_id')));
 		}
 		$template = array(

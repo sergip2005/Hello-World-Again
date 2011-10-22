@@ -284,6 +284,33 @@ body {
 	text-align: right;
 }
 
+/** SHEETS
+   ==============================*/
+#sheets {
+	list-style: none;
+	margin: 0;
+}
+
+#sheets li {
+	margin: 10px 0 0 0;
+}
+
+#sheets li label {
+	color: blue;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.sheet-info {
+	border-left: 1px solid #666666;
+	margin: 10px 10px 10px 30px;
+	padding: 5px;
+}
+
+.sheet-info .sheet-cols-values td {
+	padding: 5px;
+}
+
 /** HELPERS
    ==============================*/
 #message {

@@ -81,21 +81,30 @@ class Import extends MY_Controller {
 
 		$sheets = array();
 		foreach($objPHPExcel->getSheetNames() as $idx => $sheetName) {
-			$sheets[$idx] = $sheetName;
+			$sheets[$idx]['id'] = $idx;
+			$sheets[$idx]['name'] = $sheetName;
+			$sheets[$idx]['cols_number'] = PHPExcel_Cell::columnIndexFromString($objPHPExcel->setActiveSheetIndex($idx)->getHighestColumn());
+			$sheets[$idx]['rows_number'] = $objPHPExcel->setActiveSheetIndex($idx)->getHighestRow();
 		}
 
+		$mVendors = $this->load->model('vendors_model');
 		$tpl_data = array(
-			'sheets' => $sheets
+			'file_data' => $data,
+			'sheets' => $sheets,
+			'vendors_select' => $mVendors->getAll('select'),
 		);
+
 		$template = array(
-			'title'			=> '',
-			'description'	=> '',
-			'keywords'		=> '',
+			'title'			=> 'Детали импорта',
 			'css'			=> array(),
-			'js'			=> array(),
+			'js'			=> array('apanel/import/details.js'),
 			'body'			=> $this->load->view('pages/import/second_page', $tpl_data, true),
 		);
 		Modules::run('pages/_return_ap_page', $template);
+	}
 
+	public function process_details()
+	{
+		
 	}
 }
