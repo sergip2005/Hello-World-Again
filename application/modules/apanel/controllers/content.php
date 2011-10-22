@@ -31,7 +31,7 @@ class Content extends MY_Controller {
 	public function editor()
 	{
 		$page_id = intval($this->input->post('page_id'));
-		$page = array('type' => '');
+		$page = array('type' => '', 'status' => '');
 		if($page_id > 0)
 		{
 			$page  = $this->_m->get(intval($this->input->post('page_id')));
