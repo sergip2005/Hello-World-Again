@@ -123,7 +123,7 @@ class MX_Router extends CI_Router
 			$this->directory = $module.'/';
 			return array_slice($segments, 1);
 		}
-		
+
 		/* application sub-directory default controller exists? */
 		if (is_file(APPPATH.'controllers/'.$module.'/'.$this->default_controller.$ext)) {
 			$this->directory = $module.'/';

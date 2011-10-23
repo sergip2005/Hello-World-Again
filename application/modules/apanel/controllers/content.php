@@ -21,21 +21,15 @@ class Content extends MY_Controller {
 		$pages  = $this->_m->getAllPages();
 		$template = array(
 			'title'			=> '',
-			'js'			=> array('js' => 'apanel/content.js'),
 			'body'			=> $this->load->view('pages/content/index', array('pages' => $pages), true),
 		);
 
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
-	public function editor()
+	public function editor($page_id = '')
 	{
-		$page_id = intval($this->input->post('page_id'));
-		$page = array('type' => '', 'status' => '');
-		if($page_id > 0)
-		{
-			$page  = $this->_m->get(intval($this->input->post('page_id')));
-		}
+		$page = empty($page_id) ? array('type' => '', 'status' => '') : $this->_m->get(intval($page_id));
 		$template = array(
 			'title'			=> '',
 			'js'			=> array('js' => 'apanel/tiny_mce/tiny_mce.js', 'js2' => 'apanel/editor.js'),
