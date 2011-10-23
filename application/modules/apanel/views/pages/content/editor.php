@@ -15,17 +15,17 @@
 		<td class="label2">Не действителен с:</td><td class="label l"><?php echo isset($page['disabled']) ? $page['disabled'] : '' ?></td>
 	</tr>
 	<tr>
-		<td class="label">Ключевые слова:</td><td colspan = "3"><textarea id="keywords" name="keywords" rows="2" style="width: 99%" ><?php echo isset($page['keywords']) ? $page['keywords'] : '' ?></textarea></td>
+		<td class="label">Ключевые слова:</td><td colspan = "3"><textarea id="keywords" class="text" name="keywords" rows="2"><?php echo isset($page['keywords']) ? $page['keywords'] : '' ?></textarea></td>
 
 	</tr>
 	<tr>
-		<td class="label">Описание:</td><td colspan = "3"><div><textarea id="description" name="description" rows="2" style="width: 99%" ><?php echo isset($page['description']) ? $page['description'] : '' ?></textarea></div></td>
+		<td class="label">Описание:</td><td colspan = "3"><div><textarea id="description" class="text" name="description" rows="2"><?php echo isset($page['description']) ? $page['description'] : '' ?></textarea></div></td>
 
 	</tr>
 	<tr>
 
 		<td colspan = "4">
-		<textarea id="body"class="body" name="body" rows="15"  style="width: 101%">
+		<textarea id="body"class="body" name="body" rows="15"  style="width: 100%">
 		<?php echo isset($page['body']) ? htmlspecialchars($page['body']) : '' ?>
 		</textarea>
 		</td>

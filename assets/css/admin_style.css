@@ -473,6 +473,9 @@ body {
 
 /*list
 ==============================*/
+#pages .b{
+	font-weight: bold;
+}
 #vendors-list, #regions-list, #pages-list  {
 	background: #FFF;
 	border: 1px solid #DDD;
@@ -480,7 +483,6 @@ body {
 	box-shadow: 0 0 3px #999;
 	margin-top: 5px;
 }
-
 #vendors-list ul, #regions-list ul, #pages-list ul { padding: 0; margin: 0.2em 0 }
 #vendors > span, #regions > span, #pages a{
 	font-size: 12px;
@@ -567,6 +569,10 @@ body {
 	border: 1px solid #BBB;
 	padding: 3px;
 	margin-top: 2px;
+}
+.editor-form textarea.text {
+	width: 100%;
+	margin-left:-1px
 }
 .editor-form table{
 	width: 100%;
