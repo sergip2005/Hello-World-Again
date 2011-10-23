@@ -1,40 +1,42 @@
+<div class="editor-form">
 <form method="post" action="/apanel/content/save">
-<table>
+<table style="border-spacing: 8px;">
 	<tr>
-		<td>Название:</td><td><input type="text"  value="<?php echo isset($page['title']) ? $page['title'] : '' ?>" name="title" /></td>
-		<td>Дата создания:</td><td><?php echo isset($page['created']) ? $page['created'] : '' ?></td>
+		<td class="label">Название:</td><td><input style="width: 85%;" type="text"  value="<?php echo isset($page['title']) ? $page['title'] : '' ?>" name="title" /></td>
+		<td class="label2">Дата создания:</td><td class="label l"><?php echo isset($page['created']) ? $page['created'] : '' ?></td>
 	</tr>
 	<tr>
-		<td>URI:</td><td><input type="text" value="<?php echo isset($page['uri']) ? $page['uri'] : '' ?>" name="uri" /></td>
-		<td>Дата последнего редактирования:</td><td><?php echo isset($page['last_edited']) ? $page['last_edited'] : ''  ?></td>
+		<td class="label">URI:</td><td><input style="width: 85%;" type="text" value="<?php echo isset($page['uri']) ? $page['uri'] : '' ?>" name="uri" /></td>
+		<td class="label2">Дата последнего редактирования:</td><td class="label l"><?php echo isset($page['last_edited']) ? $page['last_edited'] : ''  ?></td>
 	</tr>
 	<tr>
-		<td>Тип страницы:</td>
-		<td><select name="type">
-		<option value="0"<?php echo $page['type'] == 0 ? 'selected=\'selected\'' : '' ?>>статическая</option>
-		<option value="1"<?php echo $page['type'] == 1 ? 'selected=\'selected\'' : '' ?>>динамическая</option>
-		</select></td>
-		<td>Не действителен с:</td><td><?php echo isset($page['disabled']) ? $page['disabled'] : '' ?></td>
+		<td class="label"><label for="status">Показывать страницу:</label></td>
+		<td><input type="checkbox" id="status" name="status" value="1" <?php echo $page['status'] == 1 ? 'checked' : ''  ?>></td>
+		<td class="label2">Не действителен с:</td><td class="label l"><?php echo isset($page['disabled']) ? $page['disabled'] : '' ?></td>
 	</tr>
 	<tr>
-		<td>Ключевые слова:</td><td><textarea id="keywords" name="keywords" rows="3" cols="39" ><?php echo isset($page['keywords']) ? $page['keywords'] : '' ?></textarea></td>
-		<td></td><td></td>
+		<td class="label">Ключевые слова:</td><td colspan = "3"><textarea id="keywords" name="keywords" rows="2" style="width: 99%" ><?php echo isset($page['keywords']) ? $page['keywords'] : '' ?></textarea></td>
+
 	</tr>
 	<tr>
-		<td>Описание:</td><td><textarea id="description" name="description" rows="3" cols="39" ><?php echo isset($page['description']) ? $page['description'] : '' ?></textarea></td>
-		<td></td><td></td>
+		<td class="label">Описание:</td><td colspan = "3"><div><textarea id="description" name="description" rows="2" style="width: 99%" ><?php echo isset($page['description']) ? $page['description'] : '' ?></textarea></div></td>
+
 	</tr>
 	<tr>
-		<td></td>
+
 		<td colspan = "4">
-		<textarea id="body"class="body" name="body" rows="15" cols="80" style="width: 80%">
+		<textarea id="body"class="body" name="body" rows="15"  style="width: 101%">
 		<?php echo isset($page['body']) ? htmlspecialchars($page['body']) : '' ?>
 		</textarea>
 		</td>
 	</tr>
 	<tr>
-		<td colsan = "4"><input type="submit" name="save" value="Submit" /><br /></a><input type="submit" name="cancel" value="Cancel" /></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td><input style="margin-right:15px" type="submit" name="save" value="Сохранить" /><input type="submit" name="cancel" value="Отмена" /></td>
 	</tr>
 </table>
 <input type="hidden" name="id" value="<?php echo isset($page['id']) ? $page['id'] : '' ?>" />
 </form>
+</div>

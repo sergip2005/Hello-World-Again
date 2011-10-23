@@ -42,7 +42,9 @@
 $route['default_controller'] = 'phones';
 
 //STATIC PAGES
-$route['about'] = '/pages/serve_page/about';
+$route['about'] = '/static_page/view/about';
+$route['contacts'] = '/static_page/view/contacts';
+$route['how-to-order'] = '/static_page/view/how-to-order';
 
 // AUTH
 $route['login'] = '/auth/login/';

@@ -34,18 +34,5 @@ class Content_model extends CI_Model
 		return $this->db->get(self::TABLE)->result_array();
 	}
 
-    public function remove($id)
-	{
-        $error = false;
-        if (isset($id) && intval($id) > 0) {
-            if (!$this->db->where('id', $id)->delete(self::TABLE)) {
-				$error = true;
-			}
-        } else {
-         $error = true;
-        }
-
-        return $error ? false : true;
-    }
 
 }
