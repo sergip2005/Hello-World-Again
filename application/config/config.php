@@ -375,5 +375,8 @@ $config['css_version'] = 1;
 $config['apanel_js_version'] = 1;
 $config['apanel_css_version'] = 1;
 
+/** uploads */
+$config['upload_path'] = BASEPATH . '../assets/.uploads/';
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */
