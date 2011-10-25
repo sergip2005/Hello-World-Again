@@ -50,6 +50,9 @@ class Import extends MY_Controller {
 		} else {
 			$data = $this->_process_xls_upload($this->upload->data());
 
+			$mVendors = $this->load->model('vendors_model');
+			$data['vendors_select'] = $mVendors->getAll('select');
+
 			$template = array(
 				'title'	=> 'Детали импорта',
 				'css'	=> array(),
@@ -68,17 +71,17 @@ class Import extends MY_Controller {
 
 		$sheets = array();
 		foreach($objPHPExcel->getSheetNames() as $idx => $sheetName) {
+			$s = $objPHPExcel->setActiveSheetIndex($idx);
 			$sheets[$idx]['id'] = $idx;
 			$sheets[$idx]['name'] = $sheetName;
-			$sheets[$idx]['cols_number'] = PHPExcel_Cell::columnIndexFromString($objPHPExcel->setActiveSheetIndex($idx)->getHighestColumn());
-			$sheets[$idx]['rows_number'] = $objPHPExcel->setActiveSheetIndex($idx)->getHighestRow();
+			$sheets[$idx]['cols_number'] = PHPExcel_Cell::columnIndexFromString($s->getHighestColumn());
+			$sheets[$idx]['rows_number'] = $s->getHighestRow();
+			$sheets[$idx]['demo'] = $this->_m->getDemoRows($s, $sheets[$idx]['rows_number'], $sheets[$idx]['cols_number']);
 		}
 
-		$mVendors = $this->load->model('vendors_model');
 		return array(
 			'file_data' => $data,
 			'sheets' => $sheets,
-			'vendors_select' => $mVendors->getAll('select'),
 		);
 	}
 
@@ -87,8 +90,12 @@ class Import extends MY_Controller {
 		$post_data['vendor_id'] = intval($this->input->post('vendors'));
 		$post_data['file'] = $this->input->post('file');
 		$post_data['sheets'] = $this->input->post('sheets');
-		$post_data['model'] = $this->input->post('model');
+		$post_data['model_input'] = $this->input->post('model_input');
+		$post_data['model_select'] = $this->input->post('model_select');
 		$post_data['sheets_names'] = $this->input->post('sheets_names');
+
+		$mVendors = $this->load->model('vendors_model');
+		$post_data['vendors_select'] = $mVendors->getAll('select', array('selected' => $post_data['vendor_id']));
 
 		$objPHPExcel = $this->_m->init_phpexcel_object($this->config->item('upload_path') . $post_data['file']);
 
@@ -108,9 +115,9 @@ class Import extends MY_Controller {
 			}
 			$sheets_data[$sheet]['col_vals'] = $cols;
 			$sheets_data[$sheet]['col_vals_keys_resseted'] = array_values($cols);
+			$sheets_data[$sheet]['fields'] = $this->_m->get_sheet_fields($sheets_data[$sheet]['type']);
 
 			$sheets_data[$sheet]['vendor_id'] = $post_data['vendor_id'];
-			$sheets_data[$sheet]['model'] = $post_data['model'];
 
 			if ($sheets_data[$sheet]['type'] !== '0') {// do not parse sheets without type provided
 				$sheets_data[$sheet]['data'] = $this->_m->get_sheet_data($objPHPExcel->setActiveSheetIndex($sheet), $sheets_data[$sheet]);
@@ -118,19 +125,19 @@ class Import extends MY_Controller {
 		}
 
 		//$this->output->set_output('<pre>' . print_r($sheets_data, TRUE));
-		//$this->output->set_output('<pre>' . print_r($post_data, TRUE));
-
 		$template = array(
 			'title'	=> 'Подтверждение импорта',
 			'css'	=> array(),
 			'js'	=> array('apanel/import/details.js'),
-			'body'	=> $this->load->view('pages/import/third_page', array('sheets' => $sheets_data), true),
+			'body'	=> $this->load->view('pages/import/third_page', array('sheets' => $sheets_data, 'import' => $post_data), true),
 		);
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
-	public function get_sheet_fields()
-	{
-		$this->output->set_output(json_encode($this->_m->get_sheet_fields($this->input->post('sheet'))));
+	public function save(){
+		$sheets = $this->input->post('sheets_data');
+		$vendor = intval($this->input->post('vendor'));
+
+		$this->output->set_output('<pre>' . print_r($_POST, true) . '</pre>');
 	}
 }

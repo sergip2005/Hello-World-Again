@@ -71,6 +71,7 @@ var app = {
 			clb();
 		}
 	},
+
 	initMessages: function(){
 		this.message = $('#message');
 		this.messageContent = $('#message-content');
@@ -86,9 +87,17 @@ var app = {
 		$(elm).html(this.text.loading);
 	},
 
+	initSlideable: function(){
+		$('.slide-trigger').click(function(e){
+			e.preventDefault();
+			$('#' + this.id + '-content').stop().slideToggle('fast');
+		});
+	},
+
 	/** @TODO INIT */
 	init: function(){
 		this.initMessages();
+		this.initSlideable();
 	},
 
 	templates: {
