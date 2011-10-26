@@ -379,3 +379,53 @@ body {
   p, h2, h3 { orphans: 3; widows: 3; }
   h2, h3{ page-break-after: avoid; }
 }
+/*Table parts*/
+table.sofT{
+	text-align: center;
+	font-family: Verdana;
+	font-weight: normal;
+	font-size: 11px;
+	color: #404040;
+	width: 580px;
+	background-color: #fafafa;
+	border: 1px #6699CC solid;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+table.sofT td.helpHed{
+	border-left: 1px solid #6699CC;
+	background-color: #BEC8D1;
+	text-align: left;
+	text-indent: 5px;
+	font-family: Verdana;
+	font-weight: bold;
+	font-size: 11px;
+	color: #404040;
+}
+table.sofT td{
+	border-bottom: 1px solid #6699CC;
+	border-top: 0px;
+	border-left: 1px solid #6699CC;
+	border-right: 0px;
+	text-align: left;
+	padding: 5px;
+}
+.cabinet{
+	display: none;
+}
+#parts{
+	margin: 15px 5px;
+}
+#parts span{
+	cursor: pointer;
+	padding: 5px;
+	margin: 5px;
+	border: 1px solid #6699CC;
+	color: #404040;
+	font-family: Verdana;
+	font-weight: bold;
+}
+#parts span.selected{
+	background-color: #FCC;
+}
+
