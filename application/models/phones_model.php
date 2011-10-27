@@ -4,29 +4,18 @@ class Phones_model extends CI_Model
 {
     public function getAllParts()
 	{
-		$mod = array();
-		$vendor = '';
-		$query = 'SELECT p.model AS model, v.name AS vendor
-				  FROM `phones` p
-				  LEFT JOIN `vendors` v ON p.vendor_id = v.id
-				  WHERE v.name IS NOT NULL
-				  ORDER BY v.name';
-		$q = $this->db->query($query);
-		foreach ($q->result_array() as  $key=>$row)
+		$query = 'SELECT phones.model AS model, vendors.name AS vendor, vendors.id AS vendor_id
+				  FROM `phones`
+				  LEFT JOIN `vendors` ON phones.vendor_id = vendors.id
+				  WHERE vendors.name IS NOT NULL
+				  ORDER BY vendors.name';
+        $q = $this->db->query($query);
+	    $data = array();
+	    foreach ($q->result_array() as $row)
 		{
-			$vendor = $key == 0 ? $row['vendor'] : $vendor;
-			$model = $row['model'];
-			if($vendor == $row['vendor']  ) {
-				$mod[] = $model;
-			}else {
-				$group_vendor[$vendor] = $mod;
-				unset($mod);
-				$mod[] = $model;
-				$vendor = $row['vendor'];
-			}
-			if($key == count($row))	$group_vendor[$vendor] =  $mod;
+			$data[$row['vendor']][] = $row['model'];
 		}
-		return  $group_vendor;
+		return  $data;
     }
 	public function getParts($vendor, $model)
 	{

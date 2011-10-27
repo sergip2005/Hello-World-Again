@@ -6,18 +6,20 @@
 	} else {
 		echo 'Вы не вошли на сайт';
 	}*/
-echo '<ul>';
-foreach ($catalog as  $key => $model)
-{
-	echo'<li>' . $key;
-	foreach ($model as $k => $m)
-	{
-		if($k  == 0) echo '<ul>';
-		echo '<li><a href="phones/' . $key . '/' . $m . '">' . $m . '</a></li>';
-		if($k + 1 == count($model)) echo '</ul>';
-	}
-	echo '</li>';
-}
-echo '</ul>';
 
+	echo '<ul>';
+	foreach ($catalog as  $key => $model)
+	{
+		echo'<li>' . $key;
+		if (count($model) > 0) {
+			echo '<ul>';
+			foreach ($model as $k => $m)
+			{
+				echo '<li><a href="phones/' .  strtolower($key) . '/' . strtolower(str_replace(' ', '_', $m)) . '">' . $m . '</a></li>';
+			}
+			echo '</ul>';
+		}
+		echo '</li>';
+	}
+	echo '</ul>';
 ?>
