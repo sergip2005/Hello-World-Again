@@ -21,7 +21,9 @@ class Phones extends My_Controller {
 	
 	public function parts($vendor, $model)
 	{
-		$parts = $this->phones_model->getParts($vendor, $model);
+		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $vendor);
+		$model = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $model);
+		$parts = $this->phones_model->getParts($vendor, str_replace('_', ' ', $model));
 		$data = array(
 			'title' 		=> 'Вендор: ' . $vendor . ' Модель: ' . $model,
 			'description' 	=> '',
