@@ -6,18 +6,18 @@
 	} else {
 		echo 'Вы не вошли на сайт';
 	}*/
-	echo '<ul>';
-	foreach ($catalog as  $key => $model)
+echo '<ul>';
+foreach ($catalog as  $key => $model)
+{
+	echo'<li>' . $key;
+	foreach ($model as $k => $m)
 	{
-		echo'<li>' . $key;
-		foreach ($model as $k => $m)
-		{
-			if($k  == 0) echo '<ul>';
-			echo '<li><a href="">' . $m . '</a></li>';
-			if($k + 1 == count($model)) echo '</ul>';
-		}
-		echo '</li>';
+		if($k  == 0) echo '<ul>';
+		echo '<li><a href="phones/' . $key . '/' . $m . '">' . $m . '</a></li>';
+		if($k + 1 == count($model)) echo '</ul>';
 	}
-	echo '</ul>';
+	echo '</li>';
+}
+echo '</ul>';
 
 ?>

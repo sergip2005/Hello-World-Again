@@ -21,9 +21,9 @@ class Phones extends My_Controller {
 	
 	public function parts($vendor, $model)
 	{
-		$parts  = $this->phones_model->getParts($vendor, $model);
+		$parts = $this->phones_model->getParts($vendor, $model);
 		$data = array(
-			'title' 		=> 'Главная страница',
+			'title' 		=> 'Вендор: ' . $vendor . ' Модель: ' . $model,
 			'description' 	=> '',
 			'keywords' 		=> '',
 			'body' 			=> $this->load->view('pages/phones/parts', array('parts' => $parts), true),

@@ -6,11 +6,11 @@ class Phones_model extends CI_Model
 	{
 		$mod = array();
 		$vendor = '';
-		$query = 'SELECT phones.model AS model, vendors.name AS vendor
-				  FROM `phones`
-				  LEFT JOIN `vendors` ON phones.vendor_id = vendors.id
-				  WHERE vendors.name IS NOT NULL
-				  ORDER BY vendors.name';
+		$query = 'SELECT p.model AS model, v.name AS vendor
+				  FROM `phones` p
+				  LEFT JOIN `vendors` v ON p.vendor_id = v.id
+				  WHERE v.name IS NOT NULL
+				  ORDER BY v.name';
 		$q = $this->db->query($query);
 		foreach ($q->result_array() as  $key=>$row)
 		{
@@ -30,13 +30,13 @@ class Phones_model extends CI_Model
     }
 	public function getParts($vendor, $model)
 	{
-		$query = 'SELECT code, parts.name as parts, phones.model, vendors.name, parts.type
-				  FROM `phones_parts`
-				  LEFT JOIN `parts` ON phones_parts.part_id = parts.id
-				  LEFT JOIN `phones` ON phones_parts.phone_id = phones.id
-				  LEFT JOIN `vendors` ON phones.vendor_id = vendors.id
-				  WHERE vendors.name = "' . $vendor . '" AND phones.model = "' . $model . '"
-				  ORDER BY vendors.name';
+		$query = 'SELECT pa.code as code, pa.name as name, pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type
+				  FROM `phones_parts` pp
+				  LEFT JOIN `parts` pa ON pp.part_id = pa.id
+				  LEFT JOIN `phones` p ON pp.phone_id = p.id
+				  LEFT JOIN `vendors` v ON p.vendor_id = v.id
+				  WHERE v.name = "' . $vendor . '" AND p.model = "' . $model . '"
+				  ORDER BY v.name';
 		$q = $this->db->query($query)->result_array();
 		return $q;
 	}
