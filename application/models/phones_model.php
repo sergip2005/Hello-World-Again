@@ -19,7 +19,7 @@ class Phones_model extends CI_Model
     }
 	public function getParts($vendor, $model)
 	{
-		$query = 'SELECT pa.code as code, pa.name as name, pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type
+		$query = 'SELECT pp.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type
 				  FROM `phones_parts` pp
 				  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 				  LEFT JOIN `phones` p ON pp.phone_id = p.id
