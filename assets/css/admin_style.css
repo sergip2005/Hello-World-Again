@@ -311,6 +311,26 @@ body {
 	padding: 5px;
 }
 
+/** tables */
+table.desc {
+	border: 1px solid #999;
+	padding: 3px;
+	background: #FFF;
+}
+
+table.desc tr {
+	height: 25px;
+}
+
+table.desc td {
+	padding: 3px;
+	vertical-align: baseline;
+}
+
+table.desc td.label {
+	padding-right: 15px;
+}
+
 /** HELPERS
    ==============================*/
 #message {
@@ -594,6 +614,55 @@ body {
 	text-align: left;
 	width: 160px;
 }
-.editor-form select, .editor-form textarea{
-padding: 0px;
+
+.editor-form select, textarea{
+padding: 0;
+}
+
+/** import */
+.demo-data {
+	padding: 10px;
+	background: #FFFFFF;
+	border: 1px solid #EEE;
+}
+
+.demo-data table {
+	font-size: 11px;
+}
+
+.demo-data table td {
+	border: 1px solid #999;
+	padding: 3px;
+	margin: 2px;
+}
+
+.slide-content { display: none }
+
+.no-data { color: #333; font-style: italic; }
+
+/** import third page */
+.sheet-import-data {
+	background: #FFF;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.sheet-import-data h2 { color: blue }
+
+.sheet-import-data table td, .sheet-import-data table th {
+	border: 1px solid #EEE;
+	padding: 2px;
+	vertical-align: baseline;
+}
+
+.sheet-import-data table td input[type="text"] {
+	width: 150px;
+}
+
+.sheet-import-data table tbody tr:hover {
+	background: #ffffdd;
+}
+
+.sheet-import-data table th {
+	background: #ffffcc;
 }

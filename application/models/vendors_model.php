@@ -33,12 +33,12 @@ class Vendors_model extends CI_Model
 		return $this->db->get(self::TABLE, $n * self::PER_PAGE, self::PER_PAGE)->result_array();
 	}
 
-    public function get($id)
+	public function get($id)
 	{
-        return $this->db->where('id', $id)->get(self::TABLE, 1)->row_array();
-    }
+		return $this->db->where('id', $id)->get(self::TABLE, 1)->row_array();
+	}
 
-	public function getAll($format = 'array')
+	public function getAll($format = 'array', $format_options = false)
 	{
 		$res = $this->db->get(self::TABLE)->result_array();
 
@@ -54,7 +54,12 @@ class Vendors_model extends CI_Model
 		if ($format == 'select') {
 			$html = '<select name="vendors">';
 			foreach ($res as $row) {
-				$html .= '<option value="' . $row['id'] . '">' . $row['name'] . '</li>';
+				if ($format_options !== false) {
+					$selected = $row['id'] == $format_options['selected'] ? ' selected="selected"' : '';
+				} else {
+					$selected = '';
+				}
+				$html .= '<option value="' . $row['id'] . '"' . $selected . '>' . $row['name'] . '</li>';
 			}
 			$html .= '</select>';
 			return $html;
@@ -63,18 +68,18 @@ class Vendors_model extends CI_Model
 		return $res;
 	}
 
-    public function remove($id)
+	public function remove($id)
 	{
-        $error = false;
-        if (isset($id) && intval($id) > 0) {
-            if (!$this->db->where('id', $id)->delete(self::TABLE)) {
+		$error = false;
+		if (isset($id) && intval($id) > 0) {
+			if (!$this->db->where('id', $id)->delete(self::TABLE)) {
 				$error = true;
 			}
-        } else {
-         $error = true;
-        }
+		} else {
+		 $error = true;
+		}
 
-        return $error ? false : true;
-    }
+		return $error ? false : true;
+	}
 
 }
