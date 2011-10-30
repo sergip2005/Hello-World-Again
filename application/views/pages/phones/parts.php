@@ -1,21 +1,7 @@
-<script>
-$(document).ready(function() {
-$('.s').click(function() {
-    $('.cabinet').show();
-	$('.solder').hide();
-	$('.c').removeClass("selected");
-	$('.s').addClass("selected")
-    return false;
-  });
-$('.c').click(function() {
-    $('.solder').show();
-	$('.cabinet').hide();
-	$('.s').removeClass("selected");
-	$('.c').addClass("selected")
-    return false;
-  });
-});
-</script>
+<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="demo" title="E75_RM-412_RM-413_Schematics_v0_1">
+    <img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
+</a>
+<div class="clearfix"></div>
 <?php
 if(count($parts) > 0){
 	echo '<div id="parts">

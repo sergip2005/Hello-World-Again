@@ -21,11 +21,13 @@ class Phones extends My_Controller {
 	
 	public function parts($vendor, $model)
 	{
-		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $vendor);
-		$model = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $model);
+		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $vendor);
+		$model = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $model);
 		$parts = $this->phones_model->getParts($vendor, str_replace('_', ' ', $model));
 		$data = array(
 			'title' 		=> 'Раскладка ' . $vendor . ' ' . $model,
+			'js'			=> array('js' => 'apanel/parts.js', 'js2' => 'libs/jquery.jqzoom-core-pack.js'),
+			'css'			=> array('css' => 'jquery.jqzoom.css'),
 			'description' 	=> '',
 			'keywords' 		=> '',
 			'body' 			=> $this->load->view('pages/phones/parts', array('parts' => $parts), true),
