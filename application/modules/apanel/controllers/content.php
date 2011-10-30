@@ -45,10 +45,10 @@ class Content extends MY_Controller {
 			$id = intval($this->input->post('id'));
 			$data = array(
 				'body'        => htmlspecialchars_decode($this->input->post('body')),
-				'title'       => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '',$this->input->post('title')),
-				'uri'         => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '',$this->input->post('uri')),
-				'keywords'    => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\,\-\/ ]/', '',$this->input->post('keywords')),
-				'description' => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\,\-\/ ]/', '',$this->input->post('description')),
+				'title'       => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $this->input->post('title')),
+				'uri'         => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $this->input->post('uri')),
+				'keywords'    => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\,\-\/ ]/ui', '', $this->input->post('keywords')),
+				'description' => preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\,\-\/ ]/ui', '', $this->input->post('description')),
 				'status'      => intval($this->input->post('status')),
 				'last_edited' => $now,
 			);
