@@ -36,6 +36,8 @@ class Import extends MY_Controller {
 
 	function do_xls_upload()
 	{
+		$this->load->model('phones_model');
+
 		$config = array(
 				'upload_path'	=> $this->config->item('upload_path'),
 				'allowed_types' => 'xls|xlsx|pdf|jpg|png|gif',

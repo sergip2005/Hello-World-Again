@@ -311,6 +311,26 @@ body {
 	padding: 5px;
 }
 
+/** tables */
+table.desc {
+	border: 1px solid #999;
+	padding: 3px;
+	background: #FFF;
+}
+
+table.desc tr {
+	height: 25px;
+}
+
+table.desc td {
+	padding: 3px;
+	vertical-align: baseline;
+}
+
+table.desc td.label {
+	padding-right: 15px;
+}
+
 /** HELPERS
    ==============================*/
 #message {
