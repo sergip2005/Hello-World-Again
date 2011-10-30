@@ -615,7 +615,7 @@ table.desc td.label {
 	width: 160px;
 }
 
-.editor-form select, textarea{
+.editor-form select, .editor-form textarea{
 padding: 0;
 }
 
