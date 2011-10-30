@@ -12,3 +12,4 @@ _Tools/CodeIgniter_2.0.3.zip
 .idea/workspace.xml
 application/config/database.php
 user_guide/*
+assets/.uploads/*
