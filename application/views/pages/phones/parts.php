@@ -1,8 +1,24 @@
-<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="demo" title="E75_RM-412_RM-413_Schematics_v0_1">
+<?php
+echo '<ul style="float: left; margin: 15px;">';
+	foreach ($catalog as  $key => $model)
+	{
+		echo'<li>' . $key;
+		if (count($model) > 0) {
+			echo '<ul>';
+			foreach ($model as $k => $m)
+			{
+				echo '<li><a href="/phones/' .  strtolower($key) . '/' . strtolower(str_replace(' ', '_', $m)) . '">' . $m . '</a></li>';
+			}
+			echo '</ul>';
+		}
+		echo '</li>';
+	}
+	echo '</ul>';
+echo '<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="demo" title="E75_RM-412_RM-413_Schematics_v0_1">
     <img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
 </a>
-<div class="clearfix"></div>
-<?php
+<div class="clearfix"></div>';
+
 if(count($parts) > 0){
 	echo '<div id="parts">
 		<span class="s selected">Корпусные </span>

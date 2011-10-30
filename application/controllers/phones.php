@@ -23,6 +23,7 @@ class Phones extends My_Controller {
 	{
 		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $vendor);
 		$model = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $model);
+		$catalog  = $this->phones_model->getAllParts();
 		$parts = $this->phones_model->getParts($vendor, str_replace('_', ' ', $model));
 		$data = array(
 			'title' 		=> 'Раскладка ' . $vendor . ' ' . $model,
@@ -30,7 +31,7 @@ class Phones extends My_Controller {
 			'css'			=> array('css' => 'jquery.jqzoom.css'),
 			'description' 	=> $vendor . ', ' . $model,
 			'keywords' 		=> $vendor . ', ' . $model,
-			'body' 			=> $this->load->view('pages/phones/parts', array('parts' => $parts), true),
+			'body' 			=> $this->load->view('pages/phones/parts', array('parts' => $parts, 'catalog' => $catalog), true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}
