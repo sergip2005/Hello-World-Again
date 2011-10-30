@@ -1,5 +1,5 @@
 <?php
-echo '<ul style="float: left; margin: 15px;">';
+echo '<ul style=" float: left; margin: 15px;">';
 	foreach ($catalog as  $key => $model)
 	{
 		echo'<li>' . $key;
