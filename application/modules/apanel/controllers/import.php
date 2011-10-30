@@ -37,6 +37,7 @@ class Import extends MY_Controller {
 	function do_xls_upload()
 	{
 		$this->load->model('phones_model');
+		$this->load->model('vendors_model');
 
 		$config = array(
 				'upload_path'	=> $this->config->item('upload_path'),
@@ -51,9 +52,6 @@ class Import extends MY_Controller {
 			redirect('apanel/import');
 		} else {
 			$data = $this->_process_xls_upload($this->upload->data());
-
-			$mVendors = $this->load->model('vendors_model');
-			$data['vendors_select'] = $mVendors->getAll('select');
 
 			$template = array(
 				'title'	=> 'Детали импорта',
