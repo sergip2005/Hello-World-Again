@@ -1,5 +1,6 @@
 <?php
-echo '<ul style=" float: left; margin: 15px;">';
+
+echo '<div style=" float: left; width:200px;"><ul >';
 	foreach ($catalog as  $key => $model)
 	{
 		echo'<li>' . $key;
@@ -13,17 +14,19 @@ echo '<ul style=" float: left; margin: 15px;">';
 		}
 		echo '</li>';
 	}
-	echo '</ul>';
-echo '<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="demo" title="E75_RM-412_RM-413_Schematics_v0_1">
-    <img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
-</a>
-<div class="clearfix"></div>';
-
-if(count($parts) > 0){
-	echo '<div id="parts">
+	echo '</ul></div>';
+echo '<div style="margin-left:200px;">';
+echo '<div id="parts">
 		<span class="s selected">Корпусные </span>
 		<span class="c">Паечные </span>
 	</div>';
+
+echo '<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="demo" title="E75_RM-412_RM-413_Schematics_v0_1">
+    <img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
+</a>
+';
+
+if(count($parts) > 0){
 
 	foreach ($parts as $row)
 	{
@@ -103,7 +106,7 @@ if(count($parts) > 0){
 	}else{
 		echo 'Нет корпусных запчастей';
 	}
-
+echo '</div>';
 }else{
 	echo 'Нет запчастей';
 }
