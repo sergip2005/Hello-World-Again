@@ -331,6 +331,10 @@ table.desc td.label {
 	padding-right: 15px;
 }
 
+table.desc select {
+	min-width: 150px;
+}
+
 /** HELPERS
    ==============================*/
 #message {
@@ -352,6 +356,10 @@ table.desc td.label {
 	top: 5px;
 	left: 5px;
 	display: none;
+}
+
+.loading #loading {
+	display: block;
 }
 
 #splash {
@@ -412,6 +420,17 @@ table.desc td.label {
 	top: 0;
 	width: 100%;
 	z-index: 101;
+}
+
+.validaton-error {
+	color: red;
+	font-style: italic;
+	font-size: 12px;
+	display: none;
+}
+
+.validaton-error-field {
+	border-color: red;
 }
  
  
@@ -655,10 +674,6 @@ padding: 0;
 	vertical-align: baseline;
 }
 
-.sheet-import-data table td input[type="text"] {
-	width: 150px;
-}
-
 .sheet-import-data table tbody tr:hover {
 	background: #ffffdd;
 }
@@ -666,3 +681,9 @@ padding: 0;
 .sheet-import-data table th {
 	background: #ffffcc;
 }
+
+.sheet-import-data td.cct_ref, .sheet-import-data td.cct_ref input { width: 50px }
+.sheet-import-data td.num, .sheet-import-data td.num input { width: 50px }
+.sheet-import-data td.code, .sheet-import-data td.code input { width: 75px }
+.sheet-import-data td.name, .sheet-import-data td.name input { width: 300px }
+.sheet-import-data td.comment, .sheet-import-data td.comment input { width: 150px }

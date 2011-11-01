@@ -38,7 +38,9 @@ function possible_sheet_types($id) {
 	<table class="desc">
 		<tr>
 			<td class="label">Поставщик:</td>
-			<td class="value"><select name="vendors"><?php echo $vendors_select ?></select></td>
+			<td class="value">
+				<select name="vendors"><?php echo $this->vendors_model->getAll('select') ?></select>
+			</td>
 		</tr>
 		<tr>
 			<td class="label">Модель:</td>
@@ -50,6 +52,7 @@ function possible_sheet_types($id) {
 				<br><br>
 				или создайте новую, вписав название:<br>
 				<input type="text" placeholder="Модель телефона" name="model_input" value="">
+				<p id="model_error" class="validaton-error">Модель не задана</p>
 			</td>
 		</tr>
 	</table>

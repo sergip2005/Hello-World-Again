@@ -24,7 +24,8 @@ var app = {
 		set_defaultRegion: '/apanel/regions/set_default/',
 		saveVendor: '/apanel/vendors/save/',
 		removeVendor: '/apanel/vendors/remove/',
-        set_visibleVendor: '/apanel/vendors/set_visible/'
+		set_visibleVendor: '/apanel/vendors/set_visible/',
+		getVendorModels: '/apanel/models/get_by_vendor/'
 	},
 
 	text: {
@@ -33,7 +34,8 @@ var app = {
 
 	cache: {
 		vendors: {},
-        regions: {}
+		regions: {},
+		models: {}
 	},
 	/** popup */
 	splash: null,
@@ -98,6 +100,11 @@ var app = {
 	init: function(){
 		this.initMessages();
 		this.initSlideable();
+		$('body').ajaxStart(function() {
+					$(this).addClass('loading');
+			}).ajaxStop(function(){
+					$(this).removeClass('loading');
+				});
 	},
 
 	templates: {

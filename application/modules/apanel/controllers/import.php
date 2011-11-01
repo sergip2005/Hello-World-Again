@@ -3,6 +3,13 @@
 class Import extends MY_Controller {
 	private $_m;
 
+	public $sheetTypes = array(
+			'rev' => 'История ревизий',
+			'cabinet' => 'Корпусные элементы',
+			'solder' => 'Паечные элементы',
+			'prices' => 'Изменения цен',
+		);
+
 	function __construct()
 	{
 		parent::__construct();
@@ -56,7 +63,7 @@ class Import extends MY_Controller {
 			$template = array(
 				'title'	=> 'Детали импорта',
 				'css'	=> array(),
-				'js'	=> array('apanel/import/details.js'),
+				'js'	=> array('apanel/import/second.js'),
 				'body'	=> $this->load->view('pages/import/second_page', $data, true),
 			);
 			Modules::run('pages/_return_ap_page', $template);
@@ -87,15 +94,15 @@ class Import extends MY_Controller {
 
 	public function process_details()
 	{
+		$this->load->model('vendors_model');
+		$this->load->model('phones_model');
+
 		$post_data['vendor_id'] = intval($this->input->post('vendors'));
 		$post_data['file'] = $this->input->post('file');
 		$post_data['sheets'] = $this->input->post('sheets');
 		$post_data['model_input'] = $this->input->post('model_input');
 		$post_data['model_select'] = $this->input->post('model_select');
 		$post_data['sheets_names'] = $this->input->post('sheets_names');
-
-		$mVendors = $this->load->model('vendors_model');
-		$post_data['vendors_select'] = $mVendors->getAll('select', array('selected' => $post_data['vendor_id']));
 
 		$objPHPExcel = $this->_m->init_phpexcel_object($this->config->item('upload_path') . $post_data['file']);
 
@@ -128,16 +135,42 @@ class Import extends MY_Controller {
 		$template = array(
 			'title'	=> 'Подтверждение импорта',
 			'css'	=> array(),
-			'js'	=> array('apanel/import/details.js'),
-			'body'	=> $this->load->view('pages/import/third_page', array('sheets' => $sheets_data, 'import' => $post_data), true),
+			'js'	=> array('apanel/import/third.js'),
+			'body'	=> $this->load->view('pages/import/third_page', array('sheets' => $sheets_data, 'post' => $post_data), true),
 		);
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
 	public function save(){
-		$sheets = $this->input->post('sheets_data');
-		$vendor = intval($this->input->post('vendor'));
+		$this->load->model('phones_model');
+		$this->load->model('parts_model');
 
-		$this->output->set_output('<pre>' . print_r($_POST, true) . '</pre>');
+		$vendor = intval($this->input->post('vendor'));
+		//get new model or existing one
+		$model = intval($this->input->post('model_select'));
+		if ($model <= 0) {
+			$model = $this->input->post('model_input');
+			$model = $this->phones_model->getOrCreateModel($model, $vendor);
+		}
+
+		$sheets = $this->input->post('sheets_data');
+		foreach ($sheets as $sheet) {
+			if (!array_key_exists($sheet['type'], $this->sheetTypes)) continue;
+			if (!array_key_exists('rows', $sheet) || count($sheet['rows']) <= 0) continue;
+
+			if (in_array($sheet['type'], array('cabinet', 'solder'))) {// import phone parts data
+				foreach ($sheet['rows'] as $rowN) {
+					if (strlen(implode('', $sheet['cols'][$rowN])) <= 0) continue;
+					if (!array_key_exists('code', $sheet['cols'][$rowN]) || empty($sheet['cols'][$rowN]['code'])) continue;
+
+					$this->parts_model->updateOrCreate(
+							$sheet['cols'][$rowN],
+							array('type' => $sheet['type'], 'vendor_id' => $vendor, 'phone_id' => $model)
+						);
+				}
+			} elseif ($sheet['type'] == 'price') {
+				
+			}
+		}
 	}
 }
