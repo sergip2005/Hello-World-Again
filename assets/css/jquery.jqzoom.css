@@ -40,7 +40,7 @@
 	filter: alpha(opacity = 60);
 	z-index:120;
 	position:absolute;
-	border:1px solid #CCC;
+	border:1px solid red;
 	z-index:101;
 	cursor:crosshair;
 }
