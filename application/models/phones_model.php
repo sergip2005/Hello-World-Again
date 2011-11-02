@@ -22,18 +22,21 @@ class Phones_model extends CI_Model
 		return  $data;
 	}
 
-	public function getParts($vendor, $model)
+	public function getParts($vendor, $model, $region = '')
 	{
 		$query = 'SELECT
-					pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name,
-					pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type
-				FROM `phones_parts` pp
-				LEFT JOIN `parts` pa ON pp.part_id = pa.id
-				LEFT JOIN `phones` p ON pp.phone_id = p.id
-				LEFT JOIN `vendors` v ON p.vendor_id = v.id
-				WHERE v.name = ? AND p.model = ?
-				ORDER BY v.name';
-		return $this->db->query($query, array($vendor, $model))->result_array();
+				  pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name,
+				  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type, r.name as r_name
+				  FROM `phones_parts` pp
+				  LEFT JOIN `parts` pa ON pp.part_id = pa.id
+				  LEFT JOIN `phones` p ON pp.phone_id = p.id
+				  LEFT JOIN `vendors` v ON p.vendor_id = v.id
+				  LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
+				  LEFT JOIN `regions` r ON r.id = pprr.region_id
+				  WHERE v.name = ? AND p.model = ?
+				  AND IF(? = "all",1,r.id = (SELECT id FROM regions where `default` = 1))
+				  ORDER BY v.name';
+		return $this->db->query($query, array($vendor, $model, $region))->result_array();
 	}
 
 	public function getAllVendorModels($vendor, $type = 'select', $format_options = array())

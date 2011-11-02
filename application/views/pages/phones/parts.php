@@ -1,10 +1,10 @@
 <div class="models-menu">
 	<ul>
-	<?php foreach ($catalog as  $key => $model) { ?>
+	<?php foreach ($catalog as  $key => $models) { ?>
 		<li><?php echo $key ?>
-		<?php if (count($model) > 0) { ?>
+		<?php if (count($models) > 0) { ?>
 			<ul>
-			<?php foreach ($model as $k => $m) { ?>
+			<?php foreach ($models as $k => $m) { ?>
 				<li><a href="/phones/<?php echo strtolower($key) ?>/<?php echo strtolower(str_replace(' ', '_', $m)) ?>"><?php echo $m ?></a></li>
 			<?php } ?>
 			</ul>
@@ -24,7 +24,8 @@
 
 	<?php
 	if (count($parts) > 0) {
-
+		$cabinet = array();
+		$solder = array();
 		foreach ($parts as $row) {
 			 if($row['type'] == 's') {
 				 $solder[] = $row;
@@ -112,6 +113,7 @@
 			Нет корпусных запчастей
 		<?php } ?>
 	</div>
+	<?php echo $region == 'all' ? '<a href="/phones/' . $vendor . '/' . $model . '">Показать основной регион</a>' : '<a href="/phones/' . $vendor . '/' . $model . '/all">Показать все регионы</a>'; ?>
 </div>
 
 <?php } else { ?>

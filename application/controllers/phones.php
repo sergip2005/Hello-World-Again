@@ -19,19 +19,25 @@ class Phones extends My_Controller {
 		Modules::run('pages/_return_page', $data);
 	}
 
-	public function parts($vendor, $model)
+	public function parts($vendor, $model, $region = '')
 	{
 		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $vendor);
-		$model = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $model);
+		$model  = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $model);
+		$region = $region == 'all' ? $region : '';
 		$catalog  = $this->phones_model->getAllParts();
-		$parts = $this->phones_model->getParts($vendor, str_replace('_', ' ', $model));
+		$parts = $this->phones_model->getParts($vendor, str_replace('_', ' ', $model), $region);
 		$data = array(
 			'title' 		=> 'Раскладка ' . $vendor . ' ' . $model,
 			'js'			=> array('libs/jquery.jqzoom-core-pack.js', 'site/phones.js'),
 			'css'			=> array('jquery.jqzoom.css'),
 			'description' 	=> $vendor . ', ' . $model,
 			'keywords' 		=> $vendor . ', ' . $model,
-			'body' 			=> $this->load->view('pages/phones/parts', array('parts' => $parts, 'catalog' => $catalog), true),
+			'body' 			=> $this->load->view('pages/phones/parts', array('parts'   => $parts,
+																			 'catalog' => $catalog,
+																			 'region'  => $region,
+																			 'vendor'  => $vendor,
+																			 'model'   => $model),
+												 true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}
