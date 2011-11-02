@@ -5,7 +5,7 @@
 	<p>Здесь показана информация, которая будет введена в систему, вы можете отредактировать ее перед сохранением.</p>
 	<br>
 
-	<p>Импорт информации из файла: <strong><?php echo $post['file'] ?></strong><br></p>
+	<p>Импорт информации из файла: <strong><?php echo $post['file'] ?></strong><br><br></p>
 	<table class="desc">
 		<tr>
 			<td class="label">производитель:</td>
@@ -24,6 +24,18 @@
 					<input type="hidden" name="model_input" value="<?php echo $post['model_input'] ? $post['model_input'] : '' ?>">
 					<input type="text" name="model_input" value="<?php echo $post['model_input'] ? $post['model_input'] : '' ?>" disabled="disabled">
 				<?php } ?>
+			</td>
+		</tr>
+		<tr>
+			<td class="label" colspan="2">Информация о ревизии:</td>
+		</tr>
+		<tr>
+			<td class="label"></td>
+			<td class="value">
+				Номер ревизии листа:<br>
+				<input name="rev_num" value="<?php echo $post['rev_num'] ?>"><br><br>
+				Описание ревизии листа<br>
+				<input name="rev_desc" value="<?php echo $post['rev_desc'] ?>">
 			</td>
 		</tr>
 	</table>
@@ -49,7 +61,7 @@
 				<tr>
 					<td><input type="checkbox" value="<?php echo $rowN ?>" name="sheets_data[<?php echo $sheet['id'] ?>][rows][]" checked="checked"></td>
 					<?php foreach ($row as $fieldN => $field) { ?>
-					<td class="<?php echo $fieldN ?>"><input type="text" name="sheets_data[<?php echo $sheet['id'] ?>][cols][<?php echo $rowN ?>][<?php echo $fieldN ?>]" value="<?php echo $field ?>"></td>
+					<td class="<?php echo $fieldN ?>"><input type="text" name="sheets_data[<?php echo $sheet['id'] ?>][cols][<?php echo $rowN ?>][<?php echo $fieldN ?>]" value="<?php echo trim($field) ?>"></td>
 					<?php } ?>
 				</tr>
 			<?php } ?>

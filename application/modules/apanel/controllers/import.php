@@ -103,6 +103,9 @@ class Import extends MY_Controller {
 		$post_data['model_input'] = $this->input->post('model_input');
 		$post_data['model_select'] = $this->input->post('model_select');
 		$post_data['sheets_names'] = $this->input->post('sheets_names');
+		$post_data['rev_num'] = $this->input->post('rev_num');
+		$post_data['rev_date'] = $this->input->post('rev_date');
+		$post_data['rev_desc'] = $this->input->post('rev_desc');
 
 		$objPHPExcel = $this->_m->init_phpexcel_object($this->config->item('upload_path') . $post_data['file']);
 
@@ -163,13 +166,35 @@ class Import extends MY_Controller {
 					if (strlen(implode('', $sheet['cols'][$rowN])) <= 0) continue;
 					if (!array_key_exists('code', $sheet['cols'][$rowN]) || empty($sheet['cols'][$rowN]['code'])) continue;
 
-					$this->parts_model->updateOrCreate(
+					// save or get part id
+					$pId = $this->parts_model->updateOrCreate(
+							$sheet['cols'][$rowN],
+							array('type' => $sheet['type'], 'vendor_id' => $vendor, 'phone_id' => $model)
+						);
+					// save or get phone model id
+					$this->phones_model->updateOrCreate(
+							$pId,
 							$sheet['cols'][$rowN],
 							array('type' => $sheet['type'], 'vendor_id' => $vendor, 'phone_id' => $model)
 						);
 				}
 			} elseif ($sheet['type'] == 'price') {
-				
+				foreach ($sheet['rows'] as $rowN) {
+					if (strlen(implode('', $sheet['cols'][$rowN])) <= 0) continue;
+					if (!array_key_exists('code', $sheet['cols'][$rowN]) || empty($sheet['cols'][$rowN]['code'])) continue;
+
+					// save or get part id
+					$pId = $this->parts_model->updateOrCreate(
+							$sheet['cols'][$rowN],
+							array('type' => $sheet['type'], 'vendor_id' => $vendor, 'phone_id' => $model)
+						);
+					// save or get phone model id
+					$this->phones_model->updateOrCreate(
+							$pId,
+							$sheet['cols'][$rowN],
+							array('type' => $sheet['type'], 'vendor_id' => $vendor, 'phone_id' => $model)
+						);
+				}
 			}
 		}
 	}

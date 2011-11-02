@@ -27,8 +27,8 @@ class Phones extends My_Controller {
 		$parts = $this->phones_model->getParts($vendor, str_replace('_', ' ', $model));
 		$data = array(
 			'title' 		=> 'Раскладка ' . $vendor . ' ' . $model,
-			'js'			=> array('js' => 'apanel/parts.js', 'js2' => 'libs/jquery.jqzoom-core-pack.js'),
-			'css'			=> array('css' => 'jquery.jqzoom.css'),
+			'js'			=> array('libs/jquery.jqzoom-core-pack.js', 'site/phones.js'),
+			'css'			=> array('jquery.jqzoom.css'),
 			'description' 	=> $vendor . ', ' . $model,
 			'keywords' 		=> $vendor . ', ' . $model,
 			'body' 			=> $this->load->view('pages/phones/parts', array('parts' => $parts, 'catalog' => $catalog), true),

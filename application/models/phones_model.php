@@ -2,6 +2,10 @@
 
 class Phones_model extends CI_Model
 {
+	public $phonePartFields = array(
+		'cct_ref', 'num', 'comment'
+	);
+
 	public function getAllParts()
 	{
 		$query = 'SELECT phones.model AS model, vendors.name AS vendor, vendors.id AS vendor_id
@@ -77,6 +81,7 @@ class Phones_model extends CI_Model
 
 	public function save($id, $data)
 	{
+		/*
 		if ($id <= 0) {
 			// check if this part is allready in this phone model
 			$part = $this->db->query(
@@ -84,7 +89,7 @@ class Phones_model extends CI_Model
 					array($data['phone_id'], $data['part_id'])
 				);
 			$id = $part->num_rows() > 0 ? $part->row()->id : 0;
-		}
+		}*/
 
 		if ($id > 0) { // update
 			$this->db->where('id', $id)->update('phones_parts', $data);
@@ -93,5 +98,18 @@ class Phones_model extends CI_Model
 			$id = $this->db->insert_id();
 		}
 		return $id;
+	}
+
+	public function updateOrCreate($pId, $rowData, $sheetData){
+		// save phone model data
+		foreach ($rowData as $n => $v) {
+			if (in_array($n, $this->phonePartFields)) {
+				$phonePartData[$n] = $v;
+			}
+		}
+		$phonePartData['phone_id'] = $sheetData['phone_id'];
+		$phonePartData['part_id'] = $pId;
+		// insert or update phone
+		return $this->save(0, $phonePartData);
 	}
 }

@@ -1,113 +1,119 @@
-<?php
+<div class="models-menu">
+	<ul>
+	<?php foreach ($catalog as  $key => $model) { ?>
+		<li><?php echo $key ?>
+		<?php if (count($model) > 0) { ?>
+			<ul>
+			<?php foreach ($model as $k => $m) { ?>
+				<li><a href="/phones/<?php echo strtolower($key) ?>/<?php echo strtolower(str_replace(' ', '_', $m)) ?>"><?php echo $m ?></a></li>
+			<?php } ?>
+			</ul>
+		<?php } ?>
+		</li>
+	<?php } ?>
+	</ul>
+</div>
 
-echo '<div style=" float: left; width:200px;"><ul >';
-	foreach ($catalog as  $key => $model)
-	{
-		echo'<li>' . $key;
-		if (count($model) > 0) {
-			echo '<ul>';
-			foreach ($model as $k => $m)
-			{
-				echo '<li><a href="/phones/' .  strtolower($key) . '/' . strtolower(str_replace(' ', '_', $m)) . '">' . $m . '</a></li>';
-			}
-			echo '</ul>';
-		}
-		echo '</li>';
-	}
-	echo '</ul></div>';
-echo '<div style="margin-left:200px;">';
-echo '<div id="parts">
+<div class="parts-content full-transparent">
+	<div id="parts">
 		<span class="s selected">Корпусные </span>
 		<span class="c">Паечные </span>
-	</div>';
+	</div>
 
-echo '<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="demo" title="E75_RM-412_RM-413_Schematics_v0_1">
-    <img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
-</a>
-';
+	<div class="cabinet" >
 
-if(count($parts) > 0){
+	<?php
+	if (count($parts) > 0) {
 
-	foreach ($parts as $row)
-	{
-		 if($row['type'] == 's'){
-			 $solder[] = $row;
-		 }else{
-			 $cabinet[] = $row;
-		 }
-	}
-
-	if(count($cabinet) > 0){
-		echo '<div class="cabinet" ><table class="sofT" cellspacing="0">
-		<tr>
-			<td colspan="8" class="helpHed">Корпусные элементы</td>
-		</tr>
-		<tr>
-			<td class="helpHed">Позиция (phones_parts.cct_ref)</td>
-			<td class="helpHed">Код (parts.code)</td>
-			<td class="helpHed">Испол.(phones_parts.num)</td>
-			<td class="helpHed">Описание eng(parts.name)</td>
-			<td class="helpHed">Описание рус(parts.name_rus)</td>
-			<td class="helpHed">Кол.</td>
-			<td class="helpHed">Мин. кол.(phones_parts.min_num)</td>
-			<td class="helpHed">Цена(parts.price)</td>
-		</tr>';
-
-		foreach ($cabinet as $c)
-		{
-			echo '<tr>
-			<td>' . $c['cct_ref'] . '</td>
-			<td>' . $c['code'] . '</td>
-			<td>' . $c['num'] . '</td>
-			<td>' . $c['name'] . '</td>
-			<td>' . $c['name_rus'] . '</td>
-			<td></td>
-			<td>' . $c['min_num'] . '</td>
-			<td>' . $c['price'] . '</td>
-			</tr>';
+		foreach ($parts as $row) {
+			 if($row['type'] == 's') {
+				 $solder[] = $row;
+			 } else {
+				 $cabinet[] = $row;
+			 }
 		}
 
-		echo '</table></div>';
-	}else{
-		echo 'Нет паечных запчастей';
-	}
+		if (count($cabinet) > 0) { ?>
+			<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="cabinet_img" title="E75_RM-412_RM-413_Schematics_v0_1">
+				<img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
+			</a>
 
-	if(count($solder) > 0){
-		echo '<div class="solder"><table class="sofT" cellspacing="0">
-		<tr>
-			<td colspan="8" class="helpHed">Паечные элементы</td>
-		</tr>
-		<tr>
-			<td class="helpHed">Позиция (phones_parts.cct_ref)</td>
-			<td class="helpHed">Код (parts.code)</td>
-			<td class="helpHed">Испол.(phones_parts.num)</td>
-			<td class="helpHed">Описание eng(parts.name)</td>
-			<td class="helpHed">Описание рус(parts.name_rus)</td>
-			<td class="helpHed">Кол.</td>
-			<td class="helpHed">Мин. кол.(phones_parts.min_num)</td>
-			<td class="helpHed">Цена(parts.price)</td>
-		</tr>';
+			<table class="sofT" cellspacing="0">
+			<tr>
+				<td colspan="8" class="helpHed">Корпусные элементы</td>
+			</tr>
+			<tr>
+				<td class="helpHed" data-field="phones_parts.cct_ref">Позиция</td>
+				<td class="helpHed" data-field="parts.code">Код</td>
+				<td class="helpHed" data-field="phones_parts.num">Испол.</td>
+				<td class="helpHed" data-field="parts.name">Описание(eng)</td>
+				<td class="helpHed" data-field="parts.name_rus">Описание(рус)</td>
+				<td class="helpHed" data-field="order_num">Кол-во</td>
+				<td class="helpHed" data-field="phones_parts.min_num">Мин. кол-во</td>
+				<td class="helpHed" data-field="parts.price">Цена</td>
+			</tr>
 
-		foreach ($solder as $s)
-		{
-			echo '<tr>
-			<td>' . $s['cct_ref'] . '</td>
-			<td>' . $s['code'] . '</td>
-			<td>' . $s['num'] . '</td>
-			<td>' . $s['name'] . '</td>
-			<td>' . $s['name_rus'] . '</td>
-			<td></td>
-			<td>' . $s['min_num'] . '</td>
-			<td>' . $s['price'] . '</td>
-			</tr>';
-		}
+			<?php foreach ($cabinet as $c) { ?>
+			<tr>
+				<td><?php echo $c['cct_ref'] ?></td>
+				<td><?php echo $c['code'] ?></td>
+				<td><?php echo $c['num'] ?></td>
+				<td><?php echo $c['name'] ?></td>
+				<td><?php echo $c['name_rus'] ?></td>
+				<td></td>
+				<td><?php echo $c['min_num'] ?></td>
+				<td><?php echo $c['price'] ?></td>
+			</tr>
+			<?php } ?>
 
-		echo '</table></div>';
-	}else{
-		echo 'Нет корпусных запчастей';
-	}
-echo '</div>';
-}else{
-	echo 'Нет запчастей';
-}
- 
+			</table>
+		<?php } else { ?>
+			Нет паечных запчастей
+		<?php } ?>
+	</div>
+
+	<div class="solder">
+		<?php if (count($solder) > 0) { ?>
+
+			<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="solder_img" title="E75_RM-412_RM-413_Schematics_v0_1">
+				<img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
+			</a>
+
+			<table class="sofT" cellspacing="0">
+			<tr>
+				<td colspan="8" class="helpHed">Паечные элементы</td>
+			</tr>
+			<tr>
+				<td class="helpHed" data-field="phones_parts.cct_ref">Позиция</td>
+				<td class="helpHed" data-field="parts.code">Код</td>
+				<td class="helpHed" data-field="phones_parts.num">Испол.</td>
+				<td class="helpHed" data-field="parts.name">Описание(eng)</td>
+				<td class="helpHed" data-field="parts.name_rus">Описание(рус)</td>
+				<td class="helpHed" data-field="order_num">Кол-во</td>
+				<td class="helpHed" data-field="phones_parts.min_num">Мин. кол-во</td>
+				<td class="helpHed" data-field="parts.price">Цена</td>
+			</tr>
+
+			<?php foreach ($solder as $s) { ?>
+			<tr>
+				<td><?php echo $s['cct_ref'] ?></td>
+				<td><?php echo $s['code'] ?></td>
+				<td><?php echo $s['num'] ?></td>
+				<td><?php echo $s['name'] ?></td>
+				<td><?php echo $s['name_rus'] ?></td>
+				<td></td>
+				<td><?php echo $s['min_num'] ?></td>
+				<td><?php echo $s['price'] ?></td>
+			</tr>
+			<?php } ?>
+
+			</table>
+		<?php } else { ?>
+			Нет корпусных запчастей
+		<?php } ?>
+	</div>
+</div>
+
+<?php } else { ?>
+	Нет запчастей
+<?php } ?>

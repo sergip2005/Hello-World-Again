@@ -4,17 +4,13 @@ class Parts_model extends CI_Model
 {
 	public $partType = array(
 		'cabinet' => 'c',
-		'colder' => 's',
+		'solder' => 's',
 	);
 
 	public $partFields = array(
 		'name', 'vendor_id', 'type',
 		'ptype', 'code', 'name_rus',
 		'url', 'mktel_has', 'price', 'min_num'
-	);
-
-	public $phonePartFields = array(
-		'cct_ref', 'num', 'comment'
 	);
 
 	public function getOrCreate($name, $vendor){
@@ -58,18 +54,7 @@ class Parts_model extends CI_Model
 			$partData['min_num'] = $partData['type'] == 'c' ? 1 : 5;
 		}
 		// insert or update part
-		$pId = $this->save(0, $partData);
-
-		// save phone model data
-		foreach ($rowData as $n => $v) {
-			if (in_array($n, $this->phonePartFields)) {
-				$phonePartData[$n] = $v;
-			}
-		}
-		$phonePartData['phone_id'] = $sheetData['phone_id'];
-		$phonePartData['part_id'] = $pId;
-		// insert or update phone
-		$this->phones_model->save(0, $phonePartData);
+		return $this->save(0, $partData);
 	}
 
 	function save($id, $data)

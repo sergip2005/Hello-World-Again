@@ -8,9 +8,6 @@ function possible_values($sheet_id) {
 			. '<option value="type">Тип детали</option>'
 			. '<option value="num">Кол-во деталей в сборке</option>'
 			. '<option value="comment">Комментарий к детали</option>'
-			. '<option value="rev_num">Номер ревизии листа</option>'
-			. '<option value="rev_date">Дата ревизии листа</option>'
-			. '<option value="rev_desc">Описание ревизии листа</option>'
 			. '<option value="price_eur">Цена детали в eur</option>'
 			. '<option value="price_$">Цена детали в $</option>'
 			. '<option value="price_grn">Цена детали в грн</option>'
@@ -20,7 +17,6 @@ function possible_values($sheet_id) {
 function possible_sheet_types($id) {
 	return '<select name="sheet_type' . $id . '">'
 			. '<option value="0"></option>'
-			. '<option value="rev">История ревизий</option>'
 			. '<option value="cabinet">Корпусные элементы</option>'
 			. '<option value="solder">Паечные элементы</option>'
 			. '<option value="prices">Изменения цен</option>'
@@ -43,7 +39,10 @@ function possible_sheet_types($id) {
 			</td>
 		</tr>
 		<tr>
-			<td class="label">Модель:</td>
+			<td class="label" colspan="2">Модель:</td>
+		</tr>
+		<tr>
+			<td class="label"></td>
 			<td class="value">выберите существующую из списка:<br>
 				<select name="model_select">
 					<option value="0">-</option>
@@ -53,6 +52,19 @@ function possible_sheet_types($id) {
 				или создайте новую, вписав название:<br>
 				<input type="text" placeholder="Модель телефона" name="model_input" value="">
 				<p id="model_error" class="validaton-error">Модель не задана</p>
+				<br><br>
+			</td>
+		</tr>
+		<tr>
+			<td class="label" colspan="2">Информация о ревизии:</td>
+		</tr>
+		<tr>
+			<td class="label"></td>
+			<td class="value">
+				Номер ревизии листа:<br>
+				<input name="rev_num" value=""><br><br>
+				Описание ревизии листа<br>
+				<input name="rev_desc" value="">
 			</td>
 		</tr>
 	</table>

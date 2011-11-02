@@ -329,6 +329,7 @@ table.desc td {
 
 table.desc td.label {
 	padding-right: 15px;
+	font-weight: bold;
 }
 
 table.desc select {

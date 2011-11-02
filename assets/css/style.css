@@ -250,6 +250,21 @@ body {
 	color: #333;
 }
 
+/** parts page */
+
+.cabinet, .solder {
+	clear: both;
+}
+
+.models-menu {
+	float: left;
+	width: 200px;
+}
+
+.parts-content {
+	margin-left:200px;
+}
+
 /** USER-MENU
 ---------------------*/
 .user-menu {
@@ -302,6 +317,15 @@ body {
 	width: 100%;
 	z-index: 101;
 }
+
+.full-transparent {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+	filter: alpha(opacity=0);
+	-moz-opacity: 0;
+	-khtml-opacity: 0;
+	opacity: 0;
+}
+
  
  
 /**
@@ -382,7 +406,7 @@ body {
 /*Table parts*/
 table.sofT{
 	text-align: center;
-	font-family: Verdana;
+	font-family: Verdana, sans-serif;
 	font-weight: normal;
 	font-size: 11px;
 	color: #404040;
@@ -390,7 +414,8 @@ table.sofT{
 	background-color: #fafafa;
 	border: 1px #6699CC solid;
 	border-collapse: collapse;
-	border-spacing: 0px;
+	border-spacing: 0;
+	clear: both;
 }
 table.sofT td.helpHed{
 	border-left: 1px solid #6699CC;
@@ -410,9 +435,7 @@ table.sofT td{
 	text-align: left;
 	padding: 5px;
 }
-.solder{
-	display: none;
-}
+
 #parts{
 	margin: 15px 5px;
 }
