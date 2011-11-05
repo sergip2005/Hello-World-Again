@@ -9,12 +9,20 @@ class Phones extends My_Controller {
 
 	public function index()
 	{
+		$this->load->module('pages');
+		$this->load->model('pages_m');
+		$page = $this->pages_m->get_page('index');
+
 		$catalog  = $this->phones_model->getAllParts();
 		$data = array(
-			'title' 		=> 'Главная страница',
-			'description' 	=> '',
-			'keywords' 		=> '',
-			'body' 			=> $this->load->view('pages/phones/index', array('catalog' => $catalog), true),
+			'title' 		=> $page['title'],
+			'description' 	=> $page['description'],
+			'keywords' 		=> $page['keywords'],
+			'body' 			=> $this->load->view('pages/phones/index',
+													array(
+														'catalog' => $catalog,
+														'body' => $page['body']
+													), true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}

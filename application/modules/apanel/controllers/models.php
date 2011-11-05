@@ -33,18 +33,18 @@ class Models extends MY_Controller {
 
 	public function save()
 	{
-        $id = intval($this->input->post('id'));
-        $name = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('name'));
-        $data = array('name' => $name);
+		$id = intval($this->input->post('id'));
+		$name = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('name'));
+		$data = array('name' => $name);
 
-        $data['id'] = $this->_m->save($id, $data );
-        if ($data['id'] > 0) {
-            $this->output->set_output(json_encode(array(
-                'status'  => 1,
-                'item'    => $data,
-                'message' => Regions_model::SAVE_SUCCESS
+		$data['id'] = $this->_m->save($id, $data );
+		if ($data['id'] > 0) {
+			$this->output->set_output(json_encode(array(
+				'status'  => 1,
+				'item'    => $data,
+				'message' => Regions_model::SAVE_SUCCESS
 				)));
-        }else {
+		}else {
 			echo json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR));
 		}
 	}

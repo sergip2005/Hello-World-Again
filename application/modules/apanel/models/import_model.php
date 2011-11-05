@@ -24,15 +24,23 @@ class Import_model extends CI_Model
 			'name'		=> 'Ориг. имя детали',
 			'code'		=> 'Парт. номер детали',
 			'price_eur'	=> 'Цена детали в eur',
-			'price_$'	=> 'Цена детали в $',
-			'price_grn'	=> 'Цена детали в грн',
+			'price_dol'	=> 'Цена детали в $',
+			'price_hrn'	=> 'Цена детали в грн',
 	);
 
+	public $sheet_types = array(
+			'cabinet' => 'Корпусные элементы',
+			'solder' => 'Паечные элементы',
+			'prices' => 'Изменения цен',
+	);
+
+	/**
+	 * @param  $sheet
+	 * @return array|bool - array containing all possible fields of this sheet type
+	 */
 	function get_sheet_fields($sheet)
 	{
-		if ($sheet === 'rev') {
-			return $this->rev_field_types;
-		} elseif ($sheet === 'cabinet' || $sheet === 'solder') {
+		if ($sheet === 'cabinet' || $sheet === 'solder') {
 			return $this->part_field_types;
 		} elseif ($sheet === 'prices') {
 			return $this->price_field_types;
@@ -64,10 +72,7 @@ class Import_model extends CI_Model
 	function get_sheet_data($objWorksheet, $sheet_info)
 	{
 		$data = $this->get_raw_sheet_data($objWorksheet, $sheet_info);
-
-		if ($sheet_info['type'] == 'rev') {
-			$data = $this->_process_rev_sheet_data($data, $sheet_info);
-		} elseif ($sheet_info['type'] == 'cabinet') {
+		if ($sheet_info['type'] == 'cabinet') {
 			$data = $this->_process_cabinet_parts_sheet_data($data, $sheet_info);
 		} elseif ($sheet_info['type'] == 'solder') {
 			$data = $this->_process_solder_parts_sheet_data($data, $sheet_info);
@@ -78,6 +83,13 @@ class Import_model extends CI_Model
 		return $data;
 	}
 
+	/**
+	 * returns some number of first sheet rows, as demo data to display on import page
+	 * @param object $objWorksheet
+	 * @param int $tRows
+	 * @param int $tCols
+	 * @return array
+	 */
 	function getDemoRows($objWorksheet, $tRows, $tCols) {
 		// Fetch the array with data of the rows
 		$data = array();
@@ -105,6 +117,7 @@ class Import_model extends CI_Model
 	}
 
 	/**
+	 * returns cell value, obtained throught PHPExcel api
 	 * @param int $a cell number
 	 * @return str value of cell with provided number in current row
 	 */
@@ -114,6 +127,7 @@ class Import_model extends CI_Model
 	}
 
 	/**
+	 * if strlen of imploded supplied array equals '' -> this array is empty
 	 * @param array $a input element of testing array
 	 * @return bool - if array is fully empty
 	 */
@@ -123,7 +137,9 @@ class Import_model extends CI_Model
 	}
 
 	/**
-	 * @return array with data in rows excluding empty rows
+	 * @param object $objWorksheet - PHPExcel sheet object
+	 * @param array $sheet_info - properties of sheet
+	 * @return array - supplied rows in keyed array excluding empty rows
 	 */
 	function get_raw_sheet_data($objWorksheet, $sheet_info){
 		$this->_worksheet = $objWorksheet;
@@ -148,49 +164,60 @@ class Import_model extends CI_Model
 	}
 
 	/**
-	 * receives fields rev_num, rev_date, rev_desc
-	 *
-	 * @param array $input - array with not null rows of this sheet
-	 * @param array $sheet_info - array with sheet details
-	 * @return void
+	 * performs trim on array with sheet data (deletes rows with unexpected part.number values)
+	 * @param array $input - sheet data
+	 * @param array $sheet_info - properties of sheet (vendor, model etc)
+	 * @return array
 	 */
-	function _process_rev_sheet_data($input, $sheet_info)
-	{
-		// this sheet may contain comments splitted into multiply rows in 'rev_desc' field
-		// so if there is data only in rev_desc field then append this data to prev field
-
-		foreach($input as $row){
-			
-		}
-		return $input;
-	}
-
 	function _process_prices_sheet_data($input, $sheet_info)
-	{
-		// need to have 
-		foreach($input as $one){
-			
-		}
-		return $input;
-	}
-
-	function _process_cabinet_parts_sheet_data($input, $sheet_info)
 	{
 		// check reqired fields
 		if (!isset($input[0]['code']) || !isset($input[0]['name'])) {
 			return false;
 		}
 
+		foreach ($input as $rowN => $row) {
+			if (strlen($row['code']) < 4 || preg_match('/^x+/i', strtolower($row['code'])) || strtolower($row['code']) == 'code') {
+				unset($input[$rowN]);
+			}
+			if (isset($row['price_hrn']) && floatval($row['price_hrn']) < 0) {
+				unset($input[$rowN]);
+			}
+			if (isset($row['price_dol']) && floatval($row['price_dol']) < 0) {
+				unset($input[$rowN]);
+			}
+			if (isset($row['price_eur']) && floatval($row['price_eur']) < 0) {
+				unset($input[$rowN]);
+			}
+		}
+		// reset array keys
+		return array_merge(array(), $input);
+	}
+
+	/**
+	 * performs trim on array with sheet data (deletes rows with unexpected part.number values)
+	 * @param array $input - sheet data
+	 * @param array $sheet_info - properties of sheet (vendor, model etc)
+	 * @return array
+	 */
+	function _process_cabinet_parts_sheet_data($input, $sheet_info)
+	{
 		// process data
 		foreach ($input as $rowN => $row) {
 			if (strlen($row['code']) < 4 || preg_match('/^x+/i', strtolower($row['code'])) || strtolower($row['code']) == 'code') {
 				unset($input[$rowN]);
 			}
 		}
-
+		// reset array keys
 		return array_merge(array(), $input);
 	}
 
+	/**
+	 * performs trim on array with sheet data (deletes rows with unexpected part.number values)
+	 * @param array $input - sheet data
+	 * @param array $sheet_info - properties of sheet (vendor, model etc)
+	 * @return array
+	 */
 	function _process_solder_parts_sheet_data($input, $sheet_info) {
 		// process data
 		foreach ($input as $rowN => $row) {
@@ -198,7 +225,7 @@ class Import_model extends CI_Model
 				unset($input[$rowN]);
 			}
 		}
-
+		// reset array keys
 		return array_merge(array(), $input);
 	}
 

@@ -1,4 +1,4 @@
-﻿<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Vendors_model extends CI_Model
 {
@@ -40,6 +40,7 @@ class Vendors_model extends CI_Model
 
 	public function getAll($format = 'array', $format_options = false)
 	{
+		$this->db->order_by('name', 'ASC');
 		$res = $this->db->get(self::TABLE)->result_array();
 
 		if ($format == 'ul') {

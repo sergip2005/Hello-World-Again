@@ -47,42 +47,41 @@ class Regions_model extends CI_Model
 		}
 
 		if ($format == 'select') {
-			$html = '<select name="vendors">';
+			$html = '';
 			foreach ($res as $row) {
 				$html .= '<option value="' . $row['id'] . '">' . $row['name'] . '</li>';
 			}
-			$html .= '</select>';
 			return $html;
 		}
 
 		return $res;
 	}
 
-    public function remove($id)
+	public function remove($id)
 	{
-        $error = false;
-        if (isset($id) && intval($id) > 0) {
-            if (!$this->db->where('id', $id)->delete(self::TABLE)) {
+		$error = false;
+		if (isset($id) && intval($id) > 0) {
+			if (!$this->db->where('id', $id)->delete(self::TABLE)) {
 				$error = true;
 			}
-        } else {
-         $error = true;
-        }
-        return $error ? false : true;
-    }
+		} else {
+		 $error = true;
+		}
+		return $error ? false : true;
+	}
 
 	public function set_default($id)
 	{
-        $error = false;
-        if (isset($id) && intval($id) > 0) {
-            if (!$this->db->update(self::TABLE, array('default' => 0)) || !$this->db->where('id', $id)->update(self::TABLE, array('default' => 1))) {
+		$error = false;
+		if (isset($id) && intval($id) > 0) {
+			if (!$this->db->update(self::TABLE, array('default' => 0)) || !$this->db->where('id', $id)->update(self::TABLE, array('default' => 1))) {
 				$error = true;
 			}
-        } else {
-         $error = true;
-        }
+		} else {
+		 $error = true;
+		}
 
-        return $error ? false : true;
-    }
+		return $error ? false : true;
+	}
 
 }

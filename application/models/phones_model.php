@@ -34,7 +34,7 @@ class Phones_model extends CI_Model
 				  LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
 				  LEFT JOIN `regions` r ON r.id = pprr.region_id
 				  WHERE v.name = ? AND p.model = ?
-				  AND IF(? = "all",1,r.id = (SELECT id FROM regions where `default` = 1))
+				  AND IF (? = "all", 1, r.id = (SELECT id FROM regions where `default` = 1))
 				  ORDER BY v.name';
 		return $this->db->query($query, array($vendor, $model, $region))->result_array();
 	}
@@ -55,9 +55,10 @@ class Phones_model extends CI_Model
 	public function getAllVendorModels($vendor, $type = 'select', $format_options = array())
 	{
 		if ($vendor == 'first') {
-			$vendor = $this->db->query('SELECT id FROM vendors ORDER BY name LIMIT 1')->row_array();
+			$vendor = $this->db->query('SELECT id FROM vendors ORDER BY name ASC LIMIT 1')->row_array();
 			$vendor = $vendor['id'];
 		}
+
 		$query = 'SELECT id, model as name FROM `phones` WHERE vendor_id = ? ORDER BY model';
 		$res = $this->db->query($query, array($vendor))->result_array();
 		if ($type == 'select' && !isset($format_options['selected'])) {
@@ -77,7 +78,7 @@ class Phones_model extends CI_Model
 	public function getOrCreateModel($name, $vendor){
 		if (empty($name)) { return false; }
 
-		$sql = 'SELECT id FROM `phones` WHERE `model` = ? AND `vendor` = ? LIMIT 1';
+		$sql = 'SELECT id FROM `phones` WHERE `model` = ? AND `vendor_id` = ? LIMIT 1';
 		$id = 0;
 		if ($res = $this->db->query($sql, array($this->db->escape($name), $this->db->escape($vendor)))->row()) {
 			$id = $res->id;
@@ -108,7 +109,7 @@ class Phones_model extends CI_Model
 		}*/
 
 		if ($id > 0) { // update
-			$this->db->where('id', $id)->update('phones_parts', $data);
+			$this->db->where('id', $id)->update('phones', $data);
 		} else { // insert
 			$this->db->insert('phones_parts', $data);
 			$id = $this->db->insert_id();

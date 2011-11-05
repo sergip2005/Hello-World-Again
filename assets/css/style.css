@@ -185,8 +185,7 @@ body {
 
 .main-menu .wrapper,
 .footer .wrapper {
-	padding: 0 50px;
-	width: 900px;
+	width: 1000px;
 }
 
 .main-menu ul,
@@ -259,6 +258,15 @@ body {
 .models-menu {
 	float: left;
 	width: 200px;
+}
+
+.models-menu ul {
+	list-style: none;
+	margin: 0;
+}
+
+.models-menu li li {
+	padding-left: 10px;
 }
 
 .parts-content {
@@ -354,7 +362,7 @@ body {
 .clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
 .clearfix:after { clear: both; }
 /* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
-.clearfix { zoom: 1; }
+.clearfix { zoom: 1; clear: both; }
  
  
  
@@ -422,30 +430,28 @@ table.sofT td.helpHed{
 	background-color: #BEC8D1;
 	text-align: left;
 	text-indent: 5px;
-	font-family: Verdana;
+	font-family: Verdana, sans-serif;
 	font-weight: bold;
 	font-size: 11px;
 	color: #404040;
 }
 table.sofT td{
 	border-bottom: 1px solid #6699CC;
-	border-top: 0px;
+	border-top: none;
 	border-left: 1px solid #6699CC;
-	border-right: 0px;
+	border-right: none;
 	text-align: left;
 	padding: 5px;
 }
 
-#parts{
-	margin: 15px 5px;
-}
+#parts{ margin: 15px 0 }
 #parts span{
 	cursor: pointer;
 	padding: 5px;
-	margin: 5px;
+	margin: 5px 10px 5px 0;
 	border: 1px solid #6699CC;
 	color: #404040;
-	font-family: Verdana;
+	font-family: Verdana, sans-serif;
 	font-weight: bold;
 }
 #parts span.selected{

@@ -1,28 +1,32 @@
 $(document).ready(function(){
-	var url = window.location.href;
-	var param = url.substring(url.lastIndexOf('/') + 1);
-	var itwas = 0;
-		$('#cabinet_img, #solder_img').jqzoom({zoomType: 'drag'});
+	var param = window.location.hash,
+		itwas = 0,
+		showPartType = function (part) {
+				if (part == '') part = '#c';
 
-	showPartType = function (part) {
-		if(part == '#c') {
-			$('.cabinet').show();
-			$('.solder').hide();
-			$('.c').removeClass("selected");
-			$('.s').addClass("selected");
-		}
-		if(part == '#s') {
-			$('.solder').show();
-			$('.cabinet').hide();
-			$('.s').removeClass("selected");
-			$('.c').addClass("selected");
-		}
-	}
+				if(part == '#c') {
+					$('.cabinet').show();
+					$('.solder').hide();
+					$('.c').removeClass("selected");
+					$('.s').addClass("selected");
+				}
+
+				if(part == '#s') {
+					$('.solder').show();
+					$('.cabinet').hide();
+					$('.s').removeClass("selected");
+					$('.c').addClass("selected");
+				}
+
+				window.location.hash = part;
+			};
+
+	$('#cabinet_img, #solder_img').jqzoom({zoomType: 'drag'});
 
 	// prepare layout, fade in
 	$('.solder').hide();
 	$('div.full-transparent').delay(500).animate({opacity: 1}, 500);
-	
+
 	showPartType(param);
 
 	$('.s').click(function() {
@@ -36,6 +40,7 @@ $(document).ready(function(){
 		itwas = 1;
 		return false;
 	});
+
 	$('.c').click(function() {
 		showPartType('#s');
 		if(itwas == 0) {
@@ -46,5 +51,9 @@ $(document).ready(function(){
 		}
 		itwas = 1;
 		return false;
+	});
+
+	$('#showparts').click(function(){
+		this.href += window.location.hash;
 	});
 });

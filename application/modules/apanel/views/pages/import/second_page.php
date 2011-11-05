@@ -1,26 +1,52 @@
 <?php
-function possible_values($sheet_id) {
-	return '<select name="sheet' . $sheet_id . '_cols_values[]">'
-			. '<option value="0"></option>'
-			. '<option value="name">Ориг. имя детали</option>'
-			. '<option value="code">Парт. номер детали</option>'
-			. '<option value="cct_ref">Позиция детали на рисунке</option>'
-			. '<option value="type">Тип детали</option>'
-			. '<option value="num">Кол-во деталей в сборке</option>'
-			. '<option value="comment">Комментарий к детали</option>'
-			. '<option value="price_eur">Цена детали в eur</option>'
-			. '<option value="price_$">Цена детали в $</option>'
-			. '<option value="price_grn">Цена детали в грн</option>'
-		. '</select>';
+function possible_values($CI, $sheet_id) {
+	$html = '<select name="sheet' . $sheet_id . '_cols_values[]">'
+			. '<option value="0"></option>';
+
+	$used_fields = array();
+
+	$html .= '<optgroup label="деталь">';
+	foreach ($CI->import_model->part_field_types as $val => $desc) {
+		if (!in_array($val, $used_fields)) {
+			$used_fields[] = $val;
+			$html .= '<option value="' . $val . '">' . $desc .'</option>';
+		}
+	}
+	$html .= '</optgroup>';
+
+	$html .= '<optgroup label="прайс-лист">';
+	foreach ($CI->import_model->price_field_types as $val => $desc) {
+		if (!in_array($val, $used_fields)) {
+			$used_fields[] = $val;
+			$html .= '<option value="' . $val . '">' . $desc .'</option>';
+		}
+	}
+	$html .= '</optgroup>';
+
+	
+
+		/*. '<option value="name">Ориг. имя детали</option>'
+		. '<option value="code">Парт. номер детали</option>'
+		. '<option value="cct_ref">Позиция детали на рисунке</option>'
+		. '<option value="type">Тип детали</option>'
+		. '<option value="num">Кол-во деталей в сборке</option>'
+		. '<option value="comment">Комментарий к детали</option>'
+		. '<option value="price_eur">Цена детали в eur</option>'
+		. '<option value="price_dol">Цена детали в $</option>'
+		. '<option value="price_hrn">Цена детали в грн</option>'*/
+	$html .= '</select>';
+	return $html;
+	//$this->import_model->part_field_types;
 }
 
-function possible_sheet_types($id) {
-	return '<select name="sheet_type' . $id . '">'
-			. '<option value="0"></option>'
-			. '<option value="cabinet">Корпусные элементы</option>'
-			. '<option value="solder">Паечные элементы</option>'
-			. '<option value="prices">Изменения цен</option>'
-		. '</select>';
+function possible_sheet_types($CI, $id) {
+	$html = '<select name="sheet_type' . $id . '">'
+			. '<option value="0" selected="selected"></option>';
+	foreach ($CI->import_model->sheet_types as $val => $desc) {
+		$html .= '<option value="' . $val . '">' . $desc .'</option>';
+	}
+	$html .= '</select>';
+	return $html;
 }
 ?>
 <h2>Детали импорта</h2>
@@ -30,12 +56,12 @@ function possible_sheet_types($id) {
 <p>Имя файла: <strong><?php echo $file_data['client_name'] ?></strong></p>
 <br>
 
-<form id="details_form" action="/apanel/import/process_details" method="post">
+<form id="details_form" action="/apanel/import/process_details/" method="post">
 	<table class="desc">
 		<tr>
 			<td class="label">Поставщик:</td>
 			<td class="value">
-				<select name="vendors"><?php echo $this->vendors_model->getAll('select') ?></select>
+				<select name="vendors" autocomplete="off"><?php echo $this->vendors_model->getAll('select') ?></select>
 			</td>
 		</tr>
 		<tr>
@@ -44,7 +70,7 @@ function possible_sheet_types($id) {
 		<tr>
 			<td class="label"></td>
 			<td class="value">выберите существующую из списка:<br>
-				<select name="model_select">
+				<select name="model_select" autocomplete="off">
 					<option value="0">-</option>
 					<?php echo implode('', $this->phones_model->getAllVendorModels('first', 'select')) ?>
 				</select>
@@ -86,7 +112,7 @@ function possible_sheet_types($id) {
 			(столбцов с данными <?php echo $sheet['cols_number'] ?>, строк с данными <?php echo $sheet['rows_number'] ?>)
 			<div id="sheet<?php echo $sheet['id'] ?>" class="sheet-info">
 				<!-- sheet info form -->
-				Тип данных в листе: <?php echo possible_sheet_types($sheet['id']) ?><br><br>
+				Тип данных в листе: <?php echo possible_sheet_types($this, $sheet['id']) ?><br><br>
 				Выберите ячейки с информацией и тип данных в них:<br>
 				<div class="demo-data">
 					<a href="#" class="slide-trigger" id="sheet<?php echo $sheet['id'] ?>slide">Показать пример полученных данных</a><br><br>
@@ -107,7 +133,7 @@ function possible_sheet_types($id) {
 						<?php for($i = 0; $i < $sheet['cols_number']; $i += 1) { ?>
 						<?php $cellIndex = PHPExcel_Cell::stringFromColumnIndex($i); ?>
 						<td>
-							<?php echo $cellIndex ?>. <?php echo possible_values($sheet['id']) ?>
+							<?php echo $cellIndex ?>. <?php echo possible_values($this, $sheet['id']) ?>
 						</td>
 						<?php if ($i != 0 && ($i + 1) % 5 == 0) { ?></tr><tr><?php } ?>
 						<?php } ?>

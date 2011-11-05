@@ -35,10 +35,7 @@ class Parts_model extends CI_Model
 	}
 
 	public function updateOrCreate($rowData, $sheetData){
-		$this->load->model('phones_model');
-
 		$partData = array();
-		$phonePartData = array();
 
 		// save part data
 		foreach ($rowData as $n => $v) {

@@ -113,10 +113,10 @@
 			Нет корпусных запчастей
 		<?php } ?>
 	</div>
-	<?php echo $region == 'all' ? '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '">Показать основной регион</a>' : '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/all">Показать все регионы</a>'; ?>
+	<?php echo $region == 'all' ? '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/">Показать основной регион</a>' : '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/all/">Показать все регионы</a>'; ?>
 </div>
 
 <?php } else { ?>
 	Нет запчастей
-	<?php echo $region == 'all' ? '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '">Показать основной регион</a>' : '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/all">Показать все регионы</a>'; ?>
+	<?php echo $region == 'all' ? '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/">Показать основной регион</a>' : '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/all/">Показать все регионы</a>'; ?>
 <?php } ?>

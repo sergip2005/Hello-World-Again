@@ -48,7 +48,6 @@
 		<h2><?php echo $sheet['name'] ?></h2>
 
 		<?php if (isset($sheet['data']) && count($sheet['data']) > 0) { ?>
-
 		<table>
 			<thead>
 					<th><input type="checkbox" class="check-all" id="check-all<?php echo $sheet['id'] ?>" checked="checked"></th>
