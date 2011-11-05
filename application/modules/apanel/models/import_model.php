@@ -50,6 +50,66 @@ class Import_model extends CI_Model
 	}
 
 	/**
+	 * returns html of select element, containing all possible cols values
+	 *
+	 * @param int $sheet_id - id of PHPExcel sheet object
+	 * @return string - formed html code of select
+	 */
+	function possible_values($sheet_id) {
+		$html = '<select name="sheet' . $sheet_id . '_cols_values[]">'
+				. '<option value="0"></option>';
+
+		$used_fields = array();
+
+		$html .= '<optgroup label="деталь">';
+		foreach ($this->part_field_types as $val => $desc) {
+			if (!in_array($val, $used_fields)) {
+				$used_fields[] = $val;
+				$html .= '<option value="' . $val . '">' . $desc .'</option>';
+			}
+		}
+		$html .= '</optgroup>';
+
+		$html .= '<optgroup label="прайс-лист">';
+		foreach ($this->price_field_types as $val => $desc) {
+			if (!in_array($val, $used_fields)) {
+				$used_fields[] = $val;
+				$html .= '<option value="' . $val . '">' . $desc .'</option>';
+			}
+		}
+		$html .= '</optgroup>';
+
+		$this->load->model('regions_model');
+		$html .= '<optgroup label="регионы">';
+		foreach ($this->regions_model->getAll() as $region) {
+			$val = 'region_' . $region['id'];
+			if (!in_array($val, $used_fields)) {
+				$used_fields[] = $val;
+				$html .= '<option value="' . $val . '">' . $region['name'] .'</option>';
+			}
+		}
+		$html .= '</optgroup>'
+				. '</select>';
+		return $html;
+	}
+
+	/**
+	 * returns formed html of select, with all possible sheet types
+	 *
+	 * @param  $id
+	 * @return string - formed html of select element
+	 */
+	function possible_sheet_types($id) {
+		$html = '<select name="sheet_type' . $id . '">'
+				. '<option value="0" selected="selected"></option>';
+		foreach ($this->sheet_types as $val => $desc) {
+			$html .= '<option value="' . $val . '">' . $desc .'</option>';
+		}
+		$html .= '</select>';
+		return $html;
+	}
+
+	/**
 	 * @param str $inputFileName - full path to excel file
 	 * @return PHPExcel object | void
 	 */

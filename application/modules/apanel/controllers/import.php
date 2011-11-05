@@ -1,7 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Import extends MY_Controller {
-	private $_m;
 
 	public $sheetTypes = array(
 			'rev' => 'История ревизий',
@@ -16,22 +15,16 @@ class Import extends MY_Controller {
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
 			redirect('login');
 		}
-		$this->_m = $this->load->model('import_model');
+		$this->load->model('import_model');
 	}
 
 	public function index()
 	{
-		$vendors = $this->load->model('vendors_model');
-
-		$data = array(
-			'vendors_select' => $vendors->getAll('select')
-		);
-
 		$template = array(
 			'title'			=> '',
 			'description'	=> '',
 			'keywords'		=> '',
-			'body'			=> $this->load->view('pages/import/index', $data, true),
+			'body'			=> $this->load->view('pages/import/index', '', true),
 		);
 		Modules::run('pages/_return_ap_page', $template);
 	}
@@ -40,6 +33,7 @@ class Import extends MY_Controller {
 	{
 		$this->load->model('phones_model');
 		$this->load->model('vendors_model');
+		$this->load->model('regions_model');
 
 		$config = array(
 				'upload_path'	=> $this->config->item('upload_path'),
@@ -69,7 +63,7 @@ class Import extends MY_Controller {
 	{
 		$inputFileName = $data['full_path'];
 
-		$objPHPExcel = $this->_m->init_phpexcel_object($inputFileName);
+		$objPHPExcel = $this->import_model->init_phpexcel_object($inputFileName);
 
 		$sheets = array();
 		foreach($objPHPExcel->getSheetNames() as $idx => $sheetName) {
@@ -78,7 +72,7 @@ class Import extends MY_Controller {
 			$sheets[$idx]['name'] = $sheetName;
 			$sheets[$idx]['cols_number'] = PHPExcel_Cell::columnIndexFromString($s->getHighestColumn());
 			$sheets[$idx]['rows_number'] = $s->getHighestRow();
-			$sheets[$idx]['demo'] = $this->_m->getDemoRows($s, $sheets[$idx]['rows_number'], $sheets[$idx]['cols_number']);
+			$sheets[$idx]['demo'] = $this->import_model->getDemoRows($s, $sheets[$idx]['rows_number'], $sheets[$idx]['cols_number']);
 		}
 
 		return array(
@@ -94,6 +88,7 @@ class Import extends MY_Controller {
 	{
 		$this->load->model('vendors_model');
 		$this->load->model('phones_model');
+		$this->load->model('regions_model');
 
 		$post_data['vendor_id'] = intval($this->input->post('vendors'));
 		$post_data['file'] = $this->input->post('file');
