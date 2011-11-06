@@ -39,6 +39,19 @@ class Phones_model extends CI_Model
 		return $this->db->query($query, array($vendor, $model, $region))->result_array();
 	}
 
+	public function getVendorModels($vendor)
+	{
+		$query = 'SELECT p.id, p.model as name
+				  FROM `phones` p
+				  LEFT JOIN `vendors` v ON p.vendor_id = v.id
+				  WHERE `name` = ? ORDER BY model';
+		$res = $this->db->query($query, array($vendor))->result_array();
+			foreach ($res as $model) {
+				$ret[] = '<li id="' . $model['id'] . '"><a href="/phones/' . $vendor . '/' . str_replace(' ', '_', $model['name']) . '">' . $model['name'] . '</a></li>';
+			}
+			return $ret;
+	}
+
 	public function getAllVendorModels($vendor, $type = 'select', $format_options = array())
 	{
 		if ($vendor == 'first') {

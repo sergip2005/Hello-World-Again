@@ -41,4 +41,20 @@ class Phones extends My_Controller {
 		);
 		Modules::run('pages/_return_page', $data);
 	}
+
+	public function Vendor($vendor)
+	{
+		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $vendor);
+		$catalog  = $this->phones_model->getAllParts();
+		$models = $this->phones_model->getVendorModels($vendor);
+		$data = array(
+			'title' 		=> 'Вендор: ' . $vendor ,
+			'description' 	=> $vendor ,
+			'keywords' 		=> $vendor ,
+			'body' 			=> $this->load->view('pages/phones/vendor', array('catalog' => $catalog,
+																			  'models'   => $models),
+				true),
+		);
+		Modules::run('pages/_return_page', $data);
+	}
 }

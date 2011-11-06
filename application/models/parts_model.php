@@ -76,4 +76,10 @@ class Parts_model extends CI_Model
 		}
 		return $id;
 	}
+
+		function getPartsByNumber($number)
+	{
+		$parts = $this->db->query('SELECT * FROM parts WHERE code = ? ',array($number))->result_array();
+		return $parts;
+	}
 }

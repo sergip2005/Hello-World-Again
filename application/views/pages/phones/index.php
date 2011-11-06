@@ -1,6 +1,6 @@
 <ul>
 	<?php foreach ($catalog as  $key => $model) { ?>
-	<li><?php echo $key ?>
+	<li><a href="/phones/<?php echo $key ?>"><?php echo $key ?></a>
 	<?php if (count($model) > 0) { ?>
 		<ul>
 		<?php foreach ($model as $k => $m) { ?>

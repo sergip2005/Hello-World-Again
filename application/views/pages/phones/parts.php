@@ -1,7 +1,7 @@
 <div class="models-menu">
 	<ul>
 	<?php foreach ($catalog as  $key => $models) { ?>
-		<li><?php echo $key ?>
+		<li><a href="/phones/<?php echo $key ?>"><?php echo $key ?></a>
 		<?php if (count($models) > 0) { ?>
 			<ul>
 			<?php foreach ($models as $k => $m) { ?>

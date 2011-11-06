@@ -125,7 +125,7 @@ var app = {
 							'<span class="ui-icon ui-icon-pencil"></span>' +
 						'</span>' +
 						'<span class="name"><%= item.name %></span>' +
-						' <span> (</span> <input type="radio" class="region-default" name="default" value="<%= item.id %>" ><span>)</span>' +
+						' <span> (</span> <input type="radio" class="region-default" name="default" value="<%= item.id %>" ><span>&nbsp;)</span>' +
 					'</span></li>' +
 				'<% }); %>'
 		},
