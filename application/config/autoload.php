@@ -67,7 +67,7 @@ $autoload['libraries'] = array(
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'my_array');
+$autoload['helper'] = array('url', 'my_utils', 'my_array');
 
 
 /*

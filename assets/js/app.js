@@ -18,8 +18,10 @@ var app = {
 		noimage: '<img src="/assets/images/icons/noimage.gif" title="Нет изображения" />'
 	},
 
+	messages: {},
+
 	urls: {
-        saveRegion: '/apanel/regions/save/',
+		saveRegion: '/apanel/regions/save/',
 		removeRegion: '/apanel/regions/remove/',
 		set_defaultRegion: '/apanel/regions/set_default/',
 		saveVendor: '/apanel/vendors/save/',

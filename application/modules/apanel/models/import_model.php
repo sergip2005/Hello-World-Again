@@ -40,10 +40,13 @@ class Import_model extends CI_Model
 	 */
 	function get_sheet_fields($sheet)
 	{
+		$this->load->model('regions_model');
+		$regions = $this->regions_model->getFieldValuesArray();
+
 		if ($sheet === 'cabinet' || $sheet === 'solder') {
-			return $this->part_field_types;
+			return array_merge($this->part_field_types, $regions);
 		} elseif ($sheet === 'prices') {
-			return $this->price_field_types;
+			return array_merge($this->price_field_types, $regions);
 		} else {
 			return false;
 		}
@@ -56,7 +59,7 @@ class Import_model extends CI_Model
 	 * @return string - formed html code of select
 	 */
 	function possible_values($sheet_id) {
-		$html = '<select name="sheet' . $sheet_id . '_cols_values[]">'
+		$html = '<select data-sheet-id="' . $sheet_id . '" name="sheet' . $sheet_id . '_cols_values[]" class="col-values-select">'
 				. '<option value="0"></option>';
 
 		$used_fields = array();
@@ -81,11 +84,10 @@ class Import_model extends CI_Model
 
 		$this->load->model('regions_model');
 		$html .= '<optgroup label="регионы">';
-		foreach ($this->regions_model->getAll() as $region) {
-			$val = 'region_' . $region['id'];
+		foreach ($this->regions_model->getFieldValuesArray() as $val => $desc) {
 			if (!in_array($val, $used_fields)) {
 				$used_fields[] = $val;
-				$html .= '<option value="' . $val . '">' . $region['name'] .'</option>';
+				$html .= '<option value="' . $val . '">' . $desc .'</option>';
 			}
 		}
 		$html .= '</optgroup>'
@@ -100,7 +102,7 @@ class Import_model extends CI_Model
 	 * @return string - formed html of select element
 	 */
 	function possible_sheet_types($id) {
-		$html = '<select name="sheet_type' . $id . '">'
+		$html = '<select data-sheet-id="' . $id . '" name="sheet_type' . $id . '" class="sheet-type-select">'
 				. '<option value="0" selected="selected"></option>';
 		foreach ($this->sheet_types as $val => $desc) {
 			$html .= '<option value="' . $val . '">' . $desc .'</option>';

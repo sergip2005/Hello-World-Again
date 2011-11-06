@@ -75,6 +75,11 @@ class Phones_model extends CI_Model
 		}
 	}
 
+	public function getModelInfo($mId)
+	{
+		return $this->db->query('SELECT * FROM `phones` WHERE `id` = ? LIMIT 1', array('id' => $mId))->row_array();
+	}
+
 	public function getOrCreateModel($name, $vendor){
 		if (empty($name)) { return false; }
 
@@ -96,7 +101,12 @@ class Phones_model extends CI_Model
 		return $id > 0 ? $id : false;
 	}
 
-	public function save($id, $data)
+	/**
+	 * @param int $id
+	 * @param array $data
+	 * @return
+	 */
+	public function savePart($id, $data)
 	{
 		/*
 		if ($id <= 0) {
@@ -109,7 +119,7 @@ class Phones_model extends CI_Model
 		}*/
 
 		if ($id > 0) { // update
-			$this->db->where('id', $id)->update('phones', $data);
+			$this->db->where('id', $id)->update('phones_parts', $data);
 		} else { // insert
 			$this->db->insert('phones_parts', $data);
 			$id = $this->db->insert_id();
@@ -117,7 +127,31 @@ class Phones_model extends CI_Model
 		return $id;
 	}
 
-	public function updateOrCreate($pId, $rowData, $sheetData){
+	/**
+	 * saves\updates phone model data
+	 * @param int $id
+	 * @param array $data
+	 * @return int - phone model id
+	 */
+	public function saveModel($id, $data)
+	{
+		if ($id > 0) { // update
+			$this->db->where('id', $id)->update('phones', $data);
+		} else { // insert
+			$this->db->insert('phones', $data);
+			$id = $this->db->insert_id();
+		}
+		return $id;
+	}
+
+	/**
+	 * receives data of part already saved in parts table, and saves this part to phone_parts table
+	 * @param int $pId
+	 * @param array $rowData
+	 * @param array $sheetData
+	 * @return int - phone part id
+	 */
+	public function updateOrCreatePhonePart($pId, $rowData, $sheetData){
 		// save phone model data
 		foreach ($rowData as $n => $v) {
 			if (in_array($n, $this->phonePartFields)) {
@@ -127,6 +161,56 @@ class Phones_model extends CI_Model
 		$phonePartData['phone_id'] = $sheetData['phone_id'];
 		$phonePartData['part_id'] = $pId;
 		// insert or update phone
-		return $this->save(0, $phonePartData);
+		return $this->savePart(0, $phonePartData);
+	}
+
+	/**
+	 * removes all stored part regions
+	 * @param int $pId
+	 * @return boolean
+	 */
+	public function resetPartRegions($pId){
+		return $this->db->query('DELETE FROM `phones_parts_regions_rel` WHERE `part_id` = ' . intval($pId));
+	}
+
+	/**
+	 * sets given region_id to given part_id
+	 * @param int $pId
+	 * @param int $rId
+	 * @return boolean
+	 */
+	public function setRegionToPart($pId, $rId)
+	{
+		return $this->db->insert('phones_parts_regions_rel', array( 'part_id' => $pId, 'region_id' => $rId ));
+	}
+
+	public function updatePartsRegions($pId, $rowData, $sheetData)
+	{
+		$this->load->model('regions_model');
+		$this->resetPartRegions($pId);
+
+		$regions = isset($rowData['regions']) && count($rowData['regions']) > 0 ? $rowData['regions'] : false;
+		if ($regions === false) {
+			return false;
+		}
+
+		foreach ($regions as $rId => $excVal) {
+			if ($rId <= 0 || empty($excVal)) continue;
+
+			if (strtolower($excVal) == 'x' || strtolower($excVal) == '+') {
+				$this->setRegionToPart($pId, $rId);
+			}
+		}
+	}
+
+	function getPartsDataByCode($codes)
+	{
+		if (!is_array($codes)) {
+			$this->db->where_in('code', $codes);
+		} elseif ((is_string($codes) || is_int($codes)) && strlen($codes) > 0)  {
+			$this->db->where('code', $codes);
+		} else {
+			return false;
+		}
 	}
 }

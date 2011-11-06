@@ -29,6 +29,9 @@ class Import extends MY_Controller {
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
+	/**
+	 * processes posted file and saves it on server
+	 */
 	function do_xls_upload()
 	{
 		$this->load->model('phones_model');
@@ -59,6 +62,10 @@ class Import extends MY_Controller {
 		}
 	}
 
+	/**
+	 * @param array $data - properties of just uploaded Excel file
+	 * @return array - processed & formatted data of posted excel file
+	 */
 	function _process_xls_upload($data)
 	{
 		$inputFileName = $data['full_path'];
@@ -94,10 +101,16 @@ class Import extends MY_Controller {
 		$post_data['file'] = $this->input->post('file');
 		$post_data['sheets'] = $this->input->post('sheets');
 		$post_data['model_input'] = $this->input->post('model_input');
-		$post_data['model_select'] = $this->input->post('model_select');
+		$post_data['model_select'] = intval($this->input->post('model_select'));
 		$post_data['sheets_names'] = $this->input->post('sheets_names');
 		$post_data['rev_num'] = $this->input->post('rev_num');
 		$post_data['rev_desc'] = $this->input->post('rev_desc');
+
+		// process posted model data
+		$existing_data = array();
+		if ($post_data['model_select'] > 0) {// if existing model was chosed
+			$existing_data['model'] = $this->phones_model->getModelInfo($post_data['model_select']);
+		}
 
 		$objPHPExcel = $this->import_model->init_phpexcel_object($this->config->item('upload_path') . $post_data['file']);
 
@@ -123,6 +136,7 @@ class Import extends MY_Controller {
 
 			if ($sheets_data[$sheet]['type'] !== '0') {// do not parse sheets without type provided
 				$sheets_data[$sheet]['data'] = $this->import_model->get_sheet_data($objPHPExcel->setActiveSheetIndex($sheet), $sheets_data[$sheet]);
+				$sheets_data[$sheet]['prev_data'] = $this->phones_model->get_parts_data_by_code(array_map('narrow_to_code_field_only', $sheets_data[$sheet]['data']), $post_data['vendor_id']);
 			}
 		}
 
@@ -130,7 +144,7 @@ class Import extends MY_Controller {
 			'title'	=> 'Подтверждение импорта',
 			'css'	=> array(),
 			'js'	=> array('apanel/import/third.js'),
-			'body'	=> $this->load->view('pages/import/third_page', array('sheets' => $sheets_data, 'post' => $post_data), true),
+			'body'	=> $this->load->view('pages/import/third_page', array('sheets' => $sheets_data, 'post' => $post_data, 'current' => $existing_data), true),
 		);
 		Modules::run('pages/_return_ap_page', $template);
 	}
@@ -153,7 +167,7 @@ class Import extends MY_Controller {
 			$model = $this->input->post('model_input');
 			$model = $this->phones_model->getOrCreateModel($model, $vendor);
 		}
-		$this->phones_model->save($model, array( 'rev_num' => $rev_num, 'rev_desc' => $rev_desc, 'rev_date' => date('Y-m-d H:i:s') ));
+		$this->phones_model->saveModel($model, array( 'rev_num' => $rev_num, 'rev_desc' => $rev_desc, 'rev_date' => date('Y-m-d H:i:s') ));
 
 		$sheets = $this->input->post('sheets_data');
 
@@ -169,13 +183,15 @@ class Import extends MY_Controller {
 
 			if (in_array($sheet['type'], array('cabinet', 'solder'))) {// import phone parts data
 				foreach ($sheet['rows'] as $rowN) {
-					if (strlen(implode('', $sheet['cols'][$rowN])) <= 0) continue;
+					if (strlen(r_implode('', $sheet['cols'][$rowN])) <= 0) continue;
 					if (!array_key_exists('code', $sheet['cols'][$rowN]) || empty($sheet['cols'][$rowN]['code'])) continue;
 
 					// save or get part id
 					$pId = $this->parts_model->updateOrCreate($sheet['cols'][$rowN], $model_params);
 					// save or get phone model id
-					$this->phones_model->updateOrCreate($pId, $sheet['cols'][$rowN], $model_params);
+					$ppId = $this->phones_model->updateOrCreatePhonePart($pId, $sheet['cols'][$rowN], $model_params);
+					// update phone part regions
+					$this->phones_model->updatePartsRegions($ppId, $sheet['cols'][$rowN], $model_params);
 				}
 			} elseif ($sheet['type'] == 'price') {
 				foreach ($sheet['rows'] as $rowN) {
@@ -185,7 +201,9 @@ class Import extends MY_Controller {
 					// save or get part id
 					$pId = $this->parts_model->updateOrCreate($sheet['cols'][$rowN], $model_params);
 					// save or get phone model id
-					$this->phones_model->updateOrCreate($pId, $sheet['cols'][$rowN], $model_params);
+					$ppId = $this->phones_model->updateOrCreatePhonePart($pId, $sheet['cols'][$rowN], $model_params);
+					// update phone part regions
+					$this->phones_model->updatePartsRegions($ppId, $sheet['cols'][$rowN], $model_params);
 				}
 			}
 		}

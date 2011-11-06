@@ -33,9 +33,16 @@
 			<td class="label"></td>
 			<td class="value">
 				Номер ревизии листа:<br>
-				<input name="rev_num" value="<?php echo $post['rev_num'] ?>"><br><br>
+				<input name="rev_num" value="<?php echo $post['rev_num'] ?>"><br>
+				<?php if (isset($current['model']['rev_num']) && !empty($current['model']['rev_num'])) { ?>
+				<span class="current-data<?php echo $post['rev_num'] != $current['model']['rev_num'] ? ' to-change' : '' ?>"><?php echo $current['model']['rev_num'] ?></span><br>
+				<?php } ?>
+				<br>
 				Описание ревизии листа<br>
-				<input name="rev_desc" value="<?php echo $post['rev_desc'] ?>">
+				<input name="rev_desc" value="<?php echo $post['rev_desc'] ?>"><br>
+				<?php if (isset($current['model']['rev_desc']) && !empty($current['model']['rev_desc'])) { ?>
+				<span class="current-data<?php echo $post['rev_desc'] != $current['model']['rev_desc'] ? ' to-change' : '' ?>"><?php echo $current['model']['rev_desc'] ?></span>
+				<?php } ?>
 			</td>
 		</tr>
 	</table>
@@ -60,7 +67,13 @@
 				<tr>
 					<td><input type="checkbox" value="<?php echo $rowN ?>" name="sheets_data[<?php echo $sheet['id'] ?>][rows][]" checked="checked"></td>
 					<?php foreach ($row as $fieldN => $field) { ?>
-					<td class="<?php echo $fieldN ?>"><input type="text" name="sheets_data[<?php echo $sheet['id'] ?>][cols][<?php echo $rowN ?>][<?php echo $fieldN ?>]" value="<?php echo trim($field) ?>"></td>
+					<?php
+						// change names of fields with region from [region_9] to [regions][9]
+						$fieldN = !preg_match('/^region_/', $fieldN) ? $fieldN : 'regions][' . (int)end(explode('_', $fieldN));
+					?>
+					<td class="<?php echo !preg_match('/^regions/', $fieldN) ? $fieldN : 'regions' ?>">
+						<input type="text" name="sheets_data[<?php echo $sheet['id'] ?>][cols][<?php echo $rowN ?>][<?php echo $fieldN ?>]" value="<?php echo trim($field) ?>">
+					</td>
 					<?php } ?>
 				</tr>
 			<?php } ?>
@@ -80,3 +93,9 @@
 	<input type="submit" value="Сохранить информацию">
 
 </form>
+
+<div class="additional-detailes">
+	<ul>
+		<li>Галочки слева от строки со значениями, позволяют исключить из внесения в систему отдельные строки, которые могли быть неправильно распознаны системой как верные.</li>
+	</ul>
+</div>

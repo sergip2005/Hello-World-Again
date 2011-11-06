@@ -26,7 +26,6 @@
 				<br><br>
 				или создайте новую, вписав название:<br>
 				<input type="text" placeholder="Модель телефона" name="model_input" value="">
-				<p id="model_error" class="validaton-error">Модель не задана</p>
 				<br><br>
 			</td>
 		</tr>
@@ -60,7 +59,6 @@
 			<label><?php echo $sheet['name'] ?></label>
 			(столбцов с данными <?php echo $sheet['cols_number'] ?>, строк с данными <?php echo $sheet['rows_number'] ?>)
 			<div id="sheet<?php echo $sheet['id'] ?>" class="sheet-info">
-				<!-- sheet info form -->
 				Тип данных в листе: <?php echo $this->import_model->possible_sheet_types($sheet['id']) ?><br><br>
 				Выберите ячейки с информацией и тип данных в них:<br>
 				<div class="demo-data">
@@ -97,4 +95,9 @@
 <?php } ?>
 </form>
 
-<br>
+<div class="additional-detailes">
+	<ul>
+		<li>Для поля, задающего регион считается, что символы + или х означают принадлежность детали этому региону. Остальные случаи - отвечают непринадлежности.</li>
+		<li>Из данных, полученных из листа с данными Excel, автоматически уберутся пустые строки и строки, в которых ячейка с типом данных "Парт. номер" не содержит информации, содержит менее 4х символов или содержит только символ-заполнитель "х" или содержит только слово-заголовок "Code". Все остальные случаи обработаются системой как парт. номера детали.</li>
+	</ul>
+</div>

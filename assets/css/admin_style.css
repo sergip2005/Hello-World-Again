@@ -431,7 +431,25 @@ table.desc select {
 }
 
 .validaton-error-field {
-	border-color: red;
+	background-color: #FFDBDB;
+}
+
+.additional-detailes{
+	border-top: 1px solid #999999;
+	margin-top: 50px;
+	padding-top: 20px;
+}
+
+.additional-detailes ul{
+	list-style-type: circle;
+	margin: 0 10px;
+}
+
+.additional-detailes ul li{
+	color: #FF4444;
+	font-weight: bold;
+	padding: 0;
+	margin-bottom: 5px;
 }
  
  
@@ -684,7 +702,8 @@ padding: 0;
 }
 
 .sheet-import-data td.cct_ref, .sheet-import-data td.cct_ref input { width: 50px }
-.sheet-import-data td.num, .sheet-import-data td.num input { width: 50px }
+.sheet-import-data td.regions, .sheet-import-data td.regions input,
+.sheet-import-data td.num, .sheet-import-data td.num input { width: 30px }
 .sheet-import-data td.code, .sheet-import-data td.code input { width: 75px }
 .sheet-import-data td.name, .sheet-import-data td.name input { width: 300px }
 .sheet-import-data td.comment, .sheet-import-data td.comment input { width: 150px }

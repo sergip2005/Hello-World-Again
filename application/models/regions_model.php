@@ -27,10 +27,9 @@ class Regions_model extends CI_Model
 		return $error ? false : $id;
 	}
 
-    public function get($id)
+	public function get($id)
 	{
-       return $this->db->where('id', $id)->get(self::TABLE)->row_array();
-
+		return $this->db->where('id', $id)->get(self::TABLE)->row_array();
 	}
 
 	public function getAll($format = 'array')
@@ -82,6 +81,21 @@ class Regions_model extends CI_Model
 		}
 
 		return $error ? false : true;
+	}
+
+	public function getFieldValuesArray()
+	{
+		$regions = '';
+		foreach ($this->getAll() as $region) {
+			$regions['region_' . $region['id']] = $region['name'];
+		}
+		return $regions;
+	}
+
+	public function getDefaultRegionId()
+	{
+		$d = $this->db->where('default', 1)->get(self::TABLE)->row();
+		return $d->id > 0 ? $d->id : 0;
 	}
 
 }
