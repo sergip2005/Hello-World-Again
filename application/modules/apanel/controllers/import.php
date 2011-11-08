@@ -136,7 +136,9 @@ class Import extends MY_Controller {
 
 			if ($sheets_data[$sheet]['type'] !== '0') {// do not parse sheets without type provided
 				$sheets_data[$sheet]['data'] = $this->import_model->get_sheet_data($objPHPExcel->setActiveSheetIndex($sheet), $sheets_data[$sheet]);
-				$sheets_data[$sheet]['prev_data'] = $this->phones_model->get_parts_data_by_code(array_map('narrow_to_code_field_only', $sheets_data[$sheet]['data']), $post_data['vendor_id']);
+
+				// returns array like parts -> code => part props; phone_parts -> code => array of parts
+				$sheets_data[$sheet]['prev_state'] = $this->phones_model->getPrevDataState(array_map('narrow_to_code_field_only', $sheets_data[$sheet]['data']), $post_data['vendor_id'], isset($existing_data['model']) ? $existing_data['model']['id'] : false);
 			}
 		}
 
@@ -209,5 +211,11 @@ class Import extends MY_Controller {
 		}
 		$this->session->set_flashdata('message', 'Импорт прошел успешно');
 		redirect('/apanel/import/index');
+	}
+
+	public function test()
+	{
+		$this->load->model('phones_model');
+		$this->output->set_output('<pre>' . print_r($this->phones_model->getPrevDataState(array ( 0 => 6300314, 1 => 9445392, 2 => 5650837, 3 => 4850320, 4 => 6300079, 5 => 6300341), 40, 6 ), true));
 	}
 }

@@ -77,7 +77,7 @@
 
 		<!--[if lt IE 7 ]>
 		<script src="/assets/js/libs/dd_belatedpng.js"></script>
-		<script>DD_belatedPNG.fix('img, .png_bg'); // Fix any <img> or .png_bg bg-images. Also, please read goo.gl/mZiyb </script>
+		<script>DD_belatedPNG.fix('img, .png_bg');</script>
 		<![endif]-->
 
 		<!-- mathiasbynens.be/notes/async-analytics-snippet Change UA-XXXXX-X to be your site's ID

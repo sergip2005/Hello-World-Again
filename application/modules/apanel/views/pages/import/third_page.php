@@ -35,12 +35,14 @@
 				Номер ревизии листа:<br>
 				<input name="rev_num" value="<?php echo $post['rev_num'] ?>"><br>
 				<?php if (isset($current['model']['rev_num']) && !empty($current['model']['rev_num'])) { ?>
+				Сейчас:
 				<span class="current-data<?php echo $post['rev_num'] != $current['model']['rev_num'] ? ' to-change' : '' ?>"><?php echo $current['model']['rev_num'] ?></span><br>
 				<?php } ?>
 				<br>
-				Описание ревизии листа<br>
+				Описание ревизии листа:<br>
 				<input name="rev_desc" value="<?php echo $post['rev_desc'] ?>"><br>
 				<?php if (isset($current['model']['rev_desc']) && !empty($current['model']['rev_desc'])) { ?>
+				Сейчас:
 				<span class="current-data<?php echo $post['rev_desc'] != $current['model']['rev_desc'] ? ' to-change' : '' ?>"><?php echo $current['model']['rev_desc'] ?></span>
 				<?php } ?>
 			</td>
@@ -96,6 +98,8 @@
 
 <div class="additional-detailes">
 	<ul>
+		<li><span class="current-data">текст</span> - выделение информации из прошлой ревизии, которая осталась без изменений в текущей</li>
+		<li><span class="current-data to-change">текст</span> - выделение информации из прошлой ревизии, которая изменена в текущей</li>
 		<li>Галочки слева от строки со значениями, позволяют исключить из внесения в систему отдельные строки, которые могли быть неправильно распознаны системой как верные.</li>
 	</ul>
 </div>

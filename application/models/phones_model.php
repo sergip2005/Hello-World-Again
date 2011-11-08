@@ -34,7 +34,7 @@ class Phones_model extends CI_Model
 				  LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
 				  LEFT JOIN `regions` r ON r.id = pprr.region_id
 				  WHERE v.name = ? AND p.model = ?
-				  AND IF (? = "all", 1, r.id = (SELECT id FROM regions where `default` = 1))
+				  AND IF (? = "all", 1, r.id = (SELECT id FROM regions where `default` = 1 LIMIT 1))
 				  ORDER BY v.name';
 		return $this->db->query($query, array($vendor, $model, $region))->result_array();
 	}
@@ -75,11 +75,22 @@ class Phones_model extends CI_Model
 		}
 	}
 
+	/**
+	 * @param int $mId
+	 * @return array - db row info from 'phones' table
+	 */
 	public function getModelInfo($mId)
 	{
 		return $this->db->query('SELECT * FROM `phones` WHERE `id` = ? LIMIT 1', array('id' => $mId))->row_array();
 	}
 
+	/**
+	 * if model with such name already exists under this vendor -> returns its id
+	 * otherwise -> creates it, and returns new model id
+	 * @param str $name
+	 * @param int $vendor
+	 * @return bool|int - id of newly created or existing model in 'phones' table
+	 */
 	public function getOrCreateModel($name, $vendor){
 		if (empty($name)) { return false; }
 
@@ -104,7 +115,7 @@ class Phones_model extends CI_Model
 	/**
 	 * @param int $id
 	 * @param array $data
-	 * @return
+	 * @return int - id of newly created of existing `phones_parts` record
 	 */
 	public function savePart($id, $data)
 	{
@@ -203,14 +214,114 @@ class Phones_model extends CI_Model
 		}
 	}
 
-	function getPartsDataByCode($codes)
+	public function getPhonePartsRegions($ids)
 	{
-		if (!is_array($codes)) {
-			$this->db->where_in('code', $codes);
-		} elseif ((is_string($codes) || is_int($codes)) && strlen($codes) > 0)  {
-			$this->db->where('code', $codes);
+		$this->db
+				->select('part_id, region_id')
+				->from('phones_parts_regions_rel');
+
+		if (is_array($ids)) {
+			$this->db->where_in('part_id', $ids);
+		} elseif ((is_string($ids) || is_int($ids)) && strlen($ids) > 0) {
+			$this->db->where('part_id', $ids);
 		} else {
 			return false;
 		}
+
+		$res = $this->db->get();
+		if ($res->num_rows() <= 0) return false;
+
+		$ret = array();
+		foreach ($res->result_array() as $row) {
+			$ret[$row['part_id']][] = $row['region_id'];
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * returns info of parts with provided codes
+	 * @param array|string $codes - array of codes to select, or one code
+	 * @param int $vendor_id
+	 * @return array|bool
+	 */
+	function getPartsDataByCode($codes, $vendor_id)
+	{
+		$this->db
+				->select('pt.id, pt.code, pt.name, pt.type, pt.ptype, pt.name_rus, pt.url, pt.mktel_has, pt.price, pt.min_num')
+				->from('parts AS pt')
+				->join('phones_parts AS pp', 'pt.id = pp.part_id', 'left')
+				->join('phones AS phn', 'phn.id = pp.phone_id', 'left')
+				->where('phn.vendor_id', $vendor_id);
+
+		if (is_array($codes)) {
+			$this->db->where_in('pt.code', $codes);
+		} elseif ((is_string($codes) || is_int($codes)) && strlen($codes) > 0) {
+			$this->db->where('pt.code', $codes);
+		} else {
+			return false;
+		}
+
+		$res = $this->db->get();
+		if ($res->num_rows() <= 0) return false;
+
+		$res = $res->result_array();
+
+		return array(
+				'data' => process_to_code_keyed_array($res),
+				'ids' => array_map('narrow_to_id_field_only', $res)
+			);
+	}
+
+	/**
+	 * returns existing data of provided model
+	 * @param array|str $codes
+	 * @param int $vendor_id
+	 * @param int $model_id
+	 * @return array
+	 */
+	public function getPrevDataState($codes, $vendor_id, $model_id){
+		$p = $this->getPartsDataByCode($codes, $vendor_id);// array of parts with passed codes: 'code' => properties array
+		$pp = $this->getPhonePartsByPartId($p['ids'], $model_id);
+		$r = $this->getPhonePartsRegions($pp['ids']);
+
+		return array(
+			'parts' => $p['data'],
+			'phone_parts' => $pp['data'],
+			'regions' => $r
+		);
+	}
+
+	/**
+	 * returns data from phones_parts table by model_id and part_id array provided
+	 * @param  $ids
+	 * @param  $model_id
+	 * @return array|bool
+	 */
+	public function getPhonePartsByPartId($ids, $model_id)
+	{
+		$this->db
+				->select('pp.id, pp.part_id, pp.phone_id, pp.cct_ref, pp.num, pp.comment, p.code')
+				->from('phones_parts AS pp')
+				->join('parts AS p', 'p.id = pp.part_id', 'left')
+				->where('pp.phone_id', $model_id);
+
+		if (is_array($ids)) {
+			$this->db->where_in('pp.part_id', $ids);
+		} elseif ((is_string($ids) || is_int($ids)) && strlen($ids) > 0) {
+			$this->db->where('pp.part_id', $ids);
+		} else {
+			return false;
+		}
+
+		$res = $this->db->get();
+		if ($res->num_rows() <= 0) return false;
+
+		$res = $res->result_array();
+
+		return array(
+			'data' => process_to_code_keyed_groupped_array($res),
+			'ids' => array_map('narrow_to_id_field_only', $res)
+		);
 	}
 }

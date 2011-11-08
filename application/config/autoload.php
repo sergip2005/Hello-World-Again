@@ -53,7 +53,7 @@ $autoload['packages'] = array();
 */
 
 $autoload['libraries'] = array(
-		'session', 'database', 'form_validation', //core
+		'session', 'database', 'form_validation',//core
 		'ion_auth', //sparks
 	);
 

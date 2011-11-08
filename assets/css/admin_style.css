@@ -693,13 +693,9 @@ padding: 0;
 	vertical-align: baseline;
 }
 
-.sheet-import-data table tbody tr:hover {
-	background: #ffffdd;
-}
+.sheet-import-data table tbody tr:hover { background: #ffffdd }
 
-.sheet-import-data table th {
-	background: #ffffcc;
-}
+.sheet-import-data table th { background: #ffffcc }
 
 .sheet-import-data td.cct_ref, .sheet-import-data td.cct_ref input { width: 50px }
 .sheet-import-data td.regions, .sheet-import-data td.regions input,
@@ -707,3 +703,13 @@ padding: 0;
 .sheet-import-data td.code, .sheet-import-data td.code input { width: 75px }
 .sheet-import-data td.name, .sheet-import-data td.name input { width: 300px }
 .sheet-import-data td.comment, .sheet-import-data td.comment input { width: 150px }
+
+/** changes highlighting */
+.current-data {
+	background-color: #DBFFDE;
+	color: #000000;
+	display: inline-block;
+	font-weight: normal;
+	padding: 2px 5px;
+}
+.current-data.to-change { background-color: #9BA5FF }
