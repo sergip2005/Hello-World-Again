@@ -57,7 +57,7 @@ class Phones_model extends CI_Model
 				  WHERE `name` = ? ORDER BY model';
 		$res = $this->db->query($query, array($vendor))->result_array();
 			foreach ($res as $model) {
-				$ret[] = '<li id="' . $model['id'] . '"><a href="/phones/' . $vendor . '/' . str_replace(' ', '_', $model['name']) . '">' . $model['name'] . '</a></li>';
+				$ret[] = '<li id="' . $model['id'] . '"><a href="/phones/' . strtolower($vendor) . '/' . str_replace(' ', '_', $model['name']) . '">' . $model['name'] . '</a></li>';
 			}
 			return $ret;
 	}
