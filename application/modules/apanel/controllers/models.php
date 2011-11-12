@@ -10,25 +10,25 @@ class Models extends MY_Controller {
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
 			redirect('login');
 		}
-		$this->_m = $this->load->model('phones_model');
+		$this->load->model('phones_model');
 	}
 
 	public function index()
 	{
-		$regions  = $this->_m->getAll();
+
 		$template = array(
 			'title'			=> '',
 			'description'	=> '',
 			'keywords'		=> '',
 			'js'			=> array('js' => 'apanel/regions.js'),
-			'body'			=> $this->load->view('pages/regions/index', array('regions' => $regions), true),
+			'body'			=> $this->load->view('pages/models/index', array(), true),
 		);
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
 	public function get_by_vendor($vendor_id)
 	{
-		$this->output->set_output(json_encode($this->_m->getAllVendorModels(intval($vendor_id))));
+		$this->output->set_output(json_encode($this->phones_model->getAllVendorModels(intval($vendor_id))));
 	}
 
 	public function save()
@@ -37,7 +37,7 @@ class Models extends MY_Controller {
 		$name = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('name'));
 		$data = array('name' => $name);
 
-		$data['id'] = $this->_m->save($id, $data );
+		$data['id'] = $this->phones_model->save($id, $data );
 		if ($data['id'] > 0) {
 			$this->output->set_output(json_encode(array(
 				'status'  => 1,
@@ -53,7 +53,7 @@ class Models extends MY_Controller {
 	{
         $id = intval($this->input->post('id'));
         if ($id > 0) {
-			$data = $this->_m->get($id);
+			$data = $this->phones_model->get($id);
 			$this->output->set_output( json_encode(array(
                 'status'  => 1,
                 'item'    => $data,
@@ -66,7 +66,7 @@ class Models extends MY_Controller {
     public function remove()
 	{
         $id = intval($this->input->post('id'));
-        if ($this->_m->remove($id)) {
+        if ($this->phones_model->remove($id)) {
 			$this->output->set_output(json_encode(array('status' => 1, 'message' => Regions_model::REMOVE_SUCCESS)));
 		} else {
 			$this->output->set_output(json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR)));

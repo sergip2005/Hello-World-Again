@@ -5,12 +5,6 @@ class Import_model extends CI_Model
 	private $_worksheet;
 	private $_row;
 
-	public $rev_field_types = array(
-			'rev_num'	=> 'Номер ревизии листа',
-			'rev_date'	=> 'Дата ревизии листа',
-			'rev_desc'	=> 'Описание ревизии листа',
-		);
-
 	public $part_field_types = array(
 			'name'		=> 'Ориг. имя детали',
 			'code'		=> 'Парт. номер детали',
@@ -242,6 +236,11 @@ class Import_model extends CI_Model
 			if (strlen($row['code']) < 4 || preg_match('/^x+/i', strtolower($row['code'])) || strtolower($row['code']) == 'code') {
 				unset($input[$rowN]);
 			}
+
+			if (isset($row['name']) && strtolower($row['name']) == 'description') {
+				unset($input[$rowN]);
+			}
+
 			if (isset($row['price_hrn']) && floatval($row['price_hrn']) < 0) {
 				unset($input[$rowN]);
 			}
@@ -252,6 +251,7 @@ class Import_model extends CI_Model
 				unset($input[$rowN]);
 			}
 		}
+
 		// reset array keys
 		return array_merge(array(), $input);
 	}

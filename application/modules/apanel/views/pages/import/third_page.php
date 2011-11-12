@@ -67,13 +67,17 @@
 			<tbody>
 			<?php
 			$ii = 1;
+			$prev_exists = isset($sheet['prev_state']) && count($sheet['prev_state']) > 0;// cache condition
 			foreach ($sheet['data'] as $rowN => $row) {
-				if (isset($sheet['prev_state']) && count($sheet['prev_state']) > 0) { // if there are already any parts in db
+				echo $row['code'] . ', ';
+				if ($prev_exists) { // if there are already any parts in db
 					if (isset($sheet['prev_state']['parts'][$row['code']])) {
 							$c_part = $sheet['prev_state']['parts'][$row['code']]; // 1 at a time
 							$c_phone_parts = $sheet['prev_state']['phone_parts'][$row['code']]; // may be more than 1
 
 							$nn = 0;
+							//if (count($c_phone_parts) <= 0) continue;
+						if (count($c_phone_parts) > 0 && in_array($sheet['type'], array('cabinet', 'solder'))) { // for sheets with parts data
 							foreach ($c_phone_parts as $phonePart) {
 								$c_regions = isset($sheet['prev_state']['regions'][$phonePart['id']]) ? $sheet['prev_state']['regions'][$phonePart['id']] : false;
 						?>
@@ -93,14 +97,11 @@
 									if ($region) {
 										echo $c_regions !== false && in_array($fieldN, $c_regions) ? 'x' : '';
 									} else {
-										if (in_array($fieldN, $this->phones_model->phonePartFields)) {
-											if ($phonePart[$fieldN] != $row[$fieldN]) echo '<span class="changed">';
-											echo $phonePart[$fieldN];
-											echo '</span>';
-										} elseif (in_array($fieldN, $this->parts_model->partFields)) {
-											if ($c_part[$fieldN] != $row[$fieldN]) echo '<span class="changed">';
-											echo $c_part[$fieldN];
-											echo '</span>';
+										if (in_array($fieldN, $this->phones_model->phonePartFields)) { ?>
+											<span<?php echo ($phonePart[$fieldN] != $row[$fieldN]) ? ' class="changed"' : '' ?>><?php echo $phonePart[$fieldN] ?></span>
+										<?php } elseif (in_array($fieldN, $this->parts_model->partFields)) { ?>
+											<span<?php echo ($c_part[$fieldN] != $row[$fieldN]) ? ' class="changed"' : '' ?>><?php echo $c_part[$fieldN] ?></span>
+										<?php
 										}
 									}
 									?>
@@ -110,10 +111,22 @@
 								} ?>
 						</tr>
 						<?php } ?>
-					<?php } ?>
-
-				<?php } ?>
-				<tr class="<?php echo $ii % 2 ? ' odd' : ' even' ?><?php echo $nn > 0 ? ' last' : '' ?>">
+						<?php } elseif (in_array($sheet['type'], array('prices'))) { // for price sheet ?>
+						<tr class="current<?php echo $ii % 2 ? ' odd' : ' even' ?>">
+							<td></td>
+							<?php foreach ($row as $fieldN => $field) { ?>
+								<td class="<?php echo $fieldN ?>">
+									<?php if (in_array($fieldN, $this->parts_model->partFields)) { ?>
+										<span<?php echo ($c_part[$fieldN] != $row[$fieldN]) ? ' class="changed"' : '' ?>><?php echo $c_part[$fieldN] ?></span>
+									<?php } ?>
+								</td>
+							<?php } ?>
+						</tr>
+						<?php
+						}
+					}
+				} ?>
+				<tr class="<?php echo $ii % 2 ? ' odd' : ' even' ?><?php echo isset($nn) && $nn > 0 ? ' last' : '' ?>">
 					<td><input type="checkbox" value="<?php echo $rowN ?>" name="sheets_data[<?php echo $sheet['id'] ?>][rows][]" checked="checked"></td>
 					<?php foreach ($row as $fieldN => $field) { ?>
 					<?php
@@ -152,3 +165,5 @@
 		<li>Галочки слева от строки со значениями, позволяют исключить из внесения в систему отдельные строки, которые могли быть некорректно распознаны системой как верные.</li>
 	</ul>
 </div>
+
+<pre><?php print_r($sheets) ?></pre>

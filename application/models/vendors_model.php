@@ -41,7 +41,7 @@ class Vendors_model extends CI_Model
 	public function getAll($format = 'array', $format_options = false)
 	{
 		$this->db->order_by('name', 'ASC');
-		$res = $this->db->get(self::TABLE)->result_array();
+		$res = $this->db->query('SELECT * FROM ' . self::TABLE . ' ORDER BY name ASC')->result_array();
 
 		if ($format == 'ul') {
 			$html = '<ul>';
