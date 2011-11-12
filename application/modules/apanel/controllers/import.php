@@ -37,6 +37,7 @@ class Import extends MY_Controller {
 		$this->load->model('phones_model');
 		$this->load->model('vendors_model');
 		$this->load->model('regions_model');
+		$this->load->model('import_data_tpl_model');
 
 		$config = array(
 				'upload_path'	=> $this->config->item('upload_path'),
@@ -48,7 +49,7 @@ class Import extends MY_Controller {
 
 		if (! $this->upload->do_upload('file')) {
 			$this->session->set_flashdata('message', $this->upload->display_errors());
-			redirect('apanel/import');
+			redirect('apanel/import/');
 		} else {
 			$data = $this->_process_xls_upload($this->upload->data());
 
@@ -95,6 +96,7 @@ class Import extends MY_Controller {
 	{
 		$this->load->model('vendors_model');
 		$this->load->model('phones_model');
+		$this->load->model('parts_model');
 		$this->load->model('regions_model');
 
 		$post_data['vendor_id'] = intval($this->input->post('vendors'));
@@ -105,6 +107,11 @@ class Import extends MY_Controller {
 		$post_data['sheets_names'] = $this->input->post('sheets_names');
 		$post_data['rev_num'] = $this->input->post('rev_num');
 		$post_data['rev_desc'] = $this->input->post('rev_desc');
+
+		if (!$post_data['file']) {
+			$this->session->set_flashdata('message', 'Не выбран файл для импорта');
+			redirect('/apanel/import/');
+		}
 
 		// process posted model data
 		$existing_data = array();
@@ -211,6 +218,22 @@ class Import extends MY_Controller {
 		}
 		$this->session->set_flashdata('message', 'Импорт прошел успешно');
 		redirect('/apanel/import/index');
+	}
+
+	public function save_data_template()
+	{
+		$data['name'] = $this->input->post('name');
+		$data['values'] = $this->input->post('values');
+		$this->load->model('import_data_tpl_model');
+		$this->import_data_tpl_model->save($data);
+		$this->output->set_output($this->import_data_tpl_model->getSelect());
+	}
+
+	public function remove_data_template($id)
+	{
+		$this->load->model('import_data_tpl_model');
+		$this->import_data_tpl_model->remove(intval($id));
+		$this->output->set_output($this->import_data_tpl_model->getSelect());
 	}
 
 	public function test()

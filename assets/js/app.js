@@ -27,7 +27,9 @@ var app = {
 		saveVendor: '/apanel/vendors/save/',
 		removeVendor: '/apanel/vendors/remove/',
 		set_visibleVendor: '/apanel/vendors/set_visible/',
-		getVendorModels: '/apanel/models/get_by_vendor/'
+		getVendorModels: '/apanel/models/get_by_vendor/',
+		saveDataTpl: '/apanel/import/save_data_template/',
+		removeDataTpl: '/apanel/import/remove_data_template/'
 	},
 
 	text: {
@@ -64,6 +66,9 @@ var app = {
 	/** message */
 	message: null,
 	messageContent: null,
+	/**
+	 * @param s - object with structure {html:string, c: function}
+	 */
 	showMessage: function (s) {
 		var c = this.messageContent, p = this.message;
 		c.html(s.html);

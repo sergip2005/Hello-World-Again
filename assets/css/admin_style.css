@@ -311,6 +311,10 @@ body {
 	padding: 5px;
 }
 
+.sheet-info .data-template {
+	float: right;
+}
+
 /** tables */
 table.desc {
 	border: 1px solid #999;
@@ -531,9 +535,8 @@ table.desc select {
 
 /*list
 ==============================*/
-#pages .b{
-	font-weight: bold;
-}
+#pages .b{ font-weight: bold }
+
 #vendors-list, #regions-list, #pages-list  {
 	background: #FFF;
 	border: 1px solid #DDD;
@@ -582,9 +585,7 @@ table.desc select {
 	font-weight: bold;
 }
 
-.item-info .data {
-	width: 100%;
-}
+.item-info .data { width: 100% }
 
 .item-info tr.border {
 	border-top: 1px solid #999;
@@ -597,7 +598,7 @@ table.desc select {
 	color: red;
 	font-size: 12px;
 }
-.top-icons .ui-icon, .bottom-icons .ui-icon {
+.ui-icon, .top-icons .ui-icon, .bottom-icons .ui-icon {
 	display: inline-block;
 	cursor: pointer;
 }
@@ -615,6 +616,8 @@ table.desc select {
 .ui-icon-close { background-position: -80px -128px; }
 .ui-icon-pencil { background-position: -64px -112px; }
 .ui-icon-arrowbold-e { background-position: -32px -48px; }
+.ui-icon-disk { background-position: -96px -112px; }
+.ui-icon-extlink { background-position: -32px -80px; }
 
 /* editor form */
 .editor-form{
@@ -653,9 +656,7 @@ table.desc select {
 	width: 160px;
 }
 
-.editor-form select, .editor-form textarea{
-padding: 0;
-}
+.editor-form select, .editor-form textarea{ padding: 0 }
 
 /** import */
 .demo-data {
@@ -664,9 +665,7 @@ padding: 0;
 	border: 1px solid #EEE;
 }
 
-.demo-data table {
-	font-size: 11px;
-}
+.demo-data table { font-size: 11px }
 
 .demo-data table td {
 	border: 1px solid #999;
@@ -703,6 +702,42 @@ padding: 0;
 .sheet-import-data td.code, .sheet-import-data td.code input { width: 75px }
 .sheet-import-data td.name, .sheet-import-data td.name input { width: 300px }
 .sheet-import-data td.comment, .sheet-import-data td.comment input { width: 150px }
+
+.sheet-import-data table tr {
+	border-left: 1px solid green;
+	border-right: 1px solid green;
+}
+
+.sheet-import-data table tr.current {
+	background: #FEEBC7;
+	color: #666666;
+	font-size: 11px;
+}
+
+.sheet-import-data table tr.current {
+	color: #666;
+}
+
+.sheet-import-data table tr.current .changed {
+	font-weight: bold;
+	color: #000;
+}
+
+.sheet-import-data table tr.first td {
+	border-top: 1px solid green;
+}
+
+.sheet-import-data table tr.last {
+	border-bottom: 1px solid green;
+}
+
+.sheet-import-data table tr.even {
+	background: #FFD3C9;
+}
+
+.sheet-import-data table tr.odd {
+	background: #C9FFCD;
+}
 
 /** changes highlighting */
 .current-data {

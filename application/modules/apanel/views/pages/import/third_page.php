@@ -35,14 +35,14 @@
 				Номер ревизии листа:<br>
 				<input name="rev_num" value="<?php echo $post['rev_num'] ?>"><br>
 				<?php if (isset($current['model']['rev_num']) && !empty($current['model']['rev_num'])) { ?>
-				Сейчас:
+				Текущий:
 				<span class="current-data<?php echo $post['rev_num'] != $current['model']['rev_num'] ? ' to-change' : '' ?>"><?php echo $current['model']['rev_num'] ?></span><br>
 				<?php } ?>
 				<br>
 				Описание ревизии листа:<br>
 				<input name="rev_desc" value="<?php echo $post['rev_desc'] ?>"><br>
 				<?php if (isset($current['model']['rev_desc']) && !empty($current['model']['rev_desc'])) { ?>
-				Сейчас:
+				Текущее:
 				<span class="current-data<?php echo $post['rev_desc'] != $current['model']['rev_desc'] ? ' to-change' : '' ?>"><?php echo $current['model']['rev_desc'] ?></span>
 				<?php } ?>
 			</td>
@@ -65,8 +65,55 @@
 				<?php } ?>
 			</thead>
 			<tbody>
-			<?php foreach ($sheet['data'] as $rowN => $row) { ?>
-				<tr>
+			<?php
+			$ii = 1;
+			foreach ($sheet['data'] as $rowN => $row) {
+				if (isset($sheet['prev_state']) && count($sheet['prev_state']) > 0) { // if there are already any parts in db
+					if (isset($sheet['prev_state']['parts'][$row['code']])) {
+							$c_part = $sheet['prev_state']['parts'][$row['code']]; // 1 at a time
+							$c_phone_parts = $sheet['prev_state']['phone_parts'][$row['code']]; // may be more than 1
+
+							$nn = 0;
+							foreach ($c_phone_parts as $phonePart) {
+								$c_regions = isset($sheet['prev_state']['regions'][$phonePart['id']]) ? $sheet['prev_state']['regions'][$phonePart['id']] : false;
+						?>
+						<tr class="current<?php echo $ii % 2 ? ' odd' : ' even' ?><?php echo $nn == 0 ? ' first' : '' ?>">
+							<td></td>
+							<?php foreach ($row as $fieldN => $field) {
+									// prepare region field
+									if (preg_match('/^region_/', $fieldN)) {
+										$fieldN = (int)end(explode('_', $fieldN));
+										$region = true;
+									} else {
+										$region = false;
+									}
+								?>
+								<td class="<?php echo $region ? 'regions' : $fieldN ?>">
+									<?php
+									if ($region) {
+										echo $c_regions !== false && in_array($fieldN, $c_regions) ? 'x' : '';
+									} else {
+										if (in_array($fieldN, $this->phones_model->phonePartFields)) {
+											if ($phonePart[$fieldN] != $row[$fieldN]) echo '<span class="changed">';
+											echo $phonePart[$fieldN];
+											echo '</span>';
+										} elseif (in_array($fieldN, $this->parts_model->partFields)) {
+											if ($c_part[$fieldN] != $row[$fieldN]) echo '<span class="changed">';
+											echo $c_part[$fieldN];
+											echo '</span>';
+										}
+									}
+									?>
+								</td>
+							<?php
+								$nn += 1;
+								} ?>
+						</tr>
+						<?php } ?>
+					<?php } ?>
+
+				<?php } ?>
+				<tr class="<?php echo $ii % 2 ? ' odd' : ' even' ?><?php echo $nn > 0 ? ' last' : '' ?>">
 					<td><input type="checkbox" value="<?php echo $rowN ?>" name="sheets_data[<?php echo $sheet['id'] ?>][rows][]" checked="checked"></td>
 					<?php foreach ($row as $fieldN => $field) { ?>
 					<?php
@@ -78,7 +125,9 @@
 					</td>
 					<?php } ?>
 				</tr>
-			<?php } ?>
+			<?php
+				$ii += 1;
+			} ?>
 			</tbody>
 		</table>
 
@@ -100,6 +149,6 @@
 	<ul>
 		<li><span class="current-data">текст</span> - выделение информации из прошлой ревизии, которая осталась без изменений в текущей</li>
 		<li><span class="current-data to-change">текст</span> - выделение информации из прошлой ревизии, которая изменена в текущей</li>
-		<li>Галочки слева от строки со значениями, позволяют исключить из внесения в систему отдельные строки, которые могли быть неправильно распознаны системой как верные.</li>
+		<li>Галочки слева от строки со значениями, позволяют исключить из внесения в систему отдельные строки, которые могли быть некорректно распознаны системой как верные.</li>
 	</ul>
 </div>

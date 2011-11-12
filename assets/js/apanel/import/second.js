@@ -1,7 +1,10 @@
 app.messages.importpage = {
 	no_data_selected: 'Не выбрано ни одного листа для сохранения',
 	no_model_selected: 'Не выбрана модель телефона',
-	no_code_field: 'В листе <strong><%= sheet %></strong> не задано ни одного поля со значением "Парт. номер"'
+	no_code_field: 'В листе <strong><%= sheet %></strong> не задано ни одного поля со значением "Парт. номер"',
+	data_tpl_saved: 'Шаблон <%= name %> успешно сохранён',
+	data_tpl_removed: 'Шаблон <%= name %> удалён',
+	data_tpl_conirm_remove: 'Вы действительно хотите удалить шаблон "<%= name %>"'
 };
 
 $(document).ready(function () {
@@ -10,6 +13,7 @@ $(document).ready(function () {
 		v_sel = $('select[name="vendors"]', f),
 		m_inp = $('input[name="model_input"]');
 
+	// bind update of models on vendor select
 	v_sel.bind({
 		change: function(){
 			var s = $(this),
@@ -22,6 +26,68 @@ $(document).ready(function () {
 			}
 		}
 	});
+
+	// load \ save templates
+	$('#sheets')
+		.delegate('div.data-template span.ui-icon-disk', 'click', function(){// save template
+			var b = $(this),
+				si = b.parents('div.sheet-info'),
+				s = si.find('select[name="' + si.attr('id') + '_cols_values[]"]'),
+				v = [],
+				n = $('select[name="vendors"] option:selected').text() + ' | ' + si.siblings('label').text();
+
+				n = prompt('Введите название шаблона:', n);
+				if (n == null) return false;
+
+				s.each(function(){
+					v.push($(this).val());
+				});
+				$.ajax({
+					url: app.urls.saveDataTpl,
+					type: 'post',
+					data: {
+						name: n,
+						values: v.join('||')
+					},
+					success: function(resp){
+						app.showMessage({html: _.template(app.messages.importpage.data_tpl_saved, {name: n})});
+						$('#details_form').find('div.data-template select').replaceWith(resp);
+					}
+				});
+		}).delegate('div.data-template span.ui-icon-close', 'click', function(){// remove template
+			var b = $(this),
+				sel = b.parents('div.data-template').contents('select'),
+				n = sel.find('option:selected').text(),
+				id = parseInt(sel.val());
+
+				if (id <= 0) return false;
+
+				if (confirm(_.template(app.messages.importpage.data_tpl_conirm_remove, {name: n}))) {
+					$.ajax({
+						url: app.urls.removeDataTpl + id,
+						success: function(resp){
+							app.showMessage({html: _.template(app.messages.importpage.data_tpl_removed, {name: n})});
+							$('#details_form').find('div.data-template select').replaceWith(resp);
+						}
+					});
+				}
+		}).delegate('div.data-template span.ui-icon-extlink', 'click', function(){
+			var b = $(this),
+				si = b.parents('div.sheet-info'),
+				s = si.find('select[name="' + si.attr('id') + '_cols_values[]"]'),
+				data_s = b.parents('div.data-template').contents('select');
+
+				if (data_s.val() <= 0) return false;
+
+				var v = data_s.find('option:selected').data('values').split('||');
+
+				$.each(s, function(ind, elm){
+					if (typeof v[ind] !== 'undefined') {
+						$(elm).val(v[ind]);
+					}
+				});
+				
+		});
 
 	$(f).submit(function(e){
 		var error_str = [];

@@ -30,7 +30,11 @@ function process_to_code_keyed_groupped_array($a)
 {
 	$b = array();
 	foreach ($a as $row) {
-		$b[$row['code']][] = $row;
+		if (isset($row['id']) && $row['id'] > 0) {// preserve id as key if id exists
+			$b[$row['code']][$row['id']] = $row;
+		} else {
+			$b[$row['code']][] = $row;
+		}
 	}
 	return $b;
 }

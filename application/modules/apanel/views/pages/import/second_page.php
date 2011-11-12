@@ -56,9 +56,25 @@
 		<li>
 			<input type="hidden" value="<?php echo $sheet['id'] ?>" name="sheets[]">
 			<input type="hidden" value="<?php echo $sheet['name'] ?>" name="sheets_names[]">
+
 			<label><?php echo $sheet['name'] ?></label>
 			(столбцов с данными <?php echo $sheet['cols_number'] ?>, строк с данными <?php echo $sheet['rows_number'] ?>)
 			<div id="sheet<?php echo $sheet['id'] ?>" class="sheet-info">
+
+				<div class="data-template">
+					Шаблон данных листа:
+					<?php echo $this->import_data_tpl_model->getSelect() ?>
+					<span title="Удалить шаблон" class="edit-item icon-container">
+						<span class="ui-icon ui-icon-close"></span>
+					</span>
+					<span title="Сохранить шаблон" class="edit-item icon-container">
+						<span class="ui-icon ui-icon-disk"></span>
+					</span>
+					<span title="Использовать шаблон" class="edit-item icon-container">
+						<span class="ui-icon ui-icon-extlink"></span>
+					</span>
+				</div>
+
 				Тип данных в листе: <?php echo $this->import_model->possible_sheet_types($sheet['id']) ?><br><br>
 				Выберите ячейки с информацией и тип данных в них:<br>
 				<div class="demo-data">
