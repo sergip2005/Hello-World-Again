@@ -31,25 +31,11 @@ $(document).ready(function(){
 
 	$('.s').click(function() {
 		showPartType('#c');
-		if(itwas == 0) {
-			$("#showparts").attr("href", $("#showparts").attr("href") + '/#c');
-		} else {
-			$("#showparts")
-			.attr("href", $("#showparts").attr("href").substring(0, $("#showparts").attr("href").length - 1) + 'c')
-		}
-		itwas = 1;
 		return false;
 	});
 
 	$('.c').click(function() {
 		showPartType('#s');
-		if(itwas == 0) {
-			$("#showparts").attr("href", $("#showparts").attr("href") + '/#s');
-		} else {
-			$("#showparts")
-			.attr("href", $("#showparts").attr("href").substring(0, $("#showparts").attr("href").length - 1) + 's');
-		}
-		itwas = 1;
 		return false;
 	});
 

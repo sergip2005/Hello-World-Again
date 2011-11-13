@@ -1,3 +1,4 @@
+<div class="models-menu">
 <ul>
 	<?php foreach ($catalog as  $key => $model) { ?>
 	<li><a href="/phones/<?php echo $key ?>"><?php echo $key ?></a>
@@ -11,3 +12,4 @@
 	</li>
 	<?php } ?>
 </ul>
+</div>

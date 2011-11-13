@@ -19,6 +19,14 @@
 				</span>
 				<span class = "vendors-activity"><?php echo $vendor['show'] == 1 ? ' (активно' : ' (не активно' ?>
                 <input type="checkbox" class="vendor-show" name="show" value="<?php echo $vendor['show']; ?>"<?php echo $vendor['show'] == 1 ?  'checked' : "" ?>>)</span>
+				<?php
+				$pathfile = '/assets/images/vendors/' . $vendor['name'] . '.png';
+				if (file_exists($_SERVER{'DOCUMENT_ROOT'} . $pathfile)) {
+					echo '<img src="' . $pathfile . '">';
+				} else {
+					echo '<span>Файл ' . $vendor['name'] . '.png' . ' не существует</span>';
+				}
+				?>
 			</span>
 		</li>
 		<?php } ?>

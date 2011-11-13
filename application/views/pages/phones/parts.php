@@ -13,7 +13,9 @@
 	<?php } ?>
 	</ul>
 </div>
-
+<?php
+	if (count($parts) > 0) {
+?>
 <div class="parts-content full-transparent">
 	<div id="parts">
 		<span class="s selected">Корпусные </span>
@@ -22,8 +24,7 @@
 
 	<div class="cabinet" >
 
-	<?php
-	if (count($parts) > 0) {
+<?php
 		$cabinet = array();
 		$solder = array();
 		foreach ($parts as $row) {
@@ -69,7 +70,7 @@
 
 			</table>
 		<?php } else { ?>
-			Нет паечных запчастей
+			Нет корпусных запчастей
 		<?php } ?>
 	</div>
 
@@ -110,13 +111,13 @@
 
 			</table>
 		<?php } else { ?>
-			Нет корпусных запчастей
+			Нет паечных запчастей
 		<?php } ?>
 	</div>
-	<?php echo $region == 'all' ? '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/">Показать основной регион</a>' : '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/all/">Показать все регионы</a>'; ?>
+	<?php echo $region == 'all' ? '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/">Показать основной регион</a>' : '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/all">Показать все регионы</a>'; ?>
 </div>
 
 <?php } else { ?>
 	Нет запчастей
-	<?php echo $region == 'all' ? '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/">Показать основной регион</a>' : '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/all/">Показать все регионы</a>'; ?>
+	<?php echo $region == 'all' ? '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/">Показать основной регион</a>' : '<a id="showparts" href="/phones/' . $vendor . '/' . $model . '/all">Показать все регионы</a>'; ?>
 <?php } ?>
