@@ -238,7 +238,11 @@ body {
 	font-size: 11px;
 }
 
-.container { position: relative }
+.container {
+	position: relative;
+	min-width: 1000px;
+	max-width: 1500px;
+}
 
 .content {
 	padding-bottom: 40px;
