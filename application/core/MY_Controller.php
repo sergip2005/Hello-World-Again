@@ -89,6 +89,16 @@ class MY_Controller extends MX_Controller {
 			$this->output->set_profiler_sections($sections);
 			$this->output->enable_profiler(FALSE);
 		}
+
+		// parse settings.ini file to CI config
+		$this->_load_ini_config();
+	}
+
+	private function _load_ini_config(){
+		$dConf = parse_ini_file($this->config->item('ini_path') . 'settings.ini');
+		foreach ($dConf as $key => $val) {
+			$this->config->set_item($key, $val);
+		}
 	}
 }
 ?>

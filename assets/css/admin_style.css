@@ -484,7 +484,8 @@ table.desc select {
 .clearfix:after { clear: both; }
 /* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
 .clearfix { zoom: 1; }
- 
+
+.w50 { width: 50px }
  
  
 /**
@@ -750,3 +751,14 @@ table.desc select {
 	padding: 2px 5px;
 }
 .current-data.to-change { background-color: #9BA5FF }
+
+/** settings */
+.settings td.title {
+	padding-right: 15px;
+	width: 150px;
+}
+
+.settings td.controls {
+	padding-top: 15px;
+	text-align: right;
+}

@@ -9,4 +9,5 @@
 	<li<?php echo $c == 'vendors' && $m == 'index' ? ' class="active"' : '' ?>><a href="/apanel/vendors/">Вендоры</a></li>
 	<li<?php echo $c == 'regions' && $m == 'index' ? ' class="active"' : '' ?>><a href="/apanel/regions/">Регионы</a></li>
 	<li<?php echo $c == 'content' ? ' class="active"' : '' ?>><a href="/apanel/content/">Наполнение</a></li>
+	<li<?php echo $c == 'settings' && $m == 'index' ? ' class="active"' : '' ?>><a href="/apanel/settings/">Настройки</a></li>
 </ul>
