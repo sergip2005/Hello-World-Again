@@ -98,6 +98,7 @@ class Import extends MY_Controller {
 		$this->load->model('phones_model');
 		$this->load->model('parts_model');
 		$this->load->model('regions_model');
+		$this->load->model('currency_model');
 
 		$post_data['vendor_id'] = intval($this->input->post('vendors'));
 		$post_data['file'] = $this->input->post('file');
@@ -164,7 +165,7 @@ class Import extends MY_Controller {
 	public function save(){
 		$this->load->model('phones_model');
 		$this->load->model('parts_model');
-		$this->load->model('money_model');
+		$this->load->model('currency_model');
 
 		$vendor = intval($this->input->post('vendor'));
 		//get new model or existing one
@@ -180,6 +181,7 @@ class Import extends MY_Controller {
 
 		$sheets = $this->input->post('sheets_data');
 
+		$n = 0;
 		foreach ($sheets as $sheet) {
 			if (!array_key_exists($sheet['type'], $this->sheetTypes)) continue;
 			if (!array_key_exists('rows', $sheet) || count($sheet['rows']) <= 0) continue;
@@ -201,22 +203,20 @@ class Import extends MY_Controller {
 					$ppId = $this->phones_model->updateOrCreatePhonePart($pId, $sheet['cols'][$rowN], $model_params);
 					// update phone part regions
 					$this->phones_model->updatePartsRegions($ppId, $sheet['cols'][$rowN], $model_params);
+					$n += 1;
 				}
-			} elseif ($sheet['type'] == 'price') {
+			} elseif ($sheet['type'] == 'prices') {
 				foreach ($sheet['rows'] as $rowN) {
 					if (strlen(implode('', $sheet['cols'][$rowN])) <= 0) continue;
 					if (!array_key_exists('code', $sheet['cols'][$rowN]) || empty($sheet['cols'][$rowN]['code'])) continue;
-
 					// save or get part id
 					$pId = $this->parts_model->updateOrCreate($sheet['cols'][$rowN], $model_params);
-					// save or get phone model id
-					$ppId = $this->phones_model->updateOrCreatePhonePart($pId, $sheet['cols'][$rowN], $model_params);
-					// update phone part regions
-					$this->phones_model->updatePartsRegions($ppId, $sheet['cols'][$rowN], $model_params);
+					$n += 1;
 				}
+				//die(print_r(array('data' => $sheet), true));
 			}
 		}
-		$this->session->set_flashdata('message', 'Импорт прошел успешно');
+		$this->session->set_flashdata('message', 'Импорт прошел успешно. Импортировано ' . $n . ' записей');
 		redirect('/apanel/import/index');
 	}
 

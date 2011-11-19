@@ -34,7 +34,7 @@ class Regions_model extends CI_Model
 
 	public function getAll($format = 'array')
 	{
-		$res = $this->db->get(self::TABLE)->result_array();
+		$res = $this->db->query('SELECT * FROM ' . self::TABLE . ' ORDER BY name')->result_array();
 
 		if ($format == 'ul') {
 			$html = '<ul>';
@@ -86,7 +86,8 @@ class Regions_model extends CI_Model
 	public function getFieldValuesArray()
 	{
 		$regions = '';
-		foreach ($this->getAll() as $region) {
+		$c = $this->getAll();
+		foreach ($c as $region) {
 			$regions['region_' . $region['id']] = $region['name'];
 		}
 		return $regions;

@@ -47,6 +47,7 @@
  * @property Phones_model $phones_model
  * @property Parts_model $parts_model
  * @property Regions_model $regions_model
+ * @property Currency_model $currency_model
  */
 
 /**

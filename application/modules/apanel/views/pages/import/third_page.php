@@ -69,7 +69,6 @@
 			$ii = 1;
 			$prev_exists = isset($sheet['prev_state']) && count($sheet['prev_state']) > 0;// cache condition
 			foreach ($sheet['data'] as $rowN => $row) {
-				echo $row['code'] . ', ';
 				if ($prev_exists) { // if there are already any parts in db
 					if (isset($sheet['prev_state']['parts'][$row['code']])) {
 							$c_part = $sheet['prev_state']['parts'][$row['code']]; // 1 at a time
@@ -85,17 +84,31 @@
 							<td></td>
 							<?php foreach ($row as $fieldN => $field) {
 									// prepare region field
+									$fieldType = '';
 									if (preg_match('/^region_/', $fieldN)) {
 										$fieldN = (int)end(explode('_', $fieldN));
-										$region = true;
+										$fieldType = 'region';
+									} elseif (preg_match('/^price_/', $fieldN)) {
+										$fieldN = (string)end(explode('_', $fieldN));
+										$fieldType = 'price';
 									} else {
 										$region = false;
 									}
 								?>
-								<td class="<?php echo $region ? 'regions' : $fieldN ?>">
+								<td class="<?php
+									if ($fieldType == 'region') {
+										echo 'regions';
+									} elseif ($fieldType == 'price') {
+										echo 'price';
+									} else {
+										echo $fieldN;
+									} ?>">
 									<?php
-									if ($region) {
+									if ($fieldType == 'region') {
 										echo $c_regions !== false && in_array($fieldN, $c_regions) ? 'x' : '';
+									} elseif ($fieldType == 'price') {
+										$this->currency_model->convert(end(explode('_', $this->currency_model->base)), $fieldN, $c_part['price']);
+										echo '';
 									} else {
 										if (in_array($fieldN, $this->phones_model->phonePartFields)) { ?>
 											<span<?php echo ($phonePart[$fieldN] != $row[$fieldN]) ? ' class="changed"' : '' ?>><?php echo $phonePart[$fieldN] ?></span>
@@ -115,8 +128,21 @@
 						<tr class="current<?php echo $ii % 2 ? ' odd' : ' even' ?>">
 							<td></td>
 							<?php foreach ($row as $fieldN => $field) { ?>
-								<td class="<?php echo $fieldN ?>">
-									<?php if (in_array($fieldN, $this->parts_model->partFields)) { ?>
+								<?php
+									$fieldType = '';
+									if (preg_match('/^price_/', $fieldN)) {
+										$fieldN = (string)end(explode('_', $fieldN));
+										$fieldType = 'price';
+									} else {
+										$region = false;
+									}
+								?>
+								<td class="<?php echo $fieldType == 'price' ? 'price' : $fieldN ?>">
+									<?php if ($fieldType == 'price') {
+										$cPrice = $this->currency_model->convert(end(explode('_', $this->currency_model->base)), $fieldN, $c_part['price']);
+										?>
+										<span<?php echo ($cPrice != $row['price_' . $fieldN]) ? ' class="changed"' : '' ?>><?php echo $cPrice ?></span>
+									<?php } elseif (in_array($fieldN, $this->parts_model->partFields)) { ?>
 										<span<?php echo ($c_part[$fieldN] != $row[$fieldN]) ? ' class="changed"' : '' ?>><?php echo $c_part[$fieldN] ?></span>
 									<?php } ?>
 								</td>
@@ -166,4 +192,4 @@
 	</ul>
 </div>
 
-<pre><?php print_r($sheets) ?></pre>
+<?php //echo '<pre>' . print_r($sheets) . '</pre>' ?>

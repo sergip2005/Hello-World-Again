@@ -18,7 +18,6 @@ class Import_model extends CI_Model
 			'name'		=> 'Ориг. имя детали',
 			'code'		=> 'Парт. номер детали',
 			'price_eur'	=> 'Цена детали в eur',
-			'price_dol'	=> 'Цена детали в $',
 			'price_hrn'	=> 'Цена детали в грн',
 	);
 
@@ -242,9 +241,6 @@ class Import_model extends CI_Model
 			}
 
 			if (isset($row['price_hrn']) && floatval($row['price_hrn']) < 0) {
-				unset($input[$rowN]);
-			}
-			if (isset($row['price_dol']) && floatval($row['price_dol']) < 0) {
 				unset($input[$rowN]);
 			}
 			if (isset($row['price_eur']) && floatval($row['price_eur']) < 0) {

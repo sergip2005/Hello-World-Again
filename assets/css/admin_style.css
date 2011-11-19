@@ -702,6 +702,8 @@ table.desc select {
 .sheet-import-data td.code, .sheet-import-data td.code input { width: 75px }
 .sheet-import-data td.name, .sheet-import-data td.name input { width: 300px }
 .sheet-import-data td.comment, .sheet-import-data td.comment input { width: 150px }
+.sheet-import-data td.price_hrn, .sheet-import-data td.price_eur,
+.sheet-import-data td.price_hrn input, .sheet-import-data td.price_eur input { width: 50px }
 
 .sheet-import-data table tr {
 	border-left: 1px solid green;

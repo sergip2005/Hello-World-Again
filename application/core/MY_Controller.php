@@ -48,6 +48,7 @@
  * @property Parts_model $parts_model
  * @property Regions_model $regions_model
  * @property Import_data_tpl_model $import_data_tpl_model
+ * @property Currency_model $currency_model
  */
 
 class MY_Controller extends MX_Controller {

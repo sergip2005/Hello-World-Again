@@ -35,6 +35,8 @@ class Parts_model extends CI_Model
 	}
 
 	public function updateOrCreate($rowData, $sheetData){
+		$this->load->model('currency_model');
+
 		$partData = array();
 
 		// save part data
@@ -44,12 +46,33 @@ class Parts_model extends CI_Model
 			}
 		}
 		$partData['vendor_id'] = $sheetData['vendor_id'];
-		$partData['type'] = $this->partType[$sheetData['type']];
+		if (isset($this->partType[$sheetData['type']])) {
+			$partData['type'] = $this->partType[$sheetData['type']];
+		}
 		$partData['show'] = 1;
 		// default vals for min_num
 		if (!isset($partData['min_num']) || empty($partData['min_num']) || $partData['min_num'] == 0) {
-			$partData['min_num'] = $partData['type'] == 'c' ? 1 : 5;
+			if (isset($partData['type']) && $partData['type'] == 'c') {
+				$partData['min_num'] = 1;
+			} elseif (isset($partData['type']) && $partData['type'] == 's') {
+				$partData['min_num'] = 5;
+			} else {
+				$partData['min_num'] = 1;
+			}
 		}
+
+		// process price value
+		foreach ($this->currency_model->priceFields as $priceField) {
+			if (isset($rowData[$priceField]) && floatval($rowData[$priceField]) > 0) {
+				// @TODO add money convertion
+				$partData['price'] =
+						$priceField === $this->currency_model->base
+								? floatval($rowData[$priceField])
+								: $this->currency_model->convert(end(explode('_', $priceField)), end(explode('_', $this->currency_model->base)), floatval($rowData[$priceField]));
+			}
+		}
+
+		//die(print_r($partData, true));
 		// insert or update part
 		return $this->save(0, $partData);
 	}
