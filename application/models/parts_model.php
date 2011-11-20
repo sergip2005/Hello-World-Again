@@ -7,6 +7,11 @@ class Parts_model extends CI_Model
 		'solder' => 's',
 	);
 
+	public $partTypeName = array(
+		'c' => 'корпусной',
+		's' => 'паечный'
+	);
+
 	public $partFields = array(
 		'name', 'vendor_id', 'type',
 		'ptype', 'code', 'name_rus',

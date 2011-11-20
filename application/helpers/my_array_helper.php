@@ -39,6 +39,20 @@ function array_values_to_option_strings($a)
 }
 
 /**
+ * @param $cct_ref - position of part in model
+ * @param $arr - array of current phone_parts with the same part.number
+ * @return array - record with provided p/n or all given records if no any found
+ */
+function find_cct_ref_elm($cct_ref, $arr){
+	foreach ($arr as $key => $pp) {
+		if ($pp['cct_ref'] == $cct_ref) {
+			return array($pp);
+		}
+	}
+	return $arr;
+}
+
+/**
  * revursive implode - implodes multidimentional arrays
  * @param string $glue
  * @param array $pieces

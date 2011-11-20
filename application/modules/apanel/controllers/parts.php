@@ -18,9 +18,17 @@ class Parts extends MY_Controller {
 	 */
 	public function index()
 	{
+		$this->load->model('vendors_model');
+		$this->load->model('phones_model');
+
+		$data = array(
+			'vendors' => $this->vendors_model->getAll('select')
+		);
+
 		$template = array(
-			'title'			=> '',
-			'body'			=> $this->load->view('pages/parts/index', array(), true),
+			'title'	=> 'Запчасти',
+			'js'	=> array('/apanel/parts/index.js'),
+			'body'	=> $this->load->view('pages/parts/index', $data, true),
 		);
 
 		Modules::run('pages/_return_ap_page', $template);

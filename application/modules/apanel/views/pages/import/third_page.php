@@ -75,12 +75,16 @@
 							$c_phone_parts = $sheet['prev_state']['phone_parts'][$row['code']]; // may be more than 1
 
 							$nn = 0;
-							//if (count($c_phone_parts) <= 0) continue;
 						if (count($c_phone_parts) > 0 && in_array($sheet['type'], array('cabinet', 'solder'))) { // for sheets with parts data
+							// narrow selection to only current part position or all parts
+							$c_phone_parts = find_cct_ref_elm($row['cct_ref'], $c_phone_parts);
+
 							foreach ($c_phone_parts as $phonePart) {
+								unset($current['model_parts'][$phonePart['id']]);
+								//echo '<tr><td colspan=8>' . print_r($c_phone_parts, true) . '</td></tr>';
 								$c_regions = isset($sheet['prev_state']['regions'][$phonePart['id']]) ? $sheet['prev_state']['regions'][$phonePart['id']] : false;
 						?>
-						<tr class="current<?php echo $ii % 2 ? ' odd' : ' even' ?><?php echo $nn == 0 ? ' first' : '' ?>">
+						<tr class="current <?php echo $ii % 2 ? 'odd' : 'even' ?>">
 							<td></td>
 							<?php foreach ($row as $fieldN => $field) {
 									// prepare region field
@@ -111,9 +115,9 @@
 										echo '';
 									} else {
 										if (in_array($fieldN, $this->phones_model->phonePartFields)) { ?>
-											<span<?php echo ($phonePart[$fieldN] != $row[$fieldN]) ? ' class="changed"' : '' ?>><?php echo $phonePart[$fieldN] ?></span>
+											<span class="<?php echo (trim($phonePart[$fieldN]) != trim($row[$fieldN])) ? 'changed' : 'not_changed' ?>"><?php echo $phonePart[$fieldN] ?></span>
 										<?php } elseif (in_array($fieldN, $this->parts_model->partFields)) { ?>
-											<span<?php echo ($c_part[$fieldN] != $row[$fieldN]) ? ' class="changed"' : '' ?>><?php echo $c_part[$fieldN] ?></span>
+											<span class="<?php echo (trim($c_part[$fieldN]) != trim($row[$fieldN])) ? 'changed' : 'not_changed' ?>"><?php echo $c_part[$fieldN] ?></span>
 										<?php
 										}
 									}
@@ -152,7 +156,7 @@
 						}
 					}
 				} ?>
-				<tr class="<?php echo $ii % 2 ? ' odd' : ' even' ?><?php echo isset($nn) && $nn > 0 ? ' last' : '' ?>">
+				<tr class="<?php echo $ii % 2 ? 'odd' : 'even' ?><?php echo isset($nn) && $nn > 0 ? ' has_current' : '' ?>">
 					<td><input type="checkbox" value="<?php echo $rowN ?>" name="sheets_data[<?php echo $sheet['id'] ?>][rows][]" checked="checked"></td>
 					<?php foreach ($row as $fieldN => $field) { ?>
 					<?php
@@ -170,7 +174,7 @@
 			</tbody>
 		</table>
 
-		<?php } else { ?>
+		<?php } else { // no data ?>
 
 			<span class="no-data">Лист не отмечен или нет данных для импорта</span>
 
@@ -180,7 +184,44 @@
 
 <?php } ?>
 
-	<input type="submit" value="Сохранить информацию">
+	<?php if (count($current['model_parts']) > 0) { ?>
+	<div class="to-remove">
+		<h3>Детали, информация о которых не найдена в текущей версии парт. листа, и они помечены к удалению</h3>
+		<table>
+			<thead>
+				<th><input type="checkbox" checked="checked" id="check-all_n" class="check-all"></th>
+				<th><?php echo $this->import_model->part_field_types['cct_ref'] ?></th>
+				<th><?php echo $this->import_model->price_field_types['code'] ?></th>
+				<th><?php echo $this->import_model->part_field_types['name'] ?></th>
+				<th><?php echo $this->import_model->part_field_types['name_rus'] ?></th>
+				<th><?php echo $this->import_model->part_field_types['ptype'] ?></th>
+				<th><?php echo $this->import_model->price_field_types['price_eur'] ?></th>
+				<th><?php echo $this->import_model->part_field_types['num'] ?></th>
+				<th><?php echo $this->import_model->part_field_types['min_num'] ?></th>
+				<th><?php echo $this->import_model->part_field_types['type'] ?></th>
+			</thead>
+			<?php $ri = 1; ?>
+			<?php foreach ($current['model_parts'] as $one) { ?>
+			<tr class="<?php echo $ri % 2 ? 'odd' : 'even' ?>">
+				<td><input type="checkbox" value="<?php echo $one['id'] ?>" name="parts_to_remove[]" checked="checked"></td>
+				<td><?php echo $one['cct_ref'] ?></td>
+				<td><?php echo $one['code'] ?></td>
+				<td><?php echo $one['name'] ?></td>
+				<td><?php echo $one['name_rus'] ?></td>
+				<td><?php echo $one['ptype'] ?></td>
+				<td><?php echo $one['price'] ?></td>
+				<td><?php echo $one['num'] ?></td>
+				<td><?php echo $one['min_num'] ?></td>
+				<td><?php echo $this->parts_model->partTypeName[$one['type']] ?></td>
+			</tr>
+			<?php
+					$ri += 1;
+				} ?>
+		</table>
+	</div>
+	<?php } ?>
+
+	<input type="submit" value="Внести изменения">
 
 </form>
 
@@ -192,4 +233,5 @@
 	</ul>
 </div>
 
-<?php //echo '<pre>' . print_r($sheets) . '</pre>' ?>
+<?php //echo '<pre>' . print_r($sheets, true) . '</pre>' ?>
+<?php //echo '<pre>' . print_r($current, true) . '</pre>' ?>

@@ -22,7 +22,14 @@ class Phones_model extends CI_Model
 		return  $data;
 	}
 
-	public function getParts($vendor, $model, $region = '')
+	/**
+	 * get parts by vendor and model names
+	 * @param string $vendor
+	 * @param string $model
+	 * @param string $region
+	 * @return array|boolean
+	 */
+	public function getPartsByName($vendor, $model, $region = '')
 	{
 		$q1 = 'SELECT
 				  pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name,
@@ -47,6 +54,29 @@ class Phones_model extends CI_Model
 				  ORDER BY v.name';
 		$query = $region == 'all' ? $q1 : $q2;
 		return $this->db->query($query, array($vendor, $model, $region))->result_array();
+	}
+
+	public function getParts($vendor_id, $model_id, $region = '')
+	{
+		$q1 = 'SELECT
+				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
+				pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type
+				FROM `phones_parts` pp
+				LEFT JOIN `parts` pa ON pp.part_id = pa.id
+				LEFT JOIN `phones` p ON pp.phone_id = p.id
+				WHERE p.vendor_id = ? AND pp.phone_id = ?';
+		$q2 = 'SELECT
+				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
+				pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type, r.name as r_name
+				FROM `phones_parts` pp
+				LEFT JOIN `parts` pa ON pp.part_id = pa.id
+				LEFT JOIN `phones` p ON pp.phone_id = p.id
+				LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
+				LEFT JOIN `regions` r ON r.id = pprr.region_id
+				WHERE p.vendor_id = ? AND pp.phone_id = ?
+				AND r.id = (SELECT id FROM regions where `default` = 1)';
+		$query = $region == 'all' ? $q1 : $q2;
+		return $this->db->query($query, array($vendor_id, $model_id, $region))->result_array();
 	}
 
 	public function getVendorModels($vendor)
@@ -129,15 +159,14 @@ class Phones_model extends CI_Model
 	 */
 	public function savePart($id, $data)
 	{
-		/*
 		if ($id <= 0) {
-			// check if this part is allready in this phone model
+			// check if this part is allready in this phone model by (part_id and position)
 			$part = $this->db->query(
-					'SELECT `id` FROM phones_parts WHERE phone_id = ? AND part_id = ? LIMIT 1',
-					array($data['phone_id'], $data['part_id'])
+					'SELECT `id` FROM `phones_parts` WHERE `phone_id` = ? AND `part_id` = ? AND `cct_ref` = ? LIMIT 1',
+					array($data['phone_id'], $data['part_id'], $data['cct_ref'])
 				);
 			$id = $part->num_rows() > 0 ? $part->row()->id : 0;
-		}*/
+		}
 
 		if ($id > 0) { // update
 			$this->db->where('id', $id)->update('phones_parts', $data);
@@ -257,24 +286,24 @@ class Phones_model extends CI_Model
 	 */
 	function getPartsDataByCode($codes, $vendor_id)
 	{
-		$this->db
-				->select('pt.id, pt.code, pt.name, pt.type, pt.ptype, pt.name_rus, pt.url, pt.mktel_has, pt.price, pt.min_num')
-				->from('parts AS pt')
-				->join('phones_parts AS pp', 'pt.id = pp.part_id', 'left')
-				->join('phones AS phn', 'phn.id = pp.phone_id', 'left')
-				->where('phn.vendor_id', $vendor_id);
+		$q = 'SELECT
+				pt.id, pt.code, pt.name, pt.type, pt.ptype,
+				pt.name_rus, pt.url, pt.mktel_has, pt.price, pt.min_num
+			FROM parts AS pt
+			LEFT JOIN phones_parts AS pp ON pt.id = pp.part_id
+			LEFT JOIN phones AS phn ON phn.id = pp.phone_id
+			WHERE phn.vendor_id = ' . (int)$vendor_id;
 
 		if (is_array($codes)) {
-			$this->db->where_in('pt.code', $codes);
+			$q .= ' AND pt.code in ("' . implode($codes, '","') . '")';
 		} elseif ((is_string($codes) || is_int($codes)) && strlen($codes) > 0) {
-			$this->db->where('pt.code', $codes);
+			$q .= ' AND pt.code = "' . $codes . '"';
 		} else {
 			return false;
 		}
 
-		$res = $this->db->get();
+		$res = $this->db->query($q);
 		if ($res->num_rows() <= 0) return false;
-
 		$res = $res->result_array();
 
 		return array(
@@ -333,5 +362,14 @@ class Phones_model extends CI_Model
 			'data' => process_to_code_keyed_groupped_array($res),
 			'ids' => array_map('narrow_to_id_field_only', $res)
 		);
+	}
+
+	/**
+	 * @param int $mId - id of phone
+	 * @param array $pIds - array of ids of phone parts
+	 * @return void
+	 */
+	public function removePhoneParts($mId, $pIds){
+		$this->db->where('phone_id', $mId)->where_in('id', $pIds)->delete('phones_parts');
 	}
 }

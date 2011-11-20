@@ -148,6 +148,13 @@ class Import extends MY_Controller {
 				// returns array like parts -> code => part props; phone_parts -> code => array of parts
 				$sheets_data[$sheet]['prev_state'] = $this->phones_model->getPrevDataState(array_map('narrow_to_code_field_only', $sheets_data[$sheet]['data']), $post_data['vendor_id'], isset($existing_data['model']) ? $existing_data['model']['id'] : false);
 			}
+			if (isset($existing_data['model'])) {
+				$existing_data['model_parts'] = $this->phones_model->getParts($post_data['vendor_id'], $existing_data['model']['id'], 'all');
+				if ($existing_data['model_parts'] !== false) {
+					$existing_data['model_parts'] = process_to_id_keyed_array($existing_data['model_parts']);
+				}
+				//echo '<pre style="text-align: left">' . print_r($existing_data['model_parts'], true) . '</pre>';
+			}
 		}
 
 		$template = array(
@@ -176,6 +183,12 @@ class Import extends MY_Controller {
 		if ($model <= 0) {
 			$model = $this->input->post('model_input');
 			$model = $this->phones_model->getOrCreateModel($model, $vendor);
+		} else {
+			// remove parts that were not included into new price and checked to be removed
+			$to_remove = $this->input->post('parts_to_remove');
+			if (count($to_remove) > 0) {
+				$this->phones_model->removePhoneParts($model, $to_remove);
+			}
 		}
 		$this->phones_model->saveModel($model, array( 'rev_num' => $rev_num, 'rev_desc' => $rev_desc, 'rev_date' => date('Y-m-d H:i:s') ));
 
@@ -213,10 +226,12 @@ class Import extends MY_Controller {
 					$pId = $this->parts_model->updateOrCreate($sheet['cols'][$rowN], $model_params);
 					$n += 1;
 				}
-				//die(print_r(array('data' => $sheet), true));
 			}
 		}
-		$this->session->set_flashdata('message', 'Импорт прошел успешно. Импортировано ' . $n . ' записей');
+		// form import message
+		$m = 'Записей импортировано: ' . $n;
+		$m .= (isset($to_remove) && count($to_remove) > 0) ? '<br>Записей удалено: ' . count($to_remove) : '';
+		$this->session->set_flashdata('message', $m);
 		redirect('/apanel/import/index');
 	}
 

@@ -688,7 +688,7 @@ table.desc select {
 .sheet-import-data h2 { color: blue }
 
 .sheet-import-data table td, .sheet-import-data table th {
-	border: 1px solid #EEE;
+	border: 2px solid #FFF;
 	padding: 2px;
 	vertical-align: baseline;
 }
@@ -723,24 +723,34 @@ table.desc select {
 
 .sheet-import-data table tr.current .changed {
 	font-weight: bold;
-	color: #000;
+	color: red;
 }
 
-.sheet-import-data table tr.first td {
-	border-top: 1px solid green;
+.sheet-import-data table tr.current .not_changed {
+	color: green;
 }
 
-.sheet-import-data table tr.last {
-	border-bottom: 1px solid green;
+.sheet-import-data table tr.even { background: #E0E0E0 }
+
+.sheet-import-data table tr.odd { background: #EFEFEF }
+
+/** parts to be removed */
+.to-remove {
+	border:  2px solid #FF7C7C;
+	padding: 5px;
+}
+.to-remove table tr.even { background: #E0E0E0 }
+.to-remove table tr.odd { background: #EFEFEF }
+.to-remove h3 { margin-bottom: 10px }
+.to-remove table td, .to-remove table th {
+	border: 2px solid #FFF;
+	padding: 2px;
+	vertical-align: baseline;
 }
 
-.sheet-import-data table tr.even {
-	background: #FFD3C9;
-}
+.to-remove table tbody tr:hover { background: #ffffdd }
+.to-remove table th { background: #ffffcc }
 
-.sheet-import-data table tr.odd {
-	background: #C9FFCD;
-}
 
 /** changes highlighting */
 .current-data {
@@ -762,3 +772,6 @@ table.desc select {
 	padding-top: 15px;
 	text-align: right;
 }
+
+/** parts */
+.show_parts { display: none }

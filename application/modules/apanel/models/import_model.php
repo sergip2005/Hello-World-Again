@@ -7,15 +7,19 @@ class Import_model extends CI_Model
 
 	public $part_field_types = array(
 			'name'		=> 'Ориг. имя детали',
+			'name_rus'	=> 'Рус. имя детали',
 			'code'		=> 'Парт. номер детали',
 			'cct_ref'	=> 'Позиция детали на рисунке',
-			'type'		=> 'Тип детали',
+			'ptype'		=> 'Тип детали',
 			'num'		=> 'Кол-во деталей в сборке',
+			'min_num'	=> 'Мин. кол-во деталей для заказа',
 			'comment'	=> 'Комментарий к детали',
+			'type'		=> 'Вид детали',
 	);
 
 	public $price_field_types = array(
 			'name'		=> 'Ориг. имя детали',
+			'name_rus'	=> 'Рус. имя детали',
 			'code'		=> 'Парт. номер детали',
 			'price_eur'	=> 'Цена детали в eur',
 			'price_hrn'	=> 'Цена детали в грн',

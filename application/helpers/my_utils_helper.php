@@ -54,3 +54,17 @@ function process_to_code_keyed_array($a)
 	return $b;
 }
 
+/**
+ * receives array of parts data
+ * returns the same array keyed by 'id' field
+ * @param array $a - parts data
+ * @return array - rekeyed array
+ */
+function process_to_id_keyed_array($a)
+{
+	$b = array();
+	foreach ($a as $row) {
+		$b[$row['id']] = $row;
+	}
+	return $b;
+}
