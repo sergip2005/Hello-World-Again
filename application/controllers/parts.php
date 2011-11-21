@@ -5,6 +5,7 @@ class Parts extends My_Controller {
 	{
 		parent::__construct();
 		$this->load->model('parts_model');
+		$this->load->model('phones_model');
 	}
 
 	public function index($number)
@@ -16,6 +17,20 @@ class Parts extends My_Controller {
 			'description' 	=> '',
 			'keywords' 		=> '',
 			'body' 			=> $this->load->view('pages/parts/index', array('parts' => $parts), true),
+		);
+		Modules::run('pages/_return_page', $data);
+	}
+	public function search($query, $parameter = '')
+	{
+		$q = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $query);
+		$p = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $parameter);
+		$catalog  = $this->phones_model->getAllParts();
+		$parts  = $this->parts_model->searchParts($q, $p);
+		$data   = array(
+			'title' 		=> 'Поиск',
+			'description' 	=> '',
+			'keywords' 		=> '',
+			'body' 			=> $this->load->view('pages/parts/search', array('parts' => $parts, 'catalog' => $catalog), true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}

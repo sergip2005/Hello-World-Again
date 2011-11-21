@@ -447,6 +447,9 @@ table.sofT td{
 	text-align: left;
 	padding: 5px;
 }
+table.sofT td.r-border{
+border-right: 1px solid #69C;
+}
 
 #parts{ margin: 15px 0 }
 #parts span{
@@ -461,4 +464,49 @@ table.sofT td{
 #parts span.selected{
 	background-color: #FCC;
 }
+.select-and-input {
+	position: relative;
+	height: 30px;
+	width: 100px;
+	float: left;
+}
+.select-and-input select {
+	position: absolute;
+	z-index: 1;
+	top: 7px;
+	left: 164px;
+	height: 20px;
+	width: 15px;
+	opacity: 0;
+}
 
+.select-and-input input.search_field {
+	position: absolute;
+	z-index: 0;
+	top: 5px;
+	left: 0;
+	height: 20px;
+	padding: 0;
+	width: 178px;
+	border:solid 1px #848388;
+	background: url(../images/icons/select.png) no-repeat 162px 3px;
+	background-color: white;
+}
+
+.select-and-input input.search_submit, .select-and-input div.search_submit {
+	position: absolute;
+	left: 183px;
+	top: 4px;
+	width: 13px;
+
+}
+.select-and-input input.search_submit{
+	opacity: 0;
+}
+.select-and-input div.search_submit {
+	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
+	background-position: -160px -109px;
+	width:15px;
+	height:20px;
+
+}
