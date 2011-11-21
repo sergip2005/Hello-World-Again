@@ -56,6 +56,12 @@ class Phones_model extends CI_Model
 		return $this->db->query($query, array($vendor, $model, $region))->result_array();
 	}
 
+	/**
+	 * @param int $vendor_id
+	 * @param int $model_id
+	 * @param string $region
+	 * @return array
+	 */
 	public function getParts($vendor_id, $model_id, $region = '')
 	{
 		$q1 = 'SELECT
@@ -76,7 +82,17 @@ class Phones_model extends CI_Model
 				WHERE p.vendor_id = ? AND pp.phone_id = ?
 				AND r.id = (SELECT id FROM regions where `default` = 1)';
 		$query = $region == 'all' ? $q1 : $q2;
-		return $this->db->query($query, array($vendor_id, $model_id, $region))->result_array();
+		$p = $this->db->query($query, array($vendor_id, $model_id, $region));
+		if ($p->num_rows() > 0) {
+			$p = $p->result_array();
+		} else {
+			return false;
+		}
+		$r = $this->getPhonePartsRegions(array_map('narrow_to_id_field_only', $p));
+		return array(
+			'parts' => $p,
+			'regions' => $r
+		);
 	}
 
 	public function getVendorModels($vendor)
@@ -100,7 +116,13 @@ class Phones_model extends CI_Model
 		}
 
 		$query = 'SELECT id, model as name FROM `phones` WHERE vendor_id = ? ORDER BY model';
-		$res = $this->db->query($query, array($vendor))->result_array();
+		$res = $this->db->query($query, array($vendor));
+		if ($res->num_rows > 0) {
+			$res = $res->result_array();
+		} else {
+			return false;
+		}
+
 		if ($type == 'select' && !isset($format_options['selected'])) {
 			return array_map('array_values_to_option_strings', $res);
 		} else if ($type == 'select' && !empty($format_options['selected'])) {
