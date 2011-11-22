@@ -5,21 +5,33 @@
 </ul>
 <script>
 	$(document).ready(function(){
-	$("[name=search_form]").submit( function (e) {
-	e.stopPropagation();
-	e.preventDefault();
-	var q = $("input.search_field").val();
-	var p = $("[name=parameter]").val().length > 0 ? '/' + $("[name=parameter]").val() : '';
-	if(q.length > 0) window.location.href = '/parts/search/' + q + p;
-	});
+		$("[name=search_form]").submit( function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		var q = $("input.search_field").val();
+		var p = $("[name=parameter]").val();
+		if(q.length > 0) {
+			switch (p) {
+				case 'code' :
+					window.location.href = '/parts/' + q;
+				break;
+				case 'model' :
+					window.location.href = '/parts/models/' + q;
+				break;
+				case 'part_name' :
+					window.location.href = '/parts/search/' + q;
+				break;
+			}
+		}
+		});
 	});
 </script>
 <form name="search_form">
 	<div class="select-and-input">
 		<select name="parameter">
-			<option value="Value1">Value1</option>
-			<option value="Value2">Value2</option>
-			<option value="Value3">Value3</option>
+			<option value="code">Код</option>
+			<option value="model">Модель</option>
+			<option value="part_name">Название детали</option>
 		</select>
 		<input class="search_field" type="text" name="query"/>
 		<div class="search_submit"></div>

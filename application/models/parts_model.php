@@ -104,11 +104,19 @@ class Parts_model extends CI_Model
 
 	function getPartsByNumber($number)
 	{
-		$parts = $this->db->query('SELECT * FROM parts WHERE code = ? ',array($number))->result_array();
-		return $parts;
+		$q = 'SELECT
+			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
+			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype, pa.type as type, p.model as model, v.name as vendor
+			  FROM `phones_parts` pp
+			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
+			  LEFT JOIN `phones` p ON pp.phone_id = p.id
+			  LEFT JOIN `vendors` v ON p.vendor_id = v.id
+			  WHERE pa.code LIKE ?';
+		return $this->db->query($q, $number . '%')->result_array();
 	}
-	function searchParts($model, $parameter)
+	function searchParts($query, $parameter)
 	{
+		if($parameter == 'models' ) {
 		$q = 'SELECT
 			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
 			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype, pa.type as type, p.model as model, v.name as vendor
@@ -117,6 +125,18 @@ class Parts_model extends CI_Model
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
 			  LEFT JOIN `vendors` v ON p.vendor_id = v.id
 			  WHERE p.model LIKE ?';
-		return $this->db->query($q, $model . '%')->result_array();
+		return $this->db->query($q, $query . '%')->result_array();
+		}
+		if($parameter == 'part_name' ) {
+		$q = 'SELECT
+			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
+			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype, pa.type as type, p.model as model, v.name as vendor
+			  FROM `phones_parts` pp
+			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
+			  LEFT JOIN `phones` p ON pp.phone_id = p.id
+			  LEFT JOIN `vendors` v ON p.vendor_id = v.id
+			  WHERE pa.name LIKE ? OR pa.name_rus LIKE ?';
+		return $this->db->query($q, array($query . '%', $query . '%'))->result_array();
+		}
 	}
 }

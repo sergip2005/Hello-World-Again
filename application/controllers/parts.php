@@ -12,15 +12,16 @@ class Parts extends My_Controller {
 	{
 		$number = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $number);
 		$parts  = $this->parts_model->getPartsByNumber($number);
+		$catalog  = $this->phones_model->getAllParts();
 		$data   = array(
 			'title' 		=> 'Номер: ' . $number,
 			'description' 	=> '',
 			'keywords' 		=> '',
-			'body' 			=> $this->load->view('pages/parts/index', array('parts' => $parts), true),
+			'body' 			=> $this->load->view('pages/parts/index', array('parts' => $parts, 'catalog' => $catalog), true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}
-	public function search($query, $parameter = '')
+	public function search($parameter, $query)
 	{
 		$q = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $query);
 		$p = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $parameter);
