@@ -34,6 +34,7 @@
 		<link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
 
 		<script src="/assets/js/libs/jquery.1.6.4.min.js"></script>
+		<script src="/assets/js/site/script.js"></script>
 		<?php
 			if (isset($js) && count($js) > 0) {
 				foreach ($js as $name) {

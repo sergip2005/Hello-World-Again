@@ -42,4 +42,6 @@ $(document).ready(function(){
 	$('#showparts').click(function(){
 		this.href += window.location.hash;
 	});
+	// tablesorter
+	$("table").tablesorter();
 });

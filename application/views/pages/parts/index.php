@@ -17,26 +17,22 @@
 <?php
 if (count($parts) > 0) { ?>
 
-			<table class="sofT" cellspacing="0">
+			<table class="tablesorter separate" >
+			<thead>
 			<tr>
-				<td class="helpHed r-border">v</td><td colspan="9" class="helpHed r-border"></td>
+				<th class="header" data-field="phones_parts.cct_ref">Позиция</th>
+				<th class="header" data-field="parts.code">Код</th>
+				<th class="header" data-field="phones_parts.num">Испол.</th>
+				<th class="header" data-field="parts.name">Описание(eng)</th>
+				<th class="header" data-field="parts.name_rus">Описание(рус)</th>
+				<th class="header" data-field="ptype">Тип</th>
+				<th class="header" data-field="phones_parts.min_num">Мин. кол-во</th>
+				<th class="header" data-field="parts.price">Цена</th>
+				<th class="header" data-field="vendor">Вендор</th>
+				<th class="header" data-field="model">Модель</th>
 			</tr>
-			<tr>
-				<td colspan="10" class="helpHed">Поиск</td>
-			</tr>
-			<tr>
-				<td class="helpHed" data-field="phones_parts.cct_ref">Позиция</td>
-				<td class="helpHed" data-field="parts.code">Код</td>
-				<td class="helpHed" data-field="phones_parts.num">Испол.</td>
-				<td class="helpHed" data-field="parts.name">Описание(eng)</td>
-				<td class="helpHed" data-field="parts.name_rus">Описание(рус)</td>
-				<td class="helpHed" data-field="ptype">Тип</td>
-				<td class="helpHed" data-field="phones_parts.min_num">Мин. кол-во</td>
-				<td class="helpHed" data-field="parts.price">Цена</td>
-				<td class="helpHed" data-field="vendor">Вендор</td>
-				<td class="helpHed" data-field="model">Модель</td>
-			</tr>
-
+			</thead>
+			<tbody>
 			<?php foreach ($parts as $p) { ?>
 			<tr>
 				<td><?php echo $p['cct_ref'] ?></td>
@@ -51,7 +47,7 @@ if (count($parts) > 0) { ?>
 				<td><a href="/phones/<?php echo strtolower($p['vendor']) ?>/<?php echo strtolower(str_replace(' ', '_', $p['model'])) ?>"><?php echo $p['model'] ?></a></td>
 			</tr>
 			<?php } ?>
-
+			</tbody>
 			</table>
 		<?php } else { ?>
 			Не найдено запчастей

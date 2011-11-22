@@ -40,20 +40,20 @@
 				<img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
 			</a>
 
-			<table class="sofT" cellspacing="0">
+			<table class="tablesorter separate" >
+			<thead>
 			<tr>
-				<td colspan="8" class="helpHed">Корпусные элементы</td>
+				<th class="header" data-field="phones_parts.cct_ref">Позиция</th>
+				<th class="header" data-field="parts.code">Код</th>
+				<th class="header" data-field="phones_parts.num">Испол.</th>
+				<th class="header" data-field="parts.name">Описание(eng)</th>
+				<th class="header" data-field="parts.name_rus">Описание(рус)</th>
+				<th class="header" data-field="order_num">Кол-во</th>
+				<th class="header" data-field="phones_parts.min_num">Мин. кол-во</th>
+				<th class="header" data-field="parts.price">Цена</th>
 			</tr>
-			<tr>
-				<td class="helpHed" data-field="phones_parts.cct_ref">Позиция</td>
-				<td class="helpHed" data-field="parts.code">Код</td>
-				<td class="helpHed" data-field="phones_parts.num">Испол.</td>
-				<td class="helpHed" data-field="parts.name">Описание(eng)</td>
-				<td class="helpHed" data-field="parts.name_rus">Описание(рус)</td>
-				<td class="helpHed" data-field="order_num">Кол-во</td>
-				<td class="helpHed" data-field="phones_parts.min_num">Мин. кол-во</td>
-				<td class="helpHed" data-field="parts.price">Цена</td>
-			</tr>
+			</thead>
+			<tbody>
 
 			<?php foreach ($cabinet as $c) { ?>
 			<tr>
@@ -67,7 +67,7 @@
 				<td><?php echo $c['price'] ?></td>
 			</tr>
 			<?php } ?>
-
+			</tbody>
 			</table>
 		<?php } else { ?>
 			Нет корпусных запчастей
@@ -81,20 +81,20 @@
 				<img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
 			</a>
 
-			<table class="sofT" cellspacing="0">
+			<table class="tablesorter separate" >
+			<thead>
 			<tr>
-				<td colspan="8" class="helpHed">Паечные элементы</td>
+				<th class="header" data-field="phones_parts.cct_ref">Позиция</th>
+				<th class="header" data-field="parts.code">Код</th>
+				<th class="header" data-field="phones_parts.num">Испол.</th>
+				<th class="header" data-field="parts.name">Описание(eng)</th>
+				<th class="header" data-field="parts.name_rus">Описание(рус)</th>
+				<th class="header" data-field="order_num">Кол-во</th>
+				<th class="header" data-field="phones_parts.min_num">Мин. кол-во</th>
+				<th class="header" data-field="parts.price">Цена</th>
 			</tr>
-			<tr>
-				<td class="helpHed" data-field="phones_parts.cct_ref">Позиция</td>
-				<td class="helpHed" data-field="parts.code">Код</td>
-				<td class="helpHed" data-field="phones_parts.num">Испол.</td>
-				<td class="helpHed" data-field="parts.name">Описание(eng)</td>
-				<td class="helpHed" data-field="parts.name_rus">Описание(рус)</td>
-				<td class="helpHed" data-field="order_num">Кол-во</td>
-				<td class="helpHed" data-field="phones_parts.min_num">Мин. кол-во</td>
-				<td class="helpHed" data-field="parts.price">Цена</td>
-			</tr>
+			</thead>
+			<tbody>
 
 			<?php foreach ($solder as $s) { ?>
 			<tr>
@@ -108,7 +108,7 @@
 				<td><?php echo $s['price'] ?></td>
 			</tr>
 			<?php } ?>
-
+			</tbody>
 			</table>
 		<?php } else { ?>
 			Нет паечных запчастей

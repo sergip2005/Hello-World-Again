@@ -508,5 +508,9 @@ border-right: 1px solid #69C;
 	background-position: -160px -109px;
 	width:15px;
 	height:20px;
+}
 
+table.separate{
+	border-collapse: separate;
+	border-spacing: 1px;
 }
