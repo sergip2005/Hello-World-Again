@@ -10,11 +10,11 @@ class Parts extends My_Controller {
 
 	public function index($number)
 	{
-		$number = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $number);
+		$number = preg_replace('/[^Р°-СЏРђ-РЇa-zA-Z0-9_\.\-\/ ]/ui', '', $number);
 		$parts  = $this->parts_model->getPartsByNumber($number);
 		$catalog  = $this->phones_model->getAllParts();
 		$data   = array(
-			'title' 		=> 'Номер: ' . $number,
+			'title' 		=> 'РќРѕРјРµСЂ: ' . $number,
 			'description' 	=> '',
 			'keywords' 		=> '',
 			'body' 			=> $this->load->view('pages/parts/index', array('parts' => $parts, 'catalog' => $catalog), true),
@@ -23,12 +23,12 @@ class Parts extends My_Controller {
 	}
 	public function search($parameter, $query)
 	{
-		$q = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $query);
-		$p = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $parameter);
+		$q = preg_replace('/[^Р°-СЏРђ-РЇa-zA-Z0-9_\.\-\/ ]/ui', '', $query);
+		$p = preg_replace('/[^Р°-СЏРђ-РЇa-zA-Z0-9_\.\-\/ ]/ui', '', $parameter);
 		$catalog  = $this->phones_model->getAllParts();
 		$parts  = $this->parts_model->searchParts($q, $p);
-		$data   = array(
-			'title' 		=> 'Поиск',
+		$data = array(
+			'title' 		=> 'РџРѕРёСЃРє',
 			'description' 	=> '',
 			'keywords' 		=> '',
 			'body' 			=> $this->load->view('pages/parts/search', array('parts' => $parts, 'catalog' => $catalog), true),

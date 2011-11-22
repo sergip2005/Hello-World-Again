@@ -28,7 +28,12 @@ class Models extends MY_Controller {
 
 	public function get_by_vendor($vendor_id)
 	{
-		$this->output->set_output(json_encode($this->phones_model->getAllVendorModels(intval($vendor_id))));
+		$parts = $this->phones_model->getAllVendorModels(intval($vendor_id), 'array');
+		if ($parts != false && count($parts) > 0) {
+			$this->output->set_output(json_encode(array('status' => 1, 'data' => $parts)));
+		} else {
+			$this->output->set_output(json_encode(array('status' => 0)));
+		}
 	}
 
 	public function save()
@@ -49,24 +54,24 @@ class Models extends MY_Controller {
 		}
 	}
 
-    public function get()
+	public function get()
 	{
-        $id = intval($this->input->post('id'));
-        if ($id > 0) {
+		$id = intval($this->input->post('id'));
+		if ($id > 0) {
 			$data = $this->phones_model->get($id);
 			$this->output->set_output( json_encode(array(
-                'status'  => 1,
-                'item'    => $data,
-                'message' => Regions_model::SAVE_SUCCESS
+				'status'  => 1,
+				'item'    => $data,
+				'message' => Regions_model::SAVE_SUCCESS
 				)));
 		} else {
 			$this->output->set_output(json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR)));
 		}
 	}
-    public function remove()
+	public function remove()
 	{
-        $id = intval($this->input->post('id'));
-        if ($this->phones_model->remove($id)) {
+		$id = intval($this->input->post('id'));
+		if ($this->phones_model->remove($id)) {
 			$this->output->set_output(json_encode(array('status' => 1, 'message' => Regions_model::REMOVE_SUCCESS)));
 		} else {
 			$this->output->set_output(json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR)));

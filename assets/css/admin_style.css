@@ -774,4 +774,42 @@ table.desc select {
 }
 
 /** parts */
-.show_parts { display: none }
+.parts-navigation { }
+
+.parts-navigation h3.title { margin-bottom: 10px }
+
+.parts-navigation .vendors-list {
+	width: 200px;
+	float: left;
+	border-right: 1px solid #DDD;
+}
+
+.parts-navigation .vendors-list ul { margin: 0 }
+
+.parts-navigation .vendors-list li { cursor: pointer }
+.parts-navigation .vendors-list li.active { font-weight: bold }
+
+.parts-navigation .models-list { margin-left: 220px }
+.parts-navigation .models-list ul { margin: 0 }
+.parts-navigation .models-list li {
+	cursor: pointer;
+	list-style: none;
+	width: 150px;
+	float: left;
+	padding: 2px 5px;
+}
+.parts-navigation .models-list li:hover { background: #FFFFA3 }
+.parts-navigation .models-list li.active { font-weight: bold }
+
+.parts-navigation .parts-table {
+	margin-top: 10px;
+	border-top:  1px solid #DDD;
+	padding-top: 5px;
+}
+.parts-navigation .parts-table table { width: 100% }
+.parts-navigation .parts-table table th, .parts-navigation .parts-table table td {
+	padding: 2px 3px;
+	vertical-align: baseline;
+	border: 1px solid #E0E0E0;
+}
+

@@ -251,9 +251,4 @@ class Import extends MY_Controller {
 		$this->output->set_output($this->import_data_tpl_model->getSelect());
 	}
 
-	public function test()
-	{
-		$this->load->model('phones_model');
-		$this->output->set_output('<pre>' . print_r($this->phones_model->getPrevDataState(array ( 0 => 6300314, 1 => 9445392, 2 => 5650837, 3 => 4850320, 4 => 6300079, 5 => 6300341), 40, 6 ), true));
-	}
 }

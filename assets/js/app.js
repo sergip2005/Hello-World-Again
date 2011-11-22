@@ -18,7 +18,9 @@ var app = {
 		noimage: '<img src="/assets/images/icons/noimage.gif" title="Нет изображения" />'
 	},
 
-	messages: {},
+	messages: {
+		noData: 'Нет информации'
+	},
 
 	urls: {
 		saveRegion: '/apanel/regions/save/',

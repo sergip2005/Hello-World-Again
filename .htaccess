@@ -1,3 +1,9 @@
+#AuthType Basic
+#AuthName "My Protected Area"
+#AuthUserFile /home/mktel/.htpasswd
+#Require valid-user
+
+
 AddDefaultCharset utf-8
 
 # remove index.php from url
@@ -16,40 +22,39 @@ Options +FollowSymLinks
 DirectoryIndex index.php index.html
 
 <IfModule mod_rewrite.c>
-    # mod_rewrite rules
-    RewriteEngine on
+	# mod_rewrite rules
+	RewriteEngine on
 
-    # If a controler can't be found - then issue a 404 error from PHP
-    # Error messages (via the "error" plugin)
-     ErrorDocument 403 /index.php/403/
-     ErrorDocument 404 /index.php/404/
-     ErrorDocument 500 /index.php/500/
-    
-    # Deny any people (or bots) from the following sites: (to stop spam comments)
-    # RewriteCond %{HTTP_REFERER} nienschanz\.ru [NC,OR]
-    # RewriteCond %{HTTP_REFERER} porn\.com
-    # RewriteRule .* - [F]
-    # Note: if you are having trouble from a certain URL just 
-    # add it above to forbide all visitors from that site.
+	# If a controler can't be found - then issue a 404 error from PHP
+	# Error messages (via the "error" plugin)
+	 ErrorDocument 403 /index.php/403/
+	 ErrorDocument 404 /index.php/404/
+	 ErrorDocument 500 /index.php/500/
 
-    # You can also uncomment this if you know the IP:
-    # Deny from 192.168.1.1
-    
-    # If the file is NOT the index.php file
-    RewriteCond %{REQUEST_FILENAME} !index.php
-    # Hide all PHP files so none can be accessed by HTTP
-    RewriteRule (.*)\.php$ index.php/$1
-    
-    # If the file/dir is NOT real go to index
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ index.php/$1 [QSA,L]
-    
+	# Deny any people (or bots) from the following sites: (to stop spam comments)
+	# RewriteCond %{HTTP_REFERER} nienschanz\.ru [NC,OR]
+	# RewriteCond %{HTTP_REFERER} porn\.com
+	# RewriteRule .* - [F]
+	# Note: if you are having trouble from a certain URL just
+	# add it above to forbide all visitors from that site.
+
+	# You can also uncomment this if you know the IP:
+	# Deny from 192.168.1.1
+
+	# If the file is NOT the index.php file
+	RewriteCond %{REQUEST_FILENAME} !index.php
+	# Hide all PHP files so none can be accessed by HTTP
+	RewriteRule (.*)\.php$ index.php/$1
+
+	# If the file/dir is NOT real go to index
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php/$1 [QSA,L]
 </IfModule>
 
 # If Mod_ewrite is NOT installed go to index.php
 <IfModule !mod_rewrite.c>
-    ErrorDocument 404 index.php
+	ErrorDocument 404 index.php
 </IfModule>
 
 
