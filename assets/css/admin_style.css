@@ -801,3 +801,15 @@ table.desc select {
 .parts-navigation .models-list li:hover { background: #FFFFA3 }
 .parts-navigation .models-list li.active { font-weight: bold }
 
+.parts-navigation .parts-table {
+	margin-top: 10px;
+	border-top:  1px solid #DDD;
+	padding-top: 5px;
+}
+.parts-navigation .parts-table table { width: 100% }
+.parts-navigation .parts-table table th, .parts-navigation .parts-table table td {
+	padding: 2px 3px;
+	vertical-align: baseline;
+	border: 1px solid #E0E0E0;
+}
+

@@ -15,6 +15,23 @@
 			<ul id="models"></ul>
 		</div>
 	</div>
-	<div id="parts" class="clearfix"></div>
+	<div class="parts-table clearfix">
+		<table class="tablesorter">
+			<thead>
+				<th>Произв-ль</th>
+				<th>Модель</th>
+				<th>Позиция</th>
+				<th>Парт-номер</th>
+				<th>Использ., шт</th>
+				<th>Описание, eng</th>
+				<th>Описание, рус</th>
+				<th>Наличие</th>
+				<th>Цена</th>
+				<th>Мин. кол.</th>
+				<th>Тип детали</th>
+			</thead>
+			<tbody id="parts"></tbody>
+		</table>
+	</div>
 
 </div>

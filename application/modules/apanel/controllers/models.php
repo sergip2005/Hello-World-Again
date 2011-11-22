@@ -29,7 +29,7 @@ class Models extends MY_Controller {
 	public function get_by_vendor($vendor_id)
 	{
 		$parts = $this->phones_model->getAllVendorModels(intval($vendor_id), 'array');
-		if ($parts !== false && count($parts) > 0) {
+		if ($parts != false && count($parts) > 0) {
 			$this->output->set_output(json_encode(array('status' => 1, 'data' => $parts)));
 		} else {
 			$this->output->set_output(json_encode(array('status' => 0)));

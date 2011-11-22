@@ -24,7 +24,8 @@ class Parts extends MY_Controller {
 
 		$template = array(
 			'title'	=> 'Запчасти',
-			'js'	=> array('/apanel/parts/index.js'),
+			'css'	=> array('jquery.tablesorter.blue.css'),
+			'js'	=> array('/apanel/parts/index.js', '/libs/jquery.tablesorter.min.js'),
 			'body'	=> $this->load->view('pages/parts/index', $data, true),
 		);
 
@@ -46,9 +47,10 @@ class Parts extends MY_Controller {
 			return;
 		}
 		$parts = $this->phones_model->getParts($search_params['vendor_id'], $search_params['model_id'], 'all');
-		$this->output->set_output(json_encode(array(
-				'status' => 1,
-				'data' => $parts
-			)));
+		if ($parts !== false && count($parts) > 0) {
+			$this->output->set_output(json_encode(array( 'status' => 1, 'data' => $parts )));
+		} else {
+			$this->output->set_output(json_encode(array( 'status' => 0 )));
+		}
 	}
 }

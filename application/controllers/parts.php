@@ -26,7 +26,7 @@ class Parts extends My_Controller {
 		$p = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $parameter);
 		$catalog  = $this->phones_model->getAllParts();
 		$parts  = $this->parts_model->searchParts($q, $p);
-		$data   = array(
+		$data = array(
 			'title' 		=> 'Поиск',
 			'description' 	=> '',
 			'keywords' 		=> '',

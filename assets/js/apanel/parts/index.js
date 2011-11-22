@@ -4,6 +4,22 @@ $(document).ready(function(){
 			vendors: {},
 			models: {}
 		},
+		templates = {
+			partTr:
+				'<tr data-id="<%= id %>">' +
+					'<td class="vname"><%= vendor_name %></td>' +
+					'<td class="mname"><%= model_name %></td>' +
+					'<td class="cct_ref"><%= cct_ref %></td>' +
+					'<td class="code"><%= code %></td>' +
+					'<td class="num"><%= num %></td>' +
+					'<td class="name"><%= name %></td>' +
+					'<td class="name_rus"><%= name_rus %></td>' +
+					'<td class="available"><%= (available ? "+" : "-") %></td>' +
+					'<td class="price"><%= price %></td>' +
+					'<td class="min_num"><%= min_num %></td>' +
+					'<td class="ptype"><%= ptype %></td>' +
+				'</tr>'
+		},
 		v = $('#vendors'),
 		m = $('#models'),
 		p = $('#parts');
@@ -31,6 +47,7 @@ $(document).ready(function(){
 		var s = $(this).data('id');
 		$(this).addClass('active').siblings().removeClass('active');
 		if (s > 0) {
+			app.showLoading(p);
 			config.model_id = s;
 			$.ajax({
 				url: '/apanel/parts/search',
@@ -43,13 +60,20 @@ $(document).ready(function(){
 				success: function(resp){
 					if (resp.status === 1) {
 						if (!_.isEmpty(resp.data.parts)) {
-							_.each(resp.data.parts, function(i, v){
-								console.log(i, v);
+							var html = '';
+							_.each(resp.data.parts, function(v){
+								html += _.template(templates.partTr, v);
 							});
+							p.html(html);
+							p.parents('table').trigger("update");
 						}
+					} else {
+						p.html(app.messages.noData);
 					}
 				}
 			});
 		}
 	});
+
+	p.parents('table').tablesorter();
 });

@@ -65,19 +65,25 @@ class Phones_model extends CI_Model
 	public function getParts($vendor_id, $model_id, $region = '')
 	{
 		$q1 = 'SELECT
-				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
-				pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type
+				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pp.num as num,
+				pa.code as code, pa.name as name, pa.ptype, pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
+				v.name as vendor_name, v.id as vendor_id,
+				p.model as model_name, p.id as model_id
 				FROM `phones_parts` pp
 				LEFT JOIN `parts` pa ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id
+				LEFT JOIN `vendors` v ON pa.vendor_id = v.id
 				WHERE p.vendor_id = ? AND pp.phone_id = ?';
 		$q2 = 'SELECT
-				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
-				pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type, r.name as r_name
+				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pp.num as num,
+				pa.code as code, pa.name as name, pa.ptype, pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
+				v.name as vendor_name, v.id as vendor_id,
+				p.model as model_name, p.id as model_id
 				FROM `phones_parts` pp
 				LEFT JOIN `parts` pa ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id
 				LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
+				LEFT JOIN `vendors` v ON pa.vendor_id = v.id
 				LEFT JOIN `regions` r ON r.id = pprr.region_id
 				WHERE p.vendor_id = ? AND pp.phone_id = ?
 				AND r.id = (SELECT id FROM regions where `default` = 1)';
