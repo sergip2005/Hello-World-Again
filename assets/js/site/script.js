@@ -32,14 +32,13 @@ $(document).ready(function () {
 		$(".select-and-input span").text($(this).text());
 		$(".select-and-input ul").hide();
 	});*/
+	search = $(".select-and-input");
 
-	$(".select-and-input").delegate('.search_field1', 'click', function (e) {
+	search.delegate('.search_code', 'click', function (e) {
 		$(this).val('');
-		$(".select-and-input input.search_field2").val('Модель');
-		$(".select-and-input input.search_field3").val('Название') ;
 	});
-	$(".select-and-input").delegate('.search_submit1', 'click', function (e) {
-		var q = $(".select-and-input input.search_field1").val();
+	search.delegate('.search_submit_code', 'click', function (e) {
+		var q = $(".select-and-input input.search_code").val();
 		e.stopPropagation();
 		e.preventDefault();
 		if(q.length > 0 && q!== "Код") {
@@ -47,13 +46,11 @@ $(document).ready(function () {
 		}
 	});
 
-	$(".select-and-input").delegate('.search_field2', 'click', function (e) {
+	search.delegate('.search_model', 'click', function (e) {
 		$(this).val('');
-		$(".select-and-input input.search_field1").val('Код');
-		$(".select-and-input input.search_field3").val('Название');
 	});
-	$(".select-and-input").delegate('.search_submit2', 'click', function (e) {
-		var q = $(".select-and-input input.search_field2").val();
+	search.delegate('.search_submit_model', 'click', function (e) {
+		var q = $(".select-and-input input.search_model").val();
 		e.stopPropagation();
 		e.preventDefault();
 		if(q.length > 0 && q!== "Модель") {
@@ -61,13 +58,11 @@ $(document).ready(function () {
 		}
 	});
 	
-	$(".select-and-input").delegate('.search_field3', 'click', function (e) {
+	search.delegate('.search_name', 'click', function (e) {
 		$(this).val('');
-		$(".select-and-input input.search_field2").val('Модель');
-		$(".select-and-input input.search_field1").val('Код');
 	});
-	$(".select-and-input").delegate('.search_submit3', 'click', function (e) {
-		var q = $(".select-and-input input.search_field3").val();
+	search.delegate('.search_submit_name', 'click', function (e) {
+		var q = $(".select-and-input input.search_name").val();
 		e.stopPropagation();
 		e.preventDefault();
 		if(q.length > 0 && q!== "Название") {

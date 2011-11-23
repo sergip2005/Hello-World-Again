@@ -517,8 +517,8 @@ border-right: 1px solid #69C;
 	border:solid 1px #848388;
 	background-color: white;
 }
-/*search field 1*/
-.select-and-input input.search_field1 {
+/*search code*/
+.select-and-input input.search_code {
 	position: absolute;
 	z-index: 0;
 	top: 5px;
@@ -530,24 +530,24 @@ border-right: 1px solid #69C;
 	border:solid 1px #848388;
 	background-color: white;
 }
-.select-and-input input.search_submit1, .select-and-input div.search_submit1 {
+.select-and-input input.search_submit_code, .select-and-input div.search_submit_code {
 	position: absolute;
 	left: 287px;
 	top: 4px;
 	width: 13px;
 
 }
-.select-and-input input.search_submit1{
+.select-and-input input.search_submit_code{
 	opacity: 0;
 }
-.select-and-input div.search_submit1 {
+.select-and-input div.search_submit_code {
 	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
 	background-position: -160px -109px;
 	width:15px;
 	height:20px;
 }
-/*search field 2*/
-.select-and-input input.search_field2 {
+/*search model*/
+.select-and-input input.search_model {
 	position: absolute;
 	z-index: 0;
 	top: 35px;
@@ -559,24 +559,24 @@ border-right: 1px solid #69C;
 	border:solid 1px #848388;
 	background-color: white;
 }
-.select-and-input input.search_submit2, .select-and-input div.search_submit2 {
+.select-and-input input.search_submit_model, .select-and-input div.search_submit_model {
 	position: absolute;
 	left: 287px;
 	top: 34px;
 	width: 13px;
 
 }
-.select-and-input input.search_submit2{
+.select-and-input input.search_submit_model{
 	opacity: 0;
 }
-.select-and-input div.search_submit2 {
+.select-and-input div.search_submit_model {
 	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
 	background-position: -160px -109px;
 	width:15px;
 	height:20px;
 }
 /*search field 3*/
-.select-and-input input.search_field3 {
+.select-and-input input.search_name {
 	position: absolute;
 	z-index: 0;
 	top: 65px;
@@ -588,17 +588,17 @@ border-right: 1px solid #69C;
 	border:solid 1px #848388;
 	background-color: white;
 }
-.select-and-input input.search_submit3, .select-and-input div.search_submit3 {
+.select-and-input input.search_submit_name, .select-and-input div.search_submit_name {
 	position: absolute;
 	left: 287px;
 	top: 64px;
 	width: 13px;
 
 }
-.select-and-input input.search_submit3{
+.select-and-input input.search_submit_name{
 	opacity: 0;
 }
-.select-and-input div.search_submit3 {
+.select-and-input div.search_submit_name {
 	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
 	background-position: -160px -109px;
 	width:15px;
