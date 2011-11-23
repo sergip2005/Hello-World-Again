@@ -505,105 +505,58 @@ border-right: 1px solid #69C;
 .select-and-input ul li:hover{
 	background-color: #E6EEEE;
 }
-.select-and-input input.search_field1 {
+
+/*search field*/
+.select-and-input div.search_field input.text {
 	position: absolute;
 	z-index: 0;
-	top: 5px;
 	left: 0;
 	height: 20px;
 	padding: 0;
-	padding-right: 104px;
-	width: 178px;
+	width: 282px;
 	border:solid 1px #848388;
 	background-color: white;
 }
-/*search code*/
-.select-and-input input.search_code {
-	position: absolute;
-	z-index: 0;
-	top: 5px;
-	left: 0;
-	height: 20px;
-	padding: 0;
-	padding-right: 104px;
-	width: 178px;
-	border:solid 1px #848388;
-	background-color: white;
-}
-.select-and-input input.search_submit_code, .select-and-input div.search_submit_code {
+
+.select-and-input div.search_field input.submit, .select-and-input div.search_field div.button {
 	position: absolute;
 	left: 287px;
 	top: 4px;
 	width: 13px;
-
-}
-.select-and-input input.search_submit_code{
 	opacity: 0;
 }
-.select-and-input div.search_submit_code {
+.select-and-input div.search_field div.button{
 	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
 	background-position: -160px -109px;
 	width:15px;
 	height:20px;
+	opacity: 1;
 }
+
+/*search code*/
+.select-and-input div.search_code input.text {
+	top: 5px;
+}
+.select-and-input div.search_code input.submit, .select-and-input div.search_code div.button {
+	top: 4px;
+}
+
 /*search model*/
-.select-and-input input.search_model {
-	position: absolute;
-	z-index: 0;
+.select-and-input div.search_model input.text {
 	top: 35px;
-	left: 0;
-	height: 20px;
-	padding: 0;
-	padding-right: 104px;
-	width: 178px;
-	border:solid 1px #848388;
-	background-color: white;
 }
-.select-and-input input.search_submit_model, .select-and-input div.search_submit_model {
-	position: absolute;
-	left: 287px;
+.select-and-input div.search_model input.submit, .select-and-input div.search_model div.button {
 	top: 34px;
-	width: 13px;
+}
 
-}
-.select-and-input input.search_submit_model{
-	opacity: 0;
-}
-.select-and-input div.search_submit_model {
-	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
-	background-position: -160px -109px;
-	width:15px;
-	height:20px;
-}
-/*search field 3*/
-.select-and-input input.search_name {
-	position: absolute;
-	z-index: 0;
+/*search name*/
+.select-and-input div.search_name input.text {
 	top: 65px;
-	left: 0;
-	height: 20px;
-	padding: 0;
-	padding-right: 104px;
-	width: 178px;
-	border:solid 1px #848388;
-	background-color: white;
 }
-.select-and-input input.search_submit_name, .select-and-input div.search_submit_name {
-	position: absolute;
-	left: 287px;
+.select-and-input div.search_name input.submit, .select-and-input div.search_name div.button {
 	top: 64px;
-	width: 13px;
+}
 
-}
-.select-and-input input.search_submit_name{
-	opacity: 0;
-}
-.select-and-input div.search_submit_name {
-	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
-	background-position: -160px -109px;
-	width:15px;
-	height:20px;
-}
 table.separate{
 	border-collapse: separate;
 	border-spacing: 1px;

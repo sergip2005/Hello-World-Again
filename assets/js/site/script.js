@@ -34,38 +34,29 @@ $(document).ready(function () {
 	});*/
 	search = $(".select-and-input");
 
-	search.delegate('.search_code', 'click', function (e) {
-		$(this).val('');
-	});
-	search.delegate('.search_submit_code', 'click', function (e) {
-		var q = $(".select-and-input input.search_code").val();
+	search.delegate('div.search_code input.submit', 'click', function (e) {
+		var q = $(".select-and-input div.search_code input.text").val();
 		e.stopPropagation();
 		e.preventDefault();
-		if(q.length > 0 && q!== "Код") {
+		if(q.length > 0) {
 			window.location.href = '/parts/' + encodeURI(q);
 		}
 	});
 
-	search.delegate('.search_model', 'click', function (e) {
-		$(this).val('');
-	});
-	search.delegate('.search_submit_model', 'click', function (e) {
-		var q = $(".select-and-input input.search_model").val();
+	search.delegate('div.search_model input.submit', 'click', function (e) {
+		var q = $(".select-and-input div.search_model input.text").val();
 		e.stopPropagation();
 		e.preventDefault();
-		if(q.length > 0 && q!== "Модель") {
+		if(q.length > 0) {
 			window.location.href = '/parts/models/' + encodeURI(q);
 		}
 	});
-	
-	search.delegate('.search_name', 'click', function (e) {
-		$(this).val('');
-	});
-	search.delegate('.search_submit_name', 'click', function (e) {
-		var q = $(".select-and-input input.search_name").val();
+
+	search.delegate('div.search_name input.submit', 'click', function (e) {
+		var q = $(".select-and-input div.search_name input.text").val();
 		e.stopPropagation();
 		e.preventDefault();
-		if(q.length > 0 && q!== "Название") {
+		if(q.length > 0) {
 			window.location.href = '/parts/search/' + encodeURI(q);
 		}
 	});
