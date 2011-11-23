@@ -39,12 +39,10 @@ class Parts extends MY_Controller {
 		$search_params['model_id'] = $this->input->post('model_id');
 		if (!in_array($search_params['model_id'], array('all', 'none'))) {
 			$search_params['model_id'] = intval($search_params['model_id']);
-		}
-		if ($search_params['model_id'] <= 0) {
-			$this->output->set_output(json_encode(array(
-					'status' => 0
-				)));
-			return;
+			if ($search_params['model_id'] <= 0) {
+				$this->output->set_output(json_encode(array( 'status' => 0 )));
+				return;
+			}
 		}
 		$parts = $this->phones_model->getParts($search_params['vendor_id'], $search_params['model_id'], 'all');
 		if ($parts !== false && count($parts) > 0) {

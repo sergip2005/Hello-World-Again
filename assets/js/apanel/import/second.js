@@ -21,7 +21,10 @@ $(document).ready(function () {
 			if (sv > 0) {
 				m_sel.attr('disabled', true);
 				$.getJSON(app.urls.getVendorModels + sv, function(resp){
-					m_sel.html('<option value="0" selected="selected"> - </option>' + resp.join()).attr('disabled', false);
+					var o = _.map(resp.data, function(v, k){
+						return '<option value="' + v.id + '">' + v.name + '</option>';
+					});
+					m_sel.html('<option value="0" selected="selected"> - </option>' + o.join()).attr('disabled', false);
 				});
 			}
 		}

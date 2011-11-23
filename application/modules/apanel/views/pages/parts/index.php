@@ -15,9 +15,16 @@
 			<ul id="models"></ul>
 		</div>
 	</div>
+
+	<div id="controls" class="controls clearfix">
+		<button disabled="disabled">Переместить</button>
+		<button disabled="disabled">Удалить</button>
+	</div>
+
 	<div class="parts-table clearfix">
 		<table class="tablesorter">
 			<thead>
+				<th><input type="checkbox" class="check-all"></th>
 				<th>Произв-ль</th>
 				<th>Модель</th>
 				<th>Позиция</th>

@@ -73,7 +73,8 @@ class Phones_model extends CI_Model
 				LEFT JOIN `parts` pa ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id
 				LEFT JOIN `vendors` v ON pa.vendor_id = v.id
-				WHERE p.vendor_id = ? AND pp.phone_id = ?';
+				WHERE p.vendor_id = ?';
+
 		$q2 = 'SELECT
 				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pp.num as num,
 				pa.code as code, pa.name as name, pa.ptype, pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
@@ -85,10 +86,24 @@ class Phones_model extends CI_Model
 				LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
 				LEFT JOIN `vendors` v ON pa.vendor_id = v.id
 				LEFT JOIN `regions` r ON r.id = pprr.region_id
-				WHERE p.vendor_id = ? AND pp.phone_id = ?
+				WHERE p.vendor_id = ?
 				AND r.id = (SELECT id FROM regions where `default` = 1)';
+		if ($model_id === 'all') {
+			$q1 .= '';
+			$q2 .= '';
+			$values = array($vendor_id, $region);
+		} elseif ($model_id === 'none') {
+			$q1 .= ' AND pp.phone_id = 0';
+			$q2 .= ' AND pp.phone_id = 0';
+			$values = array($vendor_id, $region);
+		} else {
+			$q1 .= ' AND pp.phone_id = ?';
+			$q2 .= ' AND pp.phone_id = ?';
+			$values = array($vendor_id, $model_id, $region);
+		}
+
 		$query = $region == 'all' ? $q1 : $q2;
-		$p = $this->db->query($query, array($vendor_id, $model_id, $region));
+		$p = $this->db->query($query, $values);
 		if ($p->num_rows() > 0) {
 			$p = $p->result_array();
 		} else {
@@ -284,13 +299,13 @@ class Phones_model extends CI_Model
 	public function getPhonePartsRegions($ids)
 	{
 		$this->db
-				->select('part_id, region_id')
-				->from('phones_parts_regions_rel');
+				->select('pprr.part_id, pprr.region_id')
+				->from('phones_parts_regions_rel pprr');
 
 		if (is_array($ids)) {
-			$this->db->where_in('part_id', $ids);
+			$this->db->where_in('pprr.part_id', $ids);
 		} elseif ((is_string($ids) || is_int($ids)) && strlen($ids) > 0) {
-			$this->db->where('part_id', $ids);
+			$this->db->where('pprr.part_id', $ids);
 		} else {
 			return false;
 		}
