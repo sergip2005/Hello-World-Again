@@ -787,7 +787,7 @@ table.desc select {
 .parts-navigation .vendors-list ul { margin: 0 }
 
 .parts-navigation .vendors-list li { cursor: pointer }
-.parts-navigation .vendors-list li.active { font-weight: bold }
+.parts-navigation .vendors-list li.active { font-weight: bold; color: red }
 
 .parts-navigation .models-list { margin-left: 220px }
 .parts-navigation .models-list ul { margin: 0 }
@@ -799,7 +799,7 @@ table.desc select {
 	padding: 2px 5px;
 }
 .parts-navigation .models-list li:hover { background: #FFFFA3 }
-.parts-navigation .models-list li.active { font-weight: bold }
+.parts-navigation .models-list li.active { font-weight: bold; color: red }
 
 .parts-navigation .parts-table {
 	margin-top: 10px;
@@ -813,3 +813,8 @@ table.desc select {
 	border: 1px solid #E0E0E0;
 }
 
+.parts-navigation .controls {
+	border-top: 1px solid #DDDDDD;
+	margin-top: 10px;
+	padding-top: 5px;
+}

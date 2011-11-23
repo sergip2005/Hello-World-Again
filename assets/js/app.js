@@ -47,6 +47,13 @@ var app = {
 	splash: null,
 	popup: null,
 	popupContent: null,
+	/**
+	 * @param object s
+	 * s.w - width
+	 * s.h - height
+	 * s.html - content
+	 * s.c - callback
+	 */
 	showPopup: function (s) { // makes popup to show
 		var c = this.popupContent, p = this.popup, total_w = $(window).width(),
 			w = typeof s.w === 'undefined' || s.w <= 0 ? 'auto' : s.w,
@@ -87,9 +94,16 @@ var app = {
 		this.message = $('#message');
 		this.messageContent = $('#message-content');
 
+		this.popup = $('#popup');
+		this.popupContent = $('#popup-content');
+		this.splash = $('#splash');
+
 		var ap = this;
 		ap.message.contents('img').click(function(){
-			ap.message.fadeOut();
+			ap.message.fadeOut(250);
+		});
+		ap.popup.contents('img').click(function(){
+			ap.popup.fadeOut(250);
 		});
 	},
 
@@ -109,11 +123,12 @@ var app = {
 	init: function(){
 		this.initMessages();
 		this.initSlideable();
+
 		$('body').ajaxStart(function() {
-					$(this).addClass('loading');
-			}).ajaxStop(function(){
-					$(this).removeClass('loading');
-				});
+				$(this).addClass('loading');
+		}).ajaxStop(function(){
+				$(this).removeClass('loading');
+			});
 	},
 
 	templates: {
