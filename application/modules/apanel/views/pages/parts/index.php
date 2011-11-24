@@ -17,8 +17,9 @@
 	</div>
 
 	<div id="controls" class="controls clearfix">
-		<button disabled="disabled">Переместить</button>
-		<button disabled="disabled">Удалить</button>
+		<button disabled="disabled" class="move">Переместить</button>
+		<button disabled="disabled" class="change-pn">Изменить парт-номер</button>
+		<button disabled="disabled" class="remove">Удалить</button>
 	</div>
 
 	<div class="parts-table clearfix">
