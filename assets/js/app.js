@@ -90,20 +90,28 @@ var app = {
 		}
 	},
 
+	log: function(){
+		if (typeof console.log !== undefined) {
+			console.log(arguments);
+		} else {
+			return false;
+		}
+	},
+
 	initMessages: function(){
 		this.message = $('#message');
 		this.messageContent = $('#message-content');
 
 		this.popup = $('#popup');
 		this.popupContent = $('#popup-content');
-		this.splash = $('#splash');
+		this.splash = $('#splash').splash();
 
 		var ap = this;
 		ap.message.contents('img').click(function(){
 			ap.message.fadeOut(250);
 		});
 		ap.popup.contents('img').click(function(){
-			ap.popup.fadeOut(250);
+			ap.popup.add(ap.splash).fadeOut(250);
 		});
 	},
 

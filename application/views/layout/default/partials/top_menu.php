@@ -16,19 +16,19 @@
 		<div class="search_field search_code">
 			<input class="text" placeholder="Код" type="text" name="query">
 			<div class="button"></div>
-			<input class="submit"  type="submit" value="Sub">
+			<input class="submit" type="submit" value="Sub">
 		</div>
 
 		<div class="search_field search_model">
-			<input class="text" type="text" name="query"  placeholder="Модель">
+			<input class="text" type="text" name="query" placeholder="Модель">
 			<div class="button"></div>
-			<input class="submit"  type="submit" value="Sub">
+			<input class="submit" type="submit" value="Sub">
 		</div>
 
 		<div class="search_field search_name">
-			<input class="text" type="text" name="query"  placeholder="Название">
+			<input class="text" type="text" name="query" placeholder="Название">
 			<div class="button"></div>
-			<input class="submit"  type="submit" value="Sub">
+			<input class="submit" type="submit" value="Sub">
 		</div>
 	</form>
 </div>

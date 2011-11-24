@@ -818,3 +818,13 @@ table.desc select {
 	margin-top: 10px;
 	padding-top: 5px;
 }
+
+.parts-navigation .parts-table table th.check { width: 20px }
+.parts-navigation .parts-table table th.vendor { width: 70px }
+.parts-navigation .parts-table table th.model { width: 50px }
+.parts-navigation .parts-table table th.cct_ref { width: 100px }
+.parts-navigation .parts-table table th.code { width: 70px }
+.parts-navigation .parts-table table th.name { }
+.parts-navigation .parts-table table th.num { width: 30px }
+.parts-navigation .parts-table table th.price { width: 50px }
+.parts-navigation .parts-table table th.ptype { width: 100px }

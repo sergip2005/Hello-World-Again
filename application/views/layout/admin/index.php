@@ -17,7 +17,8 @@
 		<link rel="shortcut icon" href="/favicon.ico">
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-		<link rel="stylesheet" href="/assets/css/admin_style.css?v=1">
+		<link rel="stylesheet" href="/assets/css/admin_style.css?v=<?php echo $this->config->item('apanel_css_version') ?>">
+		<link rel="stylesheet" href="/assets/css/jquery.tablesorter.blue.css?v=<?php echo $this->config->item('apanel_css_version') ?>">
 		<?php
 			if (isset($css) && count($css) > 0) {
 				foreach ($css as $name) {
@@ -26,13 +27,12 @@
 			}
 		?>
 
-		<!-- Uncomment if you are specifically targeting less enabled mobile browsers
-		<link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
-
-		<script src="/assets/js/libs/jquery.1.6.4.min.js"></script>
-		<script src="/assets/js/libs/underscore-min.js"></script>
-		<script src="/assets/js/plugins.js"></script>
-		<script src="/assets/js/app.js"></script>
+		<!-- Uncomment if you are specifically targeting less enabled mobile browsers <link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
+		<script src="/assets/js/libs/jquery.1.6.4.min.js?v=<?php echo $this->config->item('apanel_js_version') ?>"></script>
+		<script src="/assets/js/libs/underscore-min.js?v=<?php echo $this->config->item('apanel_js_version') ?>"></script>
+		<script src="/assets/js/libs/jquery.tablesorter.min.js?v=<?php echo $this->config->item('apanel_js_version') ?>"></script>
+		<script src="/assets/js/plugins.js?v=<?php echo $this->config->item('apanel_js_version') ?>"></script>
+		<script src="/assets/js/app.js?v=<?php echo $this->config->item('apanel_js_version') ?>"></script>
 		<?php
 			if (isset($js) && count($js) > 0) {
 				foreach ($js as $name) {

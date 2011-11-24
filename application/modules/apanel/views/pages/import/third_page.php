@@ -189,16 +189,16 @@
 		<h3>Детали, информация о которых не найдена в текущей версии парт. листа, и они помечены к удалению</h3>
 		<table>
 			<thead>
-				<th><input type="checkbox" checked="checked" id="check-all_n" class="check-all"></th>
-				<th><?php echo $this->import_model->part_field_types['cct_ref'] ?></th>
-				<th><?php echo $this->import_model->price_field_types['code'] ?></th>
-				<th><?php echo $this->import_model->part_field_types['name'] ?></th>
-				<th><?php echo $this->import_model->part_field_types['name_rus'] ?></th>
-				<th><?php echo $this->import_model->part_field_types['ptype'] ?></th>
-				<th><?php echo $this->import_model->price_field_types['price_eur'] ?></th>
-				<th><?php echo $this->import_model->part_field_types['num'] ?></th>
-				<th><?php echo $this->import_model->part_field_types['min_num'] ?></th>
-				<th><?php echo $this->import_model->part_field_types['type'] ?></th>
+				<th class="check"><input type="checkbox" checked="checked" id="check-all_n" class="check-all"></th>
+				<th class="cct_ref"><?php echo $this->import_model->part_field_types['cct_ref'] ?></th>
+				<th class="code"><?php echo $this->import_model->price_field_types['code'] ?></th>
+				<th class="name"><?php echo $this->import_model->part_field_types['name'] ?></th>
+				<th class="name"><?php echo $this->import_model->part_field_types['name_rus'] ?></th>
+				<th class="ptype"><?php echo $this->import_model->part_field_types['ptype'] ?></th>
+				<th class="price"><?php echo $this->import_model->price_field_types['price_eur'] ?></th>
+				<th class="num"><?php echo $this->import_model->part_field_types['num'] ?></th>
+				<th class="num"><?php echo $this->import_model->part_field_types['min_num'] ?></th>
+				<th class="type"><?php echo $this->import_model->part_field_types['type'] ?></th>
 			</thead>
 			<?php $ri = 1; ?>
 			<?php foreach ($current['model_parts'] as $one) { ?>

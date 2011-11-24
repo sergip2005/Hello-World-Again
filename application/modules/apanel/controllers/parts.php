@@ -24,8 +24,8 @@ class Parts extends MY_Controller {
 
 		$template = array(
 			'title'	=> 'Запчасти',
-			'css'	=> array('jquery.tablesorter.blue.css'),
-			'js'	=> array('/apanel/parts/index.js', '/libs/jquery.tablesorter.min.js'),
+			'css'	=> array(),
+			'js'	=> array('apanel/parts/index.js'),
 			'body'	=> $this->load->view('pages/parts/index', $data, true),
 		);
 

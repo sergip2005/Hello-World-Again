@@ -24,18 +24,18 @@
 	<div class="parts-table clearfix">
 		<table class="tablesorter">
 			<thead>
-				<th><input type="checkbox" class="check-all"></th>
-				<th>Произв-ль</th>
-				<th>Модель</th>
-				<th>Позиция</th>
-				<th>Парт-номер</th>
-				<th>Использ., шт</th>
-				<th>Описание, eng</th>
-				<th>Описание, рус</th>
-				<th>Наличие</th>
-				<th>Цена</th>
-				<th>Мин. кол.</th>
-				<th>Тип детали</th>
+				<th class="check"><input type="checkbox" class="check-all"></th>
+				<th class="vendor">Произв.</th>
+				<th class="model">Модель</th>
+				<th class="cct_ref">Позиция</th>
+				<th class="code">Парт-номер</th>
+				<th class="num">Использ.</th>
+				<th class="name">Описание, eng</th>
+				<th class="name">Описание, рус</th>
+				<th class="num">Наличие</th>
+				<th class="price">Цена</th>
+				<th class="num">Мин.</th>
+				<th class="ptype">Тип</th>
 			</thead>
 			<tbody id="parts"></tbody>
 		</table>
