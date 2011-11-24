@@ -1,6 +1,9 @@
 var partsManager = {
 
-	config: {},
+	config: {
+		vendor_id: 0,
+		model_id: 0
+	},
 
 	cache: {
 		vendors: {},
@@ -9,19 +12,19 @@ var partsManager = {
 
 	templates: {
 		partTr:
-			'<tr data-id="<%= id %>" class="<%= i % 2 ? \'odd\' : \'even\' %>">' +
-				'<td class="check"><input type="checkbox" value="<%= id %>"></td>' +
-				'<td class="vname"><%= vendor_name %></td>' +
-				'<td class="mname"><%= model_name %></td>' +
-				'<td class="cct_ref"><%= cct_ref %></td>' +
-				'<td class="code"><%= code %></td>' +
-				'<td class="num"><%= num %></td>' +
-				'<td class="name"><%= name %></td>' +
-				'<td class="name_rus"><%= name_rus %></td>' +
-				'<td class="available"><%= (available ? "+" : "-") %></td>' +
-				'<td class="price"><%= price %></td>' +
-				'<td class="min_num"><%= min_num %></td>' +
-				'<td class="ptype"><%= ptype %></td>' +
+			'<tr data-id="<%= id %>" class="<%= i % 2 ? \'even\' : \'odd\' %>">' +
+				'<td><input type="checkbox" value="<%= id %>"></td>' +
+				'<td><%= vendor_name %></td>' +
+				'<td><%= model_name %></td>' +
+				'<td><%= cct_ref %></td>' +
+				'<td><%= code %></td>' +
+				'<td><%= num %></td>' +
+				'<td><%= name %></td>' +
+				'<td><%= name_rus %></td>' +
+				'<td><%= (available ? "+" : "-") %></td>' +
+				'<td><%= price %></td>' +
+				'<td><%= min_num %></td>' +
+				'<td><%= ptype %></td>' +
 			'</tr>'
 	},
 
@@ -47,7 +50,7 @@ var partsManager = {
 		});
 
 		// init sortables
-		pm.p.parents('table').tablesorter({ headers: { 0: { sorter: false} } });
+		pm.p.parents('table').tablesorter({ headers: { 0: { sorter: false}, widgets: ['zebra', 'repeatHeaders']} });
 
 		// rows clicks
 		pm.p.delegate('tr', 'click', function(e){
@@ -60,7 +63,11 @@ var partsManager = {
 			} else {
 				pm.uncheckRow($(this).parents('tr'));
 			}
-		});
+		}).delegate('tr', 'dblclick', function(e){
+				var i = $(this);
+				pm.showPartInfo(i.data('id'));
+				app.log('dblclicked', i);
+			});
 
 		// init check all
 		pm.pchbx.click(function(e){
@@ -70,6 +77,32 @@ var partsManager = {
 				$(this).parents('table').find(':checkbox').attr('checked', false);
 			}
 		});
+
+		//if there is path in hash -> load it
+		pm.initLocationHash();
+	},
+
+	/**
+	 * loads url saved in hash
+	 */
+	initLocationHash: function(){
+		var h = document.location.hash.replace('#', ''),
+			pm = this;
+		if (h !== '') {
+			h = h.split('/');
+			if (h.length > 0) {
+				if (parseInt(h[0], 10) > 0) {
+					pm.getVendorModels(parseInt(h[0], 10));
+				}
+				if (parseInt(h[1], 10) > 0 || h[1] == 'all' || h[1] == 'none') {
+					pm.getModelParts(h[1]);
+				}
+			}
+		}
+	},
+
+	showPartInfo: function(i){
+		app.showPopup({html: i, c: function(){}});
 	},
 
 	getVendorModels: function(s){
@@ -77,6 +110,7 @@ var partsManager = {
 		if (s > 0) {
 			app.showLoading(pm.m);
 			pm.config.vendor_id = s;
+			document.location.hash = s;
 			$.getJSON(app.urls.getVendorModels + s, function(resp){
 				var html = '<li data-id="all" class="fixed">все</li><li data-id="none" class="fixed">без модели</li>';
 				if (resp.status === 1) {
@@ -95,6 +129,7 @@ var partsManager = {
 			app.showLoading(pm.p);
 			pm.pchbx.prop('checked', false);
 			pm.config.model_id = s;
+			document.location.hash = pm.config.vendor_id + '/' + s;
 			$.ajax({
 				url: '/apanel/parts/search',
 				type: 'post',
@@ -112,7 +147,7 @@ var partsManager = {
 								html += _.template(pm.templates.partTr, v);
 							});
 							pm.p.html(html);
-							pm.p.parents('table').trigger("update");
+							pm.p.parents('table').trigger('update');
 						}
 					} else {
 						pm.p.html(app.messages.noData);

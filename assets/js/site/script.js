@@ -32,7 +32,7 @@ $(document).ready(function () {
 		$(".select-and-input span").text($(this).text());
 		$(".select-and-input ul").hide();
 	});*/
-	search = $(".select-and-input");
+	var search = $(".select-and-input");
 
 	search.delegate('div.search_code input.submit', 'click', function (e) {
 		var q = $(".select-and-input div.search_code input.text").val();
