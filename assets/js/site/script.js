@@ -32,13 +32,13 @@ $(document).ready(function () {
 		$(".select-and-input span").text($(this).text());
 		$(".select-and-input ul").hide();
 	});*/
-	search = $(".select-and-input");
+	var search = $(".select-and-input");
 
 	search.delegate('div.search_code input.submit', 'click', function (e) {
 		var q = $(".select-and-input div.search_code input.text").val();
 		e.stopPropagation();
 		e.preventDefault();
-		if(q.length > 0) {
+		if($.trim(q) !== '') {
 			window.location.href = '/parts/' + encodeURI(q);
 		}
 	});
@@ -47,7 +47,7 @@ $(document).ready(function () {
 		var q = $(".select-and-input div.search_model input.text").val();
 		e.stopPropagation();
 		e.preventDefault();
-		if(q.length > 0) {
+		if($.trim(q) !== '') {
 			window.location.href = '/parts/models/' + encodeURI(q);
 		}
 	});
@@ -56,7 +56,7 @@ $(document).ready(function () {
 		var q = $(".select-and-input div.search_name input.text").val();
 		e.stopPropagation();
 		e.preventDefault();
-		if(q.length > 0) {
+		if($.trim(q) !== '') {
 			window.location.href = '/parts/search/' + encodeURI(q);
 		}
 	});
