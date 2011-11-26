@@ -33,7 +33,7 @@ class Phones_model extends CI_Model
 	{
 		$q1 = 'SELECT
 				  pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name,
-				  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type
+				  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type, p.rev_num as rev_num
 				  FROM `phones_parts` pp
 				  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 				  LEFT JOIN `phones` p ON pp.phone_id = p.id
@@ -42,7 +42,7 @@ class Phones_model extends CI_Model
 				  ORDER BY v.name';
 		$q2 = 'SELECT
 				  pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name,
-				  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type, r.name as r_name
+				  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type, r.name as r_name, p.rev_num as rev_num
 				  FROM `phones_parts` pp
 				  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 				  LEFT JOIN `phones` p ON pp.phone_id = p.id

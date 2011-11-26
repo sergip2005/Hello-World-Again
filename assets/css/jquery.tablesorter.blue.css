@@ -19,6 +19,10 @@ table.tablesorter thead tr .header {
 	cursor: pointer;
 	padding-right: 15px;
 }
+table.tablesorter thead tr .not_header {
+	background-image: none;
+
+}
 table.tablesorter tbody td {
 	color: #3D3D3D;
 	padding: 4px;

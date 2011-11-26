@@ -42,6 +42,7 @@
 
 			<table class="tablesorter separate" >
 			<thead>
+			<tr><th class="not_header">v.<?php echo $cabinet[0]['rev_num'] ?></th><th class="not_header" colspan="7"></th></tr>
 			<tr>
 				<th class="header" data-field="phones_parts.cct_ref">Позиция</th>
 				<th class="header" data-field="parts.code">Код</th>
@@ -83,6 +84,7 @@
 
 			<table class="tablesorter separate" >
 			<thead>
+			<tr><th class="not_header">v.<?php echo $solder[0]['rev_num'] ?></th><th class="not_header" colspan="7"></th></tr>
 			<tr>
 				<th class="header" data-field="phones_parts.cct_ref">Позиция</th>
 				<th class="header" data-field="parts.code">Код</th>
