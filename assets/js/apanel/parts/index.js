@@ -39,18 +39,18 @@ var partsManager = {
 
 		// vendors list
 		pm.v.delegate('li', 'click', function(){
-			$(this).addClass('active').siblings().removeClass('active');
+			pm.setVendorLiActive(this, false);
 			pm.getVendorModels($(this).data('id'));
 		});
 
 		// dynamic models list
 		pm.m.delegate('li', 'click', function(e){
-			$(this).addClass('active').siblings().removeClass('active');
+			pm.setModelLiActive(this, false);
 			pm.getModelParts($(this).data('id'));
 		});
 
 		// init sortables
-		pm.p.parents('table').tablesorter({ headers: { 0: { sorter: false}, widgets: ['zebra', 'repeatHeaders']} });
+		pm.p.parents('table').tablesorter({ headers: { 0: { sorter: false} }, widgets: ['zebra', 'repeatHeaders'] });
 
 		// rows clicks
 		pm.p.delegate('tr', 'click', function(e){
@@ -78,6 +78,8 @@ var partsManager = {
 			}
 		});
 
+		pm.initControls();
+
 		//if there is path in hash -> load it
 		pm.initLocationHash();
 	},
@@ -91,11 +93,15 @@ var partsManager = {
 		if (h !== '') {
 			h = h.split('/');
 			if (h.length > 0) {
-				if (parseInt(h[0], 10) > 0) {
-					pm.getVendorModels(parseInt(h[0], 10));
-				}
-				if (parseInt(h[1], 10) > 0 || h[1] == 'all' || h[1] == 'none') {
-					pm.getModelParts(h[1]);
+				var v = parseInt(h[0], 10);
+				if (v > 0) {
+					pm.getVendorModels(v, function(){
+						pm.setVendorLiActive(false, v);
+						if (parseInt(h[1], 10) > 0 || h[1] == 'all' || h[1] == 'none') {
+							pm.getModelParts(h[1]);
+							pm.setModelLiActive(false, h[1]);
+						}
+					});
 				}
 			}
 		}
@@ -105,7 +111,37 @@ var partsManager = {
 		app.showPopup({html: i, c: function(){}});
 	},
 
-	getVendorModels: function(s){
+	getVendorElm: function(vId){
+		return this.v.contents('li[data-id="' + vId + '"]');
+	},
+
+	getModelElm: function(mId){
+		return this.m.contents('li[data-id="' + mId + '"]');
+	},
+
+	setVendorLiActive: function(elm, id){
+		var pm = this;
+		if (elm !== false) {
+			$(elm).addClass('active').siblings().removeClass('active');
+		} else if (id > 0) {
+			pm.getVendorElm(id).addClass('active').siblings().removeClass('active');
+		} else {
+			return false;
+		}
+	},
+
+	setModelLiActive: function(elm, id){
+		var pm = this;
+		if (elm !== false) {
+			$(elm).addClass('active').siblings().removeClass('active');
+		} else if (id > 0 || id == 'all' || id == 'none') {
+			pm.getModelElm(id).addClass('active').siblings().removeClass('active');
+		} else {
+			return false;
+		}
+	},
+
+	getVendorModels: function(s, c){
 		var pm = this;
 		if (s > 0) {
 			app.showLoading(pm.m);
@@ -119,11 +155,15 @@ var partsManager = {
 					});
 				}
 				pm.m.html(html);
+				pm.updateControls();
+				if (_.isFunction(c)) {
+					c();
+				}
 			});
 		}
 	},
 
-	getModelParts: function(s){
+	getModelParts: function(s, c){
 		var pm = this;
 		if (s > 0 || s === 'none' || s === 'all') {
 			app.showLoading(pm.p);
@@ -152,12 +192,33 @@ var partsManager = {
 					} else {
 						pm.p.html(app.messages.noData);
 					}
+					pm.updateControls();
+					if (_.isFunction(c)) {
+						c();
+					}
 				}
 			});
 		}
 	},
 
-	updateControls: function(){},
+	initControls: function(){
+		this.c.find('button').attr('disabled', false);
+
+		this.c.delegate('button.move', 'click', function(e){
+			e.preventDefault();
+			app.log('move');
+		}).delegate('button.remove', 'click', function(e){
+			e.preventDefault();
+			app.log('remove');
+		}).delegate('button.change-pn', 'click', function(e){
+			e.preventDefault();
+			app.log('change-pn');
+		});
+	},
+
+	updateControls: function(){
+
+	},
 
 	checkRow: function(tr){
 		var pm = this;
