@@ -71,15 +71,15 @@ var partsManager = {
 			});
 
 		//search bottoms clicks
-		pm.s.delegate('div.search_code input.submit', 'click', function(e){
+		pm.s.delegate('form[name="search_parts_code"]', 'submit', function(e){
 			e.preventDefault();
-			pm.searchParts($(this).prev().prev().val(), 'parts_code');
-		}).delegate('div.search_model input.submit', 'click', function(e){
+			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
+		}).delegate('form[name="search_model_name"]', 'submit', function(e){
 			e.preventDefault();
-			pm.searchParts($(this).prev().prev().val(), 'model_name');
-		}).delegate('div.search_name input.submit', 'click', function(e){
+			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
+		}).delegate('form[name="search_parts_name"]', 'submit', function(e){
 			e.preventDefault();
-			pm.searchParts($(this).prev().prev().val(), 'parts_name');
+			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 		});
 
 		// init check all
