@@ -1,5 +1,38 @@
 <div id="main" class="parts-navigation">
 
+	<div id="search">
+	<div  class="select-and-input">
+		<form name="search_parts_code">
+			<div class="search_field search_code">
+				<input class="text" placeholder="Код" type="text" name="parts_code">
+				<div class="button"></div>
+				<input class="submit" type="submit" value="Sub">
+				<input class="parameter" type="hidden" value="parts_code">
+			</div>
+		</form>
+	</div>
+	<div class="select-and-input">
+		<form name="search_model_name">
+			<div class="search_field search_model">
+				<input class="text" type="text" placeholder="Модель" name="model_name">
+				<div class="button"></div>
+				<input class="submit" type="submit" value="Sub">
+				<input class="parameter" type="hidden" value="model_name">
+			</div>
+		</form>
+	</div>
+	<div class="select-and-input">
+		<form name="search_parts_name">
+		<div class="search_field search_name">
+				<input class="text" type="text" placeholder="Название" name="parts_name">
+				<div class="button"></div>
+				<input class="submit" type="submit" value="Sub">
+				<input class="parameter" type="hidden" value="parts_name">
+			</div>
+		</form>
+	</div>
+	</div>
+
 	<div class="clearfix">
 		<div class="vendors-list">
 			<h3 class="title">Производители</h3>
@@ -20,33 +53,6 @@
 		<button disabled="disabled" class="move">Переместить</button>
 		<button disabled="disabled" class="change-pn">Изменить парт-номер</button>
 		<button disabled="disabled" class="remove">Удалить</button>
-	</div>
-
-	<div id="search" class="select-and-input">
-		<form name="search_parts_code">
-			<div class="search_field search_code">
-				<input class="text" placeholder="Код" type="text" name="parts_code">
-				<div class="button"></div>
-				<input class="submit" type="submit" value="Sub">
-				<input class="parameter" type="hidden" value="parts_code">
-			</div>
-		</form>
-		<form name="search_model_name">
-			<div class="search_field search_model">
-				<input class="text" type="text" placeholder="Модель" name="model_name">
-				<div class="button"></div>
-				<input class="submit" type="submit" value="Sub">
-				<input class="parameter" type="hidden" value="model_name">
-			</div>
-		</form>
-		<form name="search_parts_name">
-		<div class="search_field search_name">
-				<input class="text" type="text" placeholder="Название" name="parts_name">
-				<div class="button"></div>
-				<input class="submit" type="submit" value="Sub">
-				<input class="parameter" type="hidden" value="parts_name">
-			</div>
-		</form>
 	</div>
 
 	<div class="parts-table clearfix">
