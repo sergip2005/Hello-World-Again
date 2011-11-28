@@ -38,4 +38,6 @@ $(document).ready(function () {
 			$(this).parents('table').find(':checkbox').attr('checked', false);
 		}
 	});
+
+	$('div.to-remove table').tablesorter({ headers: { 0: { sorter: false} }, widgets: ['zebra', 'repeatHeaders'] });
 });

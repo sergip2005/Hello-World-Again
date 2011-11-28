@@ -68,3 +68,22 @@ function process_to_id_keyed_array($a)
 	}
 	return $b;
 }
+
+/**
+ * used in array_map
+ * @param $key
+ * @param $val
+ * @param $sheet
+ * @return array
+ */
+function get_temp_serialized_values($key, $val, $sheet){
+	return array('row_id' => $key, 'row_data' => serialize($val), 'sheet_id' => $sheet );
+}
+
+function get_temp_unserialized_sheets_data($sheet){
+	return array_merge(array('sheet_id' => $sheet['sheet_id']), unserialize($sheet['sheet_data']));
+}
+
+function get_temp_unserialized_values($row){
+	return unserialize($row['row_data']);
+}

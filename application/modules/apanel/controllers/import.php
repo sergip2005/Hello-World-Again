@@ -20,11 +20,14 @@ class Import extends MY_Controller {
 
 	public function index()
 	{
+		$this->load->model('import_model');
+		$imports = $this->import_model->get_last_imports_data();
+
 		$template = array(
 			'title'			=> '',
 			'description'	=> '',
 			'keywords'		=> '',
-			'body'			=> $this->load->view('pages/import/index', '', true),
+			'body'			=> $this->load->view('pages/import/index', array('imports' => $imports), true),
 		);
 		Modules::run('pages/_return_ap_page', $template);
 	}
@@ -89,17 +92,7 @@ class Import extends MY_Controller {
 		);
 	}
 
-	/**
-	 * RECEIVES DATA FROM SECOND PAGE AND FORMS THIRD
-	 */
-	public function process_details()
-	{
-		$this->load->model('vendors_model');
-		$this->load->model('phones_model');
-		$this->load->model('parts_model');
-		$this->load->model('regions_model');
-		$this->load->model('currency_model');
-
+	function _save_xls_data(){
 		$post_data['vendor_id'] = intval($this->input->post('vendors'));
 		$post_data['file'] = $this->input->post('file');
 		$post_data['sheets'] = $this->input->post('sheets');
@@ -120,48 +113,102 @@ class Import extends MY_Controller {
 			$existing_data['model'] = $this->phones_model->getModelInfo($post_data['model_select']);
 		}
 
+		// save import object
+		$import['id'] = $this->import_model->save_import_to_temp_table($post_data);
+
 		$objPHPExcel = $this->import_model->init_phpexcel_object($this->config->item('upload_path') . $post_data['file']);
 
 		// process sheets info
-		$sheets_data = array();
 		foreach ($post_data['sheets'] as $sheetN => $sheet) {
-			$sheets_data[$sheet]['id'] = $sheet;
-			$sheets_data[$sheet]['type'] = $this->input->post('sheet_type' . $sheet);
-			$sheets_data[$sheet]['name'] = $post_data['sheets_names'][$sheetN];
+			$sheets_data = array();
+			$sheets_data['id'] = $sheet;
+			$sheets_data['type'] = $this->input->post('sheet_type' . $sheet);
+			$sheets_data['name'] = $post_data['sheets_names'][$sheetN];
 
-			$sheets_data[$sheet]['col_vals'] = $this->input->post('sheet' . $sheet . '_cols_values');
+			$sheets_data['col_vals'] = $this->input->post('sheet' . $sheet . '_cols_values');
 			$cols = array();
-			foreach ($sheets_data[$sheet]['col_vals'] as $n => $v) {
+			foreach ($sheets_data['col_vals'] as $n => $v) {
 				if ($v !== '0') {
 					$cols[$n] = $v;
 				}
 			}
-			$sheets_data[$sheet]['col_vals'] = $cols;
-			$sheets_data[$sheet]['col_vals_keys_resseted'] = array_values($cols);
-			$sheets_data[$sheet]['fields'] = $this->import_model->get_sheet_fields($sheets_data[$sheet]['type']);
+			$sheets_data['col_vals'] = $cols;
+			$sheets_data['col_vals_keys_resseted'] = array_values($cols);
+			$sheets_data['fields'] = $this->import_model->get_sheet_fields($sheets_data['type']);
+			$sheets_data['vendor_id'] = $post_data['vendor_id'];
 
-			$sheets_data[$sheet]['vendor_id'] = $post_data['vendor_id'];
+			if ($sheets_data['type'] !== '0') {// do not parse and do not save sheets without type provided
+				// save all prev data to db as sheet params
+				$import['sheet_id'] = $this->import_model->save_sheet_to_temp_table($import['id'], $sheets_data);
 
-			if ($sheets_data[$sheet]['type'] !== '0') {// do not parse sheets without type provided
-				$sheets_data[$sheet]['data'] = $this->import_model->get_sheet_data($objPHPExcel->setActiveSheetIndex($sheet), $sheets_data[$sheet]);
-
-				// returns array like parts -> code => part props; phone_parts -> code => array of parts
-				$sheets_data[$sheet]['prev_state'] = $this->phones_model->getPrevDataState(array_map('narrow_to_code_field_only', $sheets_data[$sheet]['data']), $post_data['vendor_id'], isset($existing_data['model']) ? $existing_data['model']['id'] : false);
-			}
-			if (isset($existing_data['model'])) {
-				$existing_data['model_parts'] = $this->phones_model->getParts($post_data['vendor_id'], $existing_data['model']['id'], 'all');
-				if ($existing_data['model_parts'] !== false) {
-					$existing_data['model_parts'] = process_to_id_keyed_array($existing_data['model_parts']);
-				}
-				//echo '<pre style="text-align: left">' . print_r($existing_data['model_parts'], true) . '</pre>';
+				$sheets_data['data'] = $this->import_model->get_sheet_data($objPHPExcel->setActiveSheetIndex($sheet), $sheets_data);
+				$this->import_model->save_sheet_data_to_temp_table($import['sheet_id'], $sheets_data['data']);
 			}
 		}
+		return $import['id'];
+	}
+
+	function _get_saved_import_data($import_id, $sheet_id = 0, $page = 0)
+	{
+		$return['import_id'] = $import_id;
+		$return['post'] = $this->import_model->get_import_from_temp_table($import_id);
+
+		// process sheets info
+		$return['sheets'] = $this->import_model->get_sheets_from_temp_table($import_id);
+
+		foreach ($return['sheets'] as $n => $sheet) {
+			$return['sheets'][$n]['data'] = $this->import_model->get_sheet_data_from_temp_table($sheet['sheet_id'], $page);
+
+			// returns array like parts -> code => part props; phone_parts -> code => array of parts
+			$return['sheets'][$n]['prev_state'] = $this->phones_model->getPrevDataState(
+							array_map('narrow_to_code_field_only', $return['sheets'][$n]['data']),
+							$return['post']['vendor_id'],
+							isset($return['post']['model_select']) ? $return['post']['model_select'] : false
+					);
+
+			if (isset($return['post']['model_select']) && $return['post']['model_select'] > 0) {
+				$return['current']['model_parts'] = $this->phones_model->getParts($return['post']['vendor_id'], $return['post']['model_select'], 'all');
+				if ($return['current']['model_parts'] !== false) {
+					$return['current']['model_parts']['parts'] = process_to_id_keyed_array($return['current']['model_parts']['parts']);
+				}
+			}
+		}
+		return $return;
+	}
+
+	/**
+	 * RECEIVES DATA FROM SECOND PAGE AND FORMS THIRD
+	 */
+	public function process_details($import_id = 0)
+	{
+		$this->load->model('vendors_model');
+		$this->load->model('phones_model');
+		$this->load->model('parts_model');
+		$this->load->model('regions_model');
+		$this->load->model('currency_model');
+
+		$post = false;
+		$import_id = intval($import_id);
+		if ($import_id <= 0) {//
+			$import_id = $this->_save_xls_data();
+			$post = true;
+		}
+
+		if ($import_id <= 0) {
+			$this->session->set_flashdata('message', 'Проблема с обработкой полученных данных<br>Попробуйте произвести импорт ещё раз');
+			redirect('/apanel/import/index');
+		} elseif ($post) {
+			redirect('/apanel/import/process_details/' . $import_id);
+		}
+
+		// @XXX there was all logic
+		$data = $this->_get_saved_import_data($import_id);
 
 		$template = array(
 			'title'	=> 'Подтверждение импорта',
 			'css'	=> array(),
 			'js'	=> array('apanel/import/third.js'),
-			'body'	=> $this->load->view('pages/import/third_page', array('sheets' => $sheets_data, 'post' => $post_data, 'current' => $existing_data), true),
+			'body'	=> $this->load->view( 'pages/import/third_page', $data, true ),
 		);
 		Modules::run('pages/_return_ap_page', $template);
 	}

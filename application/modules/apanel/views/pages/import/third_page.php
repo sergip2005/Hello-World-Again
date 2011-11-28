@@ -1,3 +1,5 @@
+<pre><?php //print_r($sheets) ?></pre>
+
 <h2>Подтвердение импорта</h2>
 <br>
 <form action="/apanel/import/save/" method="post" autocomplete="off">
@@ -80,12 +82,12 @@
 							$c_phone_parts = find_cct_ref_elm($row['cct_ref'], $c_phone_parts);
 
 							foreach ($c_phone_parts as $phonePart) {
-								unset($current['model_parts'][$phonePart['id']]);
+								unset($current['model_parts']['parts'][$phonePart['id']]);
 								//echo '<tr><td colspan=8>' . print_r($c_phone_parts, true) . '</td></tr>';
 								$c_regions = isset($sheet['prev_state']['regions'][$phonePart['id']]) ? $sheet['prev_state']['regions'][$phonePart['id']] : false;
 						?>
 						<tr class="current <?php echo $ii % 2 ? 'odd' : 'even' ?>">
-							<td></td>
+							<td class="check"></td>
 							<?php foreach ($row as $fieldN => $field) {
 									// prepare region field
 									$fieldType = '';
@@ -111,7 +113,7 @@
 									if ($fieldType == 'region') {
 										echo $c_regions !== false && in_array($fieldN, $c_regions) ? 'x' : '';
 									} elseif ($fieldType == 'price') {
-										$this->currency_model->convert(end(explode('_', $this->currency_model->base)), $fieldN, $c_part['price']);
+										echo $this->currency_model->convert(end(explode('_', $this->currency_model->base)), $fieldN, $c_part['price']);;
 										echo '';
 									} else {
 										if (in_array($fieldN, $this->phones_model->phonePartFields)) { ?>
@@ -130,7 +132,7 @@
 						<?php } ?>
 						<?php } elseif (in_array($sheet['type'], array('prices'))) { // for price sheet ?>
 						<tr class="current<?php echo $ii % 2 ? ' odd' : ' even' ?>">
-							<td></td>
+							<td class="check"></td>
 							<?php foreach ($row as $fieldN => $field) { ?>
 								<?php
 									$fieldType = '';
@@ -145,9 +147,9 @@
 									<?php if ($fieldType == 'price') {
 										$cPrice = $this->currency_model->convert(end(explode('_', $this->currency_model->base)), $fieldN, $c_part['price']);
 										?>
-										<span<?php echo ($cPrice != $row['price_' . $fieldN]) ? ' class="changed"' : '' ?>><?php echo $cPrice ?></span>
+										<span class="<?php echo ($cPrice != $row['price_' . $fieldN]) ? 'changed' : 'not_changed' ?>"><?php echo $cPrice ?></span>
 									<?php } elseif (in_array($fieldN, $this->parts_model->partFields)) { ?>
-										<span<?php echo ($c_part[$fieldN] != $row[$fieldN]) ? ' class="changed"' : '' ?>><?php echo $c_part[$fieldN] ?></span>
+										<span class="<?php echo ($c_part[$fieldN] != $row[$fieldN]) ? 'changed' : 'not_changed' ?>"><?php echo $c_part[$fieldN] ?></span>
 									<?php } ?>
 								</td>
 							<?php } ?>
@@ -157,7 +159,7 @@
 					}
 				} ?>
 				<tr class="<?php echo $ii % 2 ? 'odd' : 'even' ?><?php echo isset($nn) && $nn > 0 ? ' has_current' : '' ?>">
-					<td><input type="checkbox" value="<?php echo $rowN ?>" name="sheets_data[<?php echo $sheet['id'] ?>][rows][]" checked="checked"></td>
+					<td class="check"><input type="checkbox" value="<?php echo $rowN ?>" name="sheets_data[<?php echo $sheet['id'] ?>][rows][]" checked="checked"></td>
 					<?php foreach ($row as $fieldN => $field) { ?>
 					<?php
 						// change names of fields with region from [region_9] to [regions][9]
@@ -184,7 +186,7 @@
 
 <?php } ?>
 
-	<?php if (count($current['model_parts']) > 0) { ?>
+	<?php if (isset($current['model_parts']) && count($current['model_parts']) > 0) { ?>
 	<div class="to-remove">
 		<h3>Детали, информация о которых не найдена в текущей версии парт. листа, и они помечены к удалению</h3>
 		<table>
@@ -201,7 +203,7 @@
 				<th class="type"><?php echo $this->import_model->part_field_types['type'] ?></th>
 			</thead>
 			<?php $ri = 1; ?>
-			<?php foreach ($current['model_parts'] as $one) { ?>
+			<?php foreach ($current['model_parts']['parts'] as $one) { ?>
 			<tr class="<?php echo $ri % 2 ? 'odd' : 'even' ?>">
 				<td><input type="checkbox" value="<?php echo $one['id'] ?>" name="parts_to_remove[]" checked="checked"></td>
 				<td><?php echo $one['cct_ref'] ?></td>
@@ -212,7 +214,7 @@
 				<td><?php echo $one['price'] ?></td>
 				<td><?php echo $one['num'] ?></td>
 				<td><?php echo $one['min_num'] ?></td>
-				<td><?php echo $this->parts_model->partTypeName[$one['type']] ?></td>
+				<td><span class="<?php echo $one['type'] ?>"><?php echo $this->parts_model->partTypeName[$one['type']] ?></span></td>
 			</tr>
 			<?php
 					$ri += 1;
