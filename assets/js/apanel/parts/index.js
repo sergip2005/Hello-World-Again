@@ -34,6 +34,7 @@ var partsManager = {
 		this.p = $('#parts'),
 		this.pchbx = this.p.parent().find(':checkbox.check-all'),
 		this.c = $('#controls');
+		this.s = $('#search');
 
 		var pm = this;
 
@@ -69,6 +70,18 @@ var partsManager = {
 				app.log('dblclicked', i);
 			});
 
+		//search bottoms clicks
+		pm.s.delegate('div.search_code input.submit', 'click', function(e){
+			e.preventDefault();
+			pm.searchParts($(this).prev().prev().val(), 'parts_code');
+		}).delegate('div.search_model input.submit', 'click', function(e){
+			e.preventDefault();
+			pm.searchParts($(this).prev().prev().val(), 'model_name');
+		}).delegate('div.search_name input.submit', 'click', function(e){
+			e.preventDefault();
+			pm.searchParts($(this).prev().prev().val(), 'parts_name');
+		});
+
 		// init check all
 		pm.pchbx.click(function(e){
 			if (this.checked === true) {
@@ -102,6 +115,11 @@ var partsManager = {
 							pm.setModelLiActive(false, h[1]);
 						}
 					});
+				}else{
+					if(h[0] == 'model_name' || h[0] == 'parts_code' || h[0] == 'parts_name')
+					{
+						pm.searchParts(h[1], h[0]);
+					}
 				}
 			}
 		}
@@ -158,6 +176,40 @@ var partsManager = {
 				pm.updateControls();
 				if (_.isFunction(c)) {
 					c();
+				}
+			});
+		}
+	},
+
+	searchParts: function(query, param){
+		var pm = this;
+		if ((param == 'model_name' || param == 'parts_code' || param == 'parts_name') && query.length > 0) {
+			app.showLoading(pm.p);
+			pm.pchbx.prop('checked', false);
+			document.location.hash = param + '/' + encodeURI(query);
+			$.ajax({
+				url: '/apanel/parts/search',
+				type: 'post',
+				dataType: 'json',
+				data: {
+					query: query,
+					param: param
+				},
+				success: function(resp){
+					if (resp.status === 1) {
+						if (!_.isEmpty(resp.data.parts)) {
+							var html = '';
+							_.each(resp.data.parts, function(v, i){
+								v.i = i;
+								html += _.template(pm.templates.partTr, v);
+							});
+							pm.p.html(html);
+							pm.p.parents('table').trigger('update');
+						}
+					} else {
+						pm.p.html(app.messages.noData);
+					}
+					pm.updateControls();
 				}
 			});
 		}

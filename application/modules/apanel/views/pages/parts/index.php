@@ -22,6 +22,26 @@
 		<button disabled="disabled" class="remove">Удалить</button>
 	</div>
 
+	<div id="search" class="select-and-input">
+		<form name="search_form">
+			<div class="search_field search_code">
+				<input class="text" placeholder="Код" type="text" name="parts_code">
+				<div class="button"></div>
+				<input class="submit" type="submit" value="Sub">
+			</div>
+			<div class="search_field search_model">
+				<input class="text" type="text" placeholder="Модель" name="model_name">
+				<div class="button"></div>
+				<input class="submit" type="submit" value="Sub">
+			</div>
+			<div class="search_field search_name">
+				<input class="text" type="text" placeholder="Название" name="parts_name">
+				<div class="button"></div>
+				<input class="submit" type="submit" value="Sub">
+			</div>
+		</form>
+	</div>
+
 	<div class="parts-table clearfix">
 		<table class="tablesorter">
 			<thead>

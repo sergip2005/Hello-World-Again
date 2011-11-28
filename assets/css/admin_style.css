@@ -763,3 +763,43 @@ table.desc select { min-width: 150px }
 .parts-navigation .parts-table table th.num { width: 30px }
 .parts-navigation .parts-table table th.price { width: 50px }
 .parts-navigation .parts-table table th.ptype { width: 100px }
+
+/* search fields */
+.select-and-input {
+	height: 83px;
+	width: 320px;
+	margin-left: 7px;
+}
+.select-and-input div.search_field input.text {
+	z-index: 0;
+	left: 0;
+	height: 20px;
+	padding: 0;
+	width: 282px;
+	border:solid 1px #848388;
+	background-color: white;
+	float: left;
+}
+.select-and-input div.search_code, .select-and-input div.search_model, .select-and-input div.search_name{
+	margin-top: 7px;
+}
+.select-and-input div.search_field input.submit, .select-and-input div.search_field div.button {
+	width: 13px;
+	opacity: 0;
+	position: relative;
+}
+.select-and-input div.search_field div.button{
+	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
+	background-position: -160px -109px;
+	width:15px;
+	height:20px;
+	opacity: 1;
+}
+.select-and-input div.search_code input.submit, .select-and-input div.search_model input.submit, .select-and-input div.search_name input.submit{
+	display: inline-block;
+	float: left;
+}
+.select-and-input div.search_code div.button, .select-and-input div.search_model div.button, .select-and-input div.search_name div.button {
+	left: -13px;
+	display: inline-block;
+}

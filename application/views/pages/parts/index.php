@@ -43,8 +43,8 @@ if (count($parts) > 0) { ?>
 				<td><?php echo $p['ptype'] ?></td>
 				<td><?php echo $p['min_num'] ?></td>
 				<td><?php echo $p['price'] ?></td>
-				<td><a href="/phones/<?php echo strtolower($p['vendor']) ?>"><?php echo $p['vendor'] ?></a></td>
-				<td><a href="/phones/<?php echo strtolower($p['vendor']) ?>/<?php echo strtolower(str_replace(' ', '_', $p['model'])) ?>"><?php echo $p['model'] ?></a></td>
+				<td><a href="/phones/<?php echo strtolower($p['vendor_name']) ?>"><?php echo $p['vendor_name'] ?></a></td>
+				<td><a href="/phones/<?php echo strtolower($p['vendor_name']) ?>/<?php echo strtolower(str_replace(' ', '_', $p['model_name'])) ?>"><?php echo $p['model_name'] ?></a></td>
 			</tr>
 			<?php } ?>
 			</tbody>
