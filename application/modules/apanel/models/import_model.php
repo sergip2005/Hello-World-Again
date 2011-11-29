@@ -4,7 +4,7 @@ class Import_model extends CI_Model
 {
 	private $_worksheet;
 	private $_row;
-	private $_per_page = 50;
+	public $per_page = 20;
 
 	public $part_field_types = array(
 			'name'		=> 'Ориг. имя детали',
@@ -345,9 +345,19 @@ class Import_model extends CI_Model
 		}
 	}
 
+	public function get_sheet_data_from_temp_table_count($sheet, $page){
+		$data = $this->db->query('SELECT COUNT(id) as num FROM temp_sheets_data WHERE sheet_id = ' . $sheet)->row_array();
+		return array(
+			'total' => $data['num'],
+			'pages' => ceil($data['num'] / $this->per_page),
+			'page' => $page + 1,
+			'per_page' => $this->per_page,
+		);
+	}
+
 	public function get_sheet_data_from_temp_table($sheet, $page)
 	{
-		$data = $this->db->query('SELECT * FROM temp_sheets_data WHERE sheet_id = ' . $sheet . ' ORDER BY id ASC LIMIT ' . $page * $this->_per_page . ', ' . $this->_per_page);
+		$data = $this->db->query('SELECT * FROM temp_sheets_data WHERE sheet_id = ' . $sheet . ' ORDER BY id ASC LIMIT ' . $page * $this->per_page . ', ' . $this->per_page);
 		if ($data->num_rows() > 0) {
 			return array_map('get_temp_unserialized_values', $data->result_array());
 		} else {

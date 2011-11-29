@@ -31,12 +31,37 @@ $(document).ready(function () {
 	});
 
 	//
-	$(':checkbox.check-all').click(function(e){
+	$('body').delegate(':checkbox.check-all', 'click', function(e){
 		if (this.checked === true) {
 			$(this).parents('table').find(':checkbox').attr('checked', true);
 		} else {
 			$(this).parents('table').find(':checkbox').attr('checked', false);
 		}
+	// pages handlers
+	}).delegate('ul.pages a', 'click', function(e){
+		e.preventDefault();
+		var a = $(this);
+		if (a.hasClass('active')) return false;
+
+		$.ajax({
+			url: a.attr('href'),
+			success: function(resp){
+				var cont = a.parents('div.sheet-import-data');
+				cont.replaceWith($(resp).find('#' + cont.attr('id')));
+			}
+		});
+	// forms handlers
+	}).delegate('div.sheet-import-data form', 'submit', function(e){
+		e.preventDefault();
+		var f = $(this);
+		$.ajax({
+			url: f.attr('action'),
+			data: decodeURIComponent($(this).serialize()),
+			type: 'post',
+			success: function(resp){
+				app.log(resp);
+			}
+		});
 	});
 
 	$('div.to-remove table').tablesorter({ headers: { 0: { sorter: false} }, widgets: ['zebra', 'repeatHeaders'] });

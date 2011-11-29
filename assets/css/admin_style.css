@@ -665,6 +665,32 @@ table.desc select { min-width: 150px }
 
 .sheet-import-data table tr.odd { background: #EFEFEF }
 
+.sheet-import-data .sheet-data-info {
+	font-style: italic;
+	color: #555;
+}
+
+.sheet-import-data .pages {
+	float: left;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.sheet-import-data .pages li {
+	list-style-type: none;
+	float: left;
+	width: 20px;
+	margin: 5px 5px 5px 0;
+	border: 1px solid #DDDDDD;
+}
+
+.sheet-import-data .pages li a.active {
+	font-weight: bold;
+	color: #444;
+	text-decoration: none;
+}
+
 /** parts to be removed */
 .to-remove {
 	border:  2px solid #FF7C7C;

@@ -148,7 +148,7 @@ class Import extends MY_Controller {
 		return $import['id'];
 	}
 
-	function _get_saved_import_data($import_id, $sheet_id = 0, $page = 0)
+	function _get_saved_import_data($import_id, $page = 0)
 	{
 		$return['import_id'] = $import_id;
 		$return['post'] = $this->import_model->get_import_from_temp_table($import_id);
@@ -158,6 +158,7 @@ class Import extends MY_Controller {
 
 		foreach ($return['sheets'] as $n => $sheet) {
 			$return['sheets'][$n]['data'] = $this->import_model->get_sheet_data_from_temp_table($sheet['sheet_id'], $page);
+			$return['sheets'][$n]['count_data'] = $this->import_model->get_sheet_data_from_temp_table_count($sheet['sheet_id'], $page);
 
 			// returns array like parts -> code => part props; phone_parts -> code => array of parts
 			$return['sheets'][$n]['prev_state'] = $this->phones_model->getPrevDataState(
@@ -179,7 +180,7 @@ class Import extends MY_Controller {
 	/**
 	 * RECEIVES DATA FROM SECOND PAGE AND FORMS THIRD
 	 */
-	public function process_details($import_id = 0)
+	public function process_details($import_id = 0, $page = 0)
 	{
 		$this->load->model('vendors_model');
 		$this->load->model('phones_model');
@@ -189,10 +190,13 @@ class Import extends MY_Controller {
 
 		$post = false;
 		$import_id = intval($import_id);
-		if ($import_id <= 0) {//
+		if ($import_id <= 0) {
 			$import_id = $this->_save_xls_data();
 			$post = true;
 		}
+
+		$page = intval($page) - 1;
+		$page = $page > 0 ? $page : 0;
 
 		if ($import_id <= 0) {
 			$this->session->set_flashdata('message', 'Проблема с обработкой полученных данных<br>Попробуйте произвести импорт ещё раз');
@@ -202,7 +206,7 @@ class Import extends MY_Controller {
 		}
 
 		// @XXX there was all logic
-		$data = $this->_get_saved_import_data($import_id);
+		$data = $this->_get_saved_import_data($import_id, $page);
 
 		$template = array(
 			'title'	=> 'Подтверждение импорта',
