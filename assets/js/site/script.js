@@ -34,7 +34,24 @@ $(document).ready(function () {
 	});*/
 	var search = $(".select-and-input");
 
-	search.delegate('div.search_code input.submit', 'click', function (e) {
+	search.delegate('form[name="search_parts_code"]', 'submit', function(e){
+			e.preventDefault();
+			if($.trim($(this).find('input.text').val()) !== '') {
+				window.location.href = '/parts/' + encodeURI($(this).find('input.text').val());
+			}
+		}).delegate('form[name="search_model_name"]', 'submit', function(e){
+			e.preventDefault();
+			if($.trim($(this).find('input.text').val()) !== '') {
+				window.location.href = '/parts/models/' + encodeURI($(this).find('input.text').val());
+			}
+		}).delegate('form[name="search_parts_name"]', 'submit', function(e){
+			e.preventDefault();
+			if($.trim($(this).find('input.text').val()) !== '') {
+				window.location.href = '/parts/search/' + encodeURI($(this).find('input.text').val());
+			}
+	});
+
+	/*search.delegate('div.search_code input.submit', 'click', function (e) {
 		var q = $(".select-and-input div.search_code input.text").val();
 		e.stopPropagation();
 		e.preventDefault();
@@ -59,5 +76,5 @@ $(document).ready(function () {
 		if($.trim(q) !== '') {
 			window.location.href = '/parts/search/' + encodeURI(q);
 		}
-	});
+	});*/
 });

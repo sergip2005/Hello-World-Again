@@ -3,8 +3,7 @@
 	<li><a href="/how-to-order">Как заказать</a></li>
 	<li><a href="/contacts">Контакты</a></li>
 </ul>
-<div class="select-and-input">
-	<form name="search_form">
+
 		<!--
 		<span value="code">Код</span>
 		<ul>
@@ -13,22 +12,36 @@
 			<li name="part_name">Название</li>
 		</ul>
 		-->
-		<div class="search_field search_code">
-			<input class="text" placeholder="Код" type="text" name="query">
-			<div class="button"></div>
-			<input class="submit" type="submit" value="Sub">
-		</div>
-
-		<div class="search_field search_model">
-			<input class="text" type="text" name="query" placeholder="Модель">
-			<div class="button"></div>
-			<input class="submit" type="submit" value="Sub">
-		</div>
-
+<div id="search">
+	<div  class="select-and-input">
+		<form name="search_parts_code">
+			<div class="search_field search_code">
+				<input class="text" placeholder="Код" type="text" name="parts_code">
+				<div class="button"></div>
+				<input class="submit" type="submit" value="Sub">
+				<input class="parameter" type="hidden" value="parts_code">
+			</div>
+		</form>
+	</div>
+	<div class="select-and-input">
+		<form name="search_model_name">
+			<div class="search_field search_model">
+				<input class="text" type="text" placeholder="Модель" name="model_name">
+				<div class="button"></div>
+				<input class="submit" type="submit" value="Sub">
+				<input class="parameter" type="hidden" value="model_name">
+			</div>
+		</form>
+	</div>
+	<div class="select-and-input">
+		<form name="search_parts_name">
 		<div class="search_field search_name">
-			<input class="text" type="text" name="query" placeholder="Название">
-			<div class="button"></div>
-			<input class="submit" type="submit" value="Sub">
-		</div>
-	</form>
+				<input class="text" type="text" placeholder="Название" name="parts_name">
+				<div class="button"></div>
+				<input class="submit" type="submit" value="Sub">
+				<input class="parameter" type="hidden" value="parts_name">
+			</div>
+		</form>
+	</div>
 </div>
+

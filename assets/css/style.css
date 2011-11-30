@@ -464,10 +464,15 @@ border-right: 1px solid #69C;
 #parts span.selected{
 	background-color: #FCC;
 }
+div.main-menu #search{
+	float:left;
+	width: 970px;
+}
 .select-and-input {
-	height: 83px;
+	height: 30px;
 	width: 320px;
-	float: left;
+	display: inline-block;
+	margin-bottom: 7px;
 }
 /*
 .select-and-input span {
@@ -530,41 +535,11 @@ border-right: 1px solid #69C;
 	height:20px;
 	opacity: 1;
 }
-
-/*search code*/
-.select-and-input div.search_code input.text {
-	top: 5px;
-}
-.select-and-input div.search_code input.submit{
+.select-and-input div.search_code input.submit, .select-and-input div.search_model input.submit, .select-and-input div.search_name input.submit{
 	display: inline-block;
 	float: left;
 }
-.select-and-input div.search_code div.button {
-	left: -13px;
-	display: inline-block;
-}
-
-/*search model*/
-.select-and-input div.search_model input.text {
-	top: 35px;
-}
-.select-and-input div.search_model input.submit{
-	display: inline-block;
-	float: left;
-}
-.select-and-input div.search_model div.button {
-	left: -13px;
-	display: inline-block;
-}
-/*search name*/
-.select-and-input div.search_name input.text {
-	top: 65px;
-}
-.select-and-input div.search_name input.submit{
-	display: inline-block;
-	float: left;
-}
-.select-and-input div.search_name div.button {
+.select-and-input div.search_code div.button, .select-and-input div.search_model div.button, .select-and-input div.search_name div.button {
 	left: -13px;
 	display: inline-block;
 }
