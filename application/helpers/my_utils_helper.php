@@ -85,5 +85,5 @@ function get_temp_unserialized_sheets_data($sheet){
 }
 
 function get_temp_unserialized_values($row){
-	return unserialize($row['row_data']);
+	return array_merge(array('row_id' => $row['id']), unserialize($row['row_data']));
 }

@@ -4,7 +4,8 @@ app.messages.importpage = {
 	no_code_field: 'В листе <strong><%= sheet %></strong> не задано ни одного поля со значением "Парт. номер"',
 	data_tpl_saved: 'Шаблон <%= name %> успешно сохранён',
 	data_tpl_removed: 'Шаблон <%= name %> удалён',
-	data_tpl_conirm_remove: 'Вы действительно хотите удалить шаблон "<%= name %>"'
+	data_tpl_conirm_remove: 'Вы действительно хотите удалить шаблон "<%= name %>"',
+	rev_date: 'Дата последнего импорта:<br><%= date %>'
 };
 
 $(document).ready(function () {
@@ -22,10 +23,24 @@ $(document).ready(function () {
 				m_sel.attr('disabled', true);
 				$.getJSON(app.urls.getVendorModels + sv, function(resp){
 					var o = _.map(resp.data, function(v, k){
-						return '<option value="' + v.id + '">' + v.name + '</option>';
+						return '<option value="' + v.id + '" data-rev-desc="' + v.rev_desc + '" data-rev-num="' + v.rev_num + '" data-rev-date="' + v.rev_date + '">' + v.name + '</option>';
 					});
-					m_sel.html('<option value="0" selected="selected"> - </option>' + o.join()).attr('disabled', false);
+					m_sel.html('<option value="0" selected="selected"> - </option>' + o.join()).attr('disabled', false).trigger('change');
 				});
+			}
+		}
+	});
+
+	m_sel.bind({
+		change: function(){
+			var s = $(this),
+				os = s.contents('option:selected');
+			if (s.val() != 0) {
+				if (os.data('rev-num') != '') $('#rev-num').show().text('Текущее: ' + os.data('rev-num'));
+				if (os.data('rev-desc') != '') $('#rev-desc').show().text('Текущее: ' + os.data('rev-desc'));
+				if (os.data('rev-date') != '0000-00-00 00:00:00') $('#rev-date').show().text(_.template(app.messages.importpage.rev_date, {date: os.data('rev-date')}));
+			} else {
+				$('#rev-num, #rev-desc, #rev-date').hide();
 			}
 		}
 	});

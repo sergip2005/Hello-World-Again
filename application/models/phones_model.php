@@ -62,7 +62,7 @@ class Phones_model extends CI_Model
 	 * @param string $region
 	 * @return array
 	 */
-	public function getParts($vendor_id, $model_id, $region = '')
+	public function getParts($vendor_id, $model_id, $region = '', $options = false)
 	{
 		$q1 = 'SELECT
 				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pp.num as num,
@@ -102,6 +102,13 @@ class Phones_model extends CI_Model
 			$values = array($vendor_id, $model_id, $region);
 		}
 
+		if ($options !== false) {
+			if (isset($options['not_import']) && $options['not_import'] > 0) {
+				$q1 .= ' AND pp.import_id <> ' . $options['not_import'];
+				$q2 .= ' AND pp.import_id <> ' . $options['not_import'];
+			}
+		}
+
 		$query = $region == 'all' ? $q1 : $q2;
 		$p = $this->db->query($query, $values);
 		if ($p->num_rows() > 0) {
@@ -136,7 +143,7 @@ class Phones_model extends CI_Model
 			$vendor = $vendor['id'];
 		}
 
-		$query = 'SELECT id, model as name FROM `phones` WHERE vendor_id = ? ORDER BY model';
+		$query = 'SELECT id, model as name, rev_num, rev_desc, rev_date FROM `phones` WHERE vendor_id = ? ORDER BY model';
 		$res = $this->db->query($query, array($vendor));
 		if ($res->num_rows > 0) {
 			$res = $res->result_array();
@@ -150,7 +157,7 @@ class Phones_model extends CI_Model
 			$ret = array();
 			foreach ($res as $model) {
 				$selected = $model['id'] == $format_options['selected'] ? ' selected="selected"' : '';
-				$ret[] = '<option value="' . $model['id'] . '"' . $selected . '>' . $model['name'] . '</option>';
+				$ret[] = '<option value="' . $model['id'] . '"' . $selected . ' data-rev-num="' . $model['rev_num'] . '" data-rev-desc="' . $model['rev_desc'] . '" data-rev-date="' . $model['rev_date'] . '">' . $model['name'] . '</option>';
 			}
 			return $ret;
 		} else {
@@ -170,7 +177,7 @@ class Phones_model extends CI_Model
 	/**
 	 * if model with such name already exists under this vendor -> returns its id
 	 * otherwise -> creates it, and returns new model id
-	 * @param str $name
+	 * @param string $name
 	 * @param int $vendor
 	 * @return bool|int - id of newly created or existing model in 'phones' table
 	 */
@@ -179,7 +186,9 @@ class Phones_model extends CI_Model
 
 		$sql = 'SELECT id FROM `phones` WHERE `model` = ? AND `vendor_id` = ? LIMIT 1';
 		$id = 0;
-		if ($res = $this->db->query($sql, array($this->db->escape($name), $this->db->escape($vendor)))->row()) {
+		$res = $this->db->query($sql, array($name, $vendor));
+		if ($res->num_rows() > 0) {
+			$res = $res->row();
 			$id = $res->id;
 		}
 
@@ -193,6 +202,17 @@ class Phones_model extends CI_Model
 		}
 
 		return $id > 0 ? $id : false;
+	}
+
+	public function getModel($id)
+	{
+		$sql = 'SELECT * FROM `phones` WHERE id = ' . $id . ' LIMIT 1';
+		$res = $this->db->query($sql);
+		if ($res->num_rows() > 0) {
+			return $res->row_array();
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -251,6 +271,7 @@ class Phones_model extends CI_Model
 				$phonePartData[$n] = $v;
 			}
 		}
+		$phonePartData['import_id'] = $sheetData['import_id'];
 		$phonePartData['phone_id'] = $sheetData['phone_id'];
 		$phonePartData['part_id'] = $pId;
 		// insert or update phone
@@ -298,19 +319,20 @@ class Phones_model extends CI_Model
 
 	public function getPhonePartsRegions($ids)
 	{
-		$this->db
-				->select('pprr.part_id, pprr.region_id')
-				->from('phones_parts_regions_rel pprr');
+		$q = 'SELECT pprr.part_id, pprr.region_id FROM phones_parts_regions_rel pprr WHERE ';
+		//$this->db->select('pprr.part_id, pprr.region_id')->from('phones_parts_regions_rel pprr');
 
 		if (is_array($ids)) {
-			$this->db->where_in('pprr.part_id', $ids);
+			$q .= 'pprr.part_id IN (' . implode(', ', $ids) . ') ';
+			//$this->db->where_in('pprr.part_id', $ids);
 		} elseif ((is_string($ids) || is_int($ids)) && strlen($ids) > 0) {
-			$this->db->where('pprr.part_id', $ids);
+			$q .= 'pprr.part_id = ' . $ids;
+			//$this->db->where('pprr.part_id', $ids);
 		} else {
 			return false;
 		}
 
-		$res = $this->db->get();
+		$res = $this->db->query($q);
 		if ($res->num_rows() <= 0) return false;
 
 		$ret = array();
@@ -414,5 +436,6 @@ class Phones_model extends CI_Model
 	 */
 	public function removePhoneParts($mId, $pIds){
 		$this->db->where('phone_id', $mId)->where_in('id', $pIds)->delete('phones_parts');
+		return true;
 	}
 }

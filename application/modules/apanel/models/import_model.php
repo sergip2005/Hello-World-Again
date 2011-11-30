@@ -365,4 +365,8 @@ class Import_model extends CI_Model
 		}
 	}
 
+	public function remove_sheet_data_from_temp_table($rows){
+		$this->db->query('DELETE from temp_sheets_data WHERE id IN (' . implode(',', $rows) . ')');
+	}
+
 }

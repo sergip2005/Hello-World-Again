@@ -35,7 +35,7 @@ class Vendors_model extends CI_Model
 
 	public function get($id)
 	{
-		return $this->db->where('id', $id)->get(self::TABLE, 1)->row_array();
+		return $this->db->query('SELECT * FROM ' . self::TABLE . ' WHERE id = ' . $id . ' LIMIT 1')->row_array();
 	}
 
 	public function getAll($format = 'array', $format_options = false)

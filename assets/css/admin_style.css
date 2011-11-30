@@ -426,7 +426,7 @@ table.desc select { min-width: 150px }
  
 /* Hide for both screenreaders and browsers:
    css-discuss.incutio.com/wiki/Screenreader_Visibility */
-.hidden { display: none; visibility: hidden; }
+.hidden { display: none }
  
 /* Hide only visually, but have it available for screenreaders: by Jon Neal.
   www.webaim.org/techniques/css/invisiblecontent/ ; &  j.mp/visuallyhidden */
@@ -444,7 +444,7 @@ table.desc select { min-width: 150px }
 .clearfix:after { clear: both; }
 /* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
 .clearfix { zoom: 1; }
-
+.clear { clear: both }
 .w50 { width: 50px }
 
 /**
@@ -616,6 +616,7 @@ table.desc select { min-width: 150px }
 	background: #FFF;
 	padding: 10px;
 	margin-bottom: 10px;
+	border: 1px solid #999;
 }
 
 .sheet-import-data h2 { color: blue }
