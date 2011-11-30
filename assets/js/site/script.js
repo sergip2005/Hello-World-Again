@@ -34,7 +34,42 @@ $(document).ready(function () {
 	});*/
 	var search = $(".select-and-input");
 
-	search.delegate('div.search_code input.submit', 'click', function (e) {
+	/*$('form[name="search_parts_code"] input.text', search).livesearch({
+		searchCallback: function(){ search.find('form[name="search_parts_code"]').trigger('submit'); },
+		queryDelay: 250,
+		innerText: "Код",
+		minimumSearchLength: 2
+	});
+	$('form[name="search_model_name"] input.text', search).livesearch({
+		searchCallback: function(){ search.find('form[name="search_model_name"]').trigger('submit'); },
+		queryDelay: 250,
+		innerText: "Модель",
+		minimumSearchLength: 2
+	});
+	$('form[name="search_parts_name"] input.text', search).livesearch({
+		searchCallback: function(){ search.find('form[name="search_parts_name"]').trigger('submit'); },
+		queryDelay: 250,
+		innerText: "Название",
+		minimumSearchLength: 2
+	});*/
+	search.delegate('form[name="search_parts_code"]', 'submit', function(e){
+			e.preventDefault();
+			if($.trim($(this).find('input.text').val()) !== '') {
+				window.location.href = '/parts/' + encodeURI($(this).find('input.text').val());
+			}
+		}).delegate('form[name="search_model_name"]', 'submit', function(e){
+			e.preventDefault();
+			if($.trim($(this).find('input.text').val()) !== '') {
+				window.location.href = '/parts/models/' + encodeURI($(this).find('input.text').val());
+			}
+		}).delegate('form[name="search_parts_name"]', 'submit', function(e){
+			e.preventDefault();
+			if($.trim($(this).find('input.text').val()) !== '') {
+				window.location.href = '/parts/search/' + encodeURI($(this).find('input.text').val());
+			}
+	});
+
+	/*search.delegate('div.search_code input.submit', 'click', function (e) {
 		var q = $(".select-and-input div.search_code input.text").val();
 		e.stopPropagation();
 		e.preventDefault();
@@ -59,5 +94,5 @@ $(document).ready(function () {
 		if($.trim(q) !== '') {
 			window.location.href = '/parts/search/' + encodeURI(q);
 		}
-	});
+	});*/
 });

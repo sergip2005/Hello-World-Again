@@ -69,16 +69,41 @@ var partsManager = {
 				pm.showPartInfo(i.data('id'));
 				app.log('dblclicked', i);
 			});
+		//live search
+		$('form[name="search_parts_code"] input.text', pm.s).livesearch({
+			searchCallback: function(){ pm.s.find('form[name="search_parts_code"]').trigger('submit'); },
+			queryDelay: 250,
+			innerText: "Код",
+			minimumSearchLength: 2
+        });
+		$('form[name="search_model_name"] input.text', pm.s).livesearch({
+			searchCallback: function(){ pm.s.find('form[name="search_model_name"]').trigger('submit'); },
+			queryDelay: 250,
+			innerText: "Модель",
+			minimumSearchLength: 2
+        });
+		$('form[name="search_parts_name"] input.text', pm.s).livesearch({
+			searchCallback: function(){ pm.s.find('form[name="search_parts_name"]').trigger('submit'); },
+			queryDelay: 250,
+			innerText: "Название",
+			minimumSearchLength: 2
+        });
 
 		//search bottoms clicks
 		pm.s.delegate('form[name="search_parts_code"]', 'submit', function(e){
 			e.preventDefault();
+			pm.setVendorLiActive(false, -1);
+			pm.setModelLiActive(false, -1);
 			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 		}).delegate('form[name="search_model_name"]', 'submit', function(e){
 			e.preventDefault();
+			pm.setVendorLiActive(false, -1);
+			pm.setModelLiActive(false, -1);
 			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 		}).delegate('form[name="search_parts_name"]', 'submit', function(e){
 			e.preventDefault();
+			pm.setVendorLiActive(false, -1);
+			pm.setModelLiActive(false, -1);
 			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 		});
 
@@ -144,6 +169,7 @@ var partsManager = {
 		} else if (id > 0) {
 			pm.getVendorElm(id).addClass('active').siblings().removeClass('active');
 		} else {
+			$('#vendors li').removeClass('active');
 			return false;
 		}
 	},
@@ -155,6 +181,7 @@ var partsManager = {
 		} else if (id > 0 || id == 'all' || id == 'none') {
 			pm.getModelElm(id).addClass('active').siblings().removeClass('active');
 		} else {
+			$('#models li').removeClass('active');
 			return false;
 		}
 	},
