@@ -426,7 +426,7 @@ table.desc select { min-width: 150px }
  
 /* Hide for both screenreaders and browsers:
    css-discuss.incutio.com/wiki/Screenreader_Visibility */
-.hidden { display: none; visibility: hidden; }
+.hidden { display: none }
  
 /* Hide only visually, but have it available for screenreaders: by Jon Neal.
   www.webaim.org/techniques/css/invisiblecontent/ ; &  j.mp/visuallyhidden */
@@ -444,7 +444,7 @@ table.desc select { min-width: 150px }
 .clearfix:after { clear: both; }
 /* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
 .clearfix { zoom: 1; }
-
+.clear { clear: both }
 .w50 { width: 50px }
 
 /**
@@ -488,7 +488,7 @@ table.desc select { min-width: 150px }
 }
 #vendors li:hover, #regions li:hover, #pages a:hover  { background: #FFFFA3 }
 #vendors a.selected, #regions a.selected  { font-weight: bold }
-#vendors li, #regions li, #pages li { list-style-type: none }
+#vendors li, #regions li, #pages li { list-style-type: none; clear: both; }
 #vendors li > span, #regions li > span, #pages a   { padding-left: 5px }
 #vendors .ui-icon, #regions .ui-icon { cursor: pointer }
 #vendors form, #regions form { display: inline }
@@ -616,12 +616,14 @@ table.desc select { min-width: 150px }
 	background: #FFF;
 	padding: 10px;
 	margin-bottom: 10px;
+	border: 1px solid #999;
 }
 
 .sheet-import-data h2 { color: blue }
 
 .sheet-import-data table td, .sheet-import-data table th {
-	border: 2px solid #FFF;
+	border: 1px solid #FFF;
+	vertical-align: baseline;
 	padding: 2px;
 	vertical-align: baseline;
 }
@@ -630,6 +632,7 @@ table.desc select { min-width: 150px }
 
 .sheet-import-data table th { background: #ffffcc }
 
+.sheet-import-data td.check { width: 20px; text-align: center; }
 .sheet-import-data td.cct_ref, .sheet-import-data td.cct_ref input { width: 50px }
 .sheet-import-data td.regions, .sheet-import-data td.regions input,
 .sheet-import-data td.num, .sheet-import-data td.num input { width: 30px }
@@ -662,6 +665,32 @@ table.desc select { min-width: 150px }
 .sheet-import-data table tr.even { background: #E0E0E0 }
 
 .sheet-import-data table tr.odd { background: #EFEFEF }
+
+.sheet-import-data .sheet-data-info {
+	font-style: italic;
+	color: #555;
+}
+
+.sheet-import-data .pages {
+	float: left;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.sheet-import-data .pages li {
+	list-style-type: none;
+	float: left;
+	width: 20px;
+	margin: 5px 5px 5px 0;
+	border: 1px solid #DDDDDD;
+}
+
+.sheet-import-data .pages li a.active {
+	font-weight: bold;
+	color: #444;
+	text-decoration: none;
+}
 
 /** parts to be removed */
 .to-remove {
@@ -764,14 +793,36 @@ table.desc select { min-width: 150px }
 .parts-navigation .parts-table table th.price { width: 50px }
 .parts-navigation .parts-table table th.ptype { width: 100px }
 
+/** imports list */
+.available-imports {
+	padding: 10px;
+	border: 1px solid #DDD;
+	float: right;
+}
+
+.available-imports h3 { margin-bottom: 10px }
+
+.available-imports ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.available-imports li { padding: 0 }
+
 /* search fields */
-.select-and-input {
+.search {
+	border-bottom: 1px solid #DDD;
+	padding: 0 0 10px 0;
+	margin-bottom: 10px;
+}
+.search .select-and-input {
 	height: 30px;
 	width: 320px;
-	margin: 0 7px 7px 7px;
+	margin: 0 7px 0 0;
 	display: inline-block;
 }
-.select-and-input div.search_field input.text {
+.search .select-and-input div.search_field input.text {
 	z-index: 0;
 	left: 0;
 	height: 20px;
@@ -781,26 +832,25 @@ table.desc select { min-width: 150px }
 	background-color: white;
 	float: left;
 }
-.select-and-input div.search_code, .select-and-input div.search_model, .select-and-input div.search_name{
+.search .select-and-input div.search_code, .select-and-input div.search_model, .select-and-input div.search_name{
 	margin-top: 7px;
 }
-.select-and-input div.search_field input.submit, .select-and-input div.search_field div.button {
+.search .select-and-input div.search_field input.submit, .select-and-input div.search_field div.button {
 	width: 13px;
 	opacity: 0;
 	position: relative;
 }
-.select-and-input div.search_field div.button{
-	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
-	background-position: -160px -109px;
+.search .select-and-input div.search_field div.button{
+	background: url(../images/icons/ui-default.png) no-repeat -160px -109px;
 	width:15px;
 	height:20px;
 	opacity: 1;
 }
-.select-and-input div.search_code input.submit, .select-and-input div.search_model input.submit, .select-and-input div.search_name input.submit{
+.search .select-and-input div.search_code input.submit, .select-and-input div.search_model input.submit, .select-and-input div.search_name input.submit{
 	display: inline-block;
 	float: left;
 }
-.select-and-input div.search_code div.button, .select-and-input div.search_model div.button, .select-and-input div.search_name div.button {
+.search .select-and-input div.search_code div.button, .select-and-input div.search_model div.button, .select-and-input div.search_name div.button {
 	left: -13px;
 	display: inline-block;
 }

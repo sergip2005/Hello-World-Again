@@ -4,6 +4,7 @@ class Import_model extends CI_Model
 {
 	private $_worksheet;
 	private $_row;
+	public $per_page = 20;
 
 	public $part_field_types = array(
 			'name'		=> 'Ориг. имя детали',
@@ -109,7 +110,7 @@ class Import_model extends CI_Model
 	}
 
 	/**
-	 * @param str $inputFileName - full path to excel file
+	 * @param string $inputFileName - full path to excel file
 	 * @return PHPExcel object | void
 	 */
 	function init_phpexcel_object($inputFileName)
@@ -289,6 +290,83 @@ class Import_model extends CI_Model
 		}
 		// reset array keys
 		return array_merge(array(), $input);
+	}
+
+	public function save_import_to_temp_table($arr)
+	{
+		$this->db->insert('temp_imports', array('import_data' => serialize($arr)));
+		return $this->db->insert_id();
+	}
+
+	public function get_import_from_temp_table($id)
+	{
+		$data = $this->db->where('import_id', $id)->get('temp_imports', 1);
+		if ($data->num_rows() <= 0) return false;
+		$data = $data->row_array();
+		return unserialize($data['import_data']);
+	}
+
+	public function get_last_imports_data()
+	{
+		$data = $this->db->order_by('import_id', 'desc')->get('temp_imports', 3);
+		if ($data->num_rows() <= 0) return false;
+		$data = $data->result_array();
+		foreach ($data as $k => $one) {
+			$data[$k]['import_data'] = unserialize($one['import_data']);
+		}
+		return $data;
+	}
+
+	public function save_sheet_to_temp_table($import, $sheet_data)
+	{
+		$this->db->insert('temp_sheets', array( 'import_id' => $import, 'sheet_data' => serialize($sheet_data) ));
+		return $this->db->insert_id();
+	}
+
+	function get_sheets_from_temp_table($id)
+	{
+		$data = $this->db->where('import_id', $id)->order_by('sheet_id')->get('temp_sheets');
+		if ($data->num_rows() <= 0) return false;
+		return array_map('get_temp_unserialized_sheets_data', $data->result_array());
+	}
+
+	/**
+	 * @param $sheet
+	 * @param $data - array of data rows
+	 * @return void
+	 */
+	public function save_sheet_data_to_temp_table($sheet, $data)
+	{
+		$insert = array_map('get_temp_serialized_values', array_keys($data), $data, array_fill(0, count($data), $sheet));
+		if ($this->db->insert_batch('temp_sheets_data', $insert)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function get_sheet_data_from_temp_table_count($sheet, $page){
+		$data = $this->db->query('SELECT COUNT(id) as num FROM temp_sheets_data WHERE sheet_id = ' . $sheet)->row_array();
+		return array(
+			'total' => $data['num'],
+			'pages' => ceil($data['num'] / $this->per_page),
+			'page' => $page + 1,
+			'per_page' => $this->per_page,
+		);
+	}
+
+	public function get_sheet_data_from_temp_table($sheet, $page)
+	{
+		$data = $this->db->query('SELECT * FROM temp_sheets_data WHERE sheet_id = ' . $sheet . ' ORDER BY id ASC LIMIT ' . $page * $this->per_page . ', ' . $this->per_page);
+		if ($data->num_rows() > 0) {
+			return array_map('get_temp_unserialized_values', $data->result_array());
+		} else {
+			return false;
+		}
+	}
+
+	public function remove_sheet_data_from_temp_table($rows){
+		$this->db->query('DELETE from temp_sheets_data WHERE id IN (' . implode(',', $rows) . ')');
 	}
 
 }

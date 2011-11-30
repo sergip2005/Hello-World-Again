@@ -149,3 +149,89 @@ $.tablesorter.addWidget({
 		}
 	}
 });
+
+/** jQuery live search plugin Version 1.0 Author: Jeremy Herrman (jherrman@sei.cmu.edu)
+ * usage example
+ $("#search_string", fm.elm).livesearch({
+        searchCallback: function(){ fm.elm.find('form.search_files').trigger('submit'); },
+        queryDelay: 250,
+        innerText: "Search",
+        minimumSearchLength: 2
+    });
+ */
+(function($){
+	var LiveSearch = function(element, opts){
+		element = $(element);
+		var settings = $.extend({}, $.fn.livesearch.defaults, opts);
+		var timer = undefined;
+		var prevSearchTerm = element.val();
+
+		element.empty();
+		element.bind("keyup", function(){
+			if(timer != undefined){
+				clearTimeout(timer);
+			}
+			timer = setTimeout(DoSearch, settings.queryDelay);
+		});
+
+		this.DoSearch = DoSearch;
+		function DoSearch(){
+			var searchTerm = element.val();
+			if(searchTerm != prevSearchTerm) {
+				prevSearchTerm = searchTerm;
+				if(searchTerm.length >= settings.minimumSearchLength) {
+					DisplayResults(searchTerm);
+				} else if(searchTerm.length == 0) {
+					DisplayResults("");
+				}
+			}
+		}
+
+		function DisplayResults(searchTerm){
+			timer = undefined;
+			settings.searchCallback(searchTerm);
+		}
+
+		if (element.val() == "" || element.val() == settings.innerText) {
+			disableSearch();
+		} else {
+			enableSearch();
+		}
+
+		element.focus(function(){
+			if (element.hasClass("inactive_search")) { enableSearch(); }
+		});
+
+		element.blur(function(){
+			if (element.val() == "") { disableSearch(); }
+		});
+
+		function enableSearch(){
+			element.addClass("active_search");
+			element.removeClass("inactive_search");
+			element.val("");
+		}
+
+		function disableSearch(){
+			element.addClass("inactive_search");
+			element.removeClass("active_search");
+			element.val(settings.innerText);
+		}
+
+	};
+
+	$.fn.livesearch = function(options){
+		this.each(function(){
+			var element = $(this);
+			if (element.data('livesearch')) return;
+			var livesearch = new LiveSearch(this, options);
+			element.data('livesearch', livesearch);
+		});
+	};
+
+	$.fn.livesearch.defaults = {
+		queryDelay: 250,
+		innerText: "Search",
+		minimumSearchLength: 3
+	};
+})(jQuery);
