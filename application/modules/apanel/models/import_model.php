@@ -4,7 +4,7 @@ class Import_model extends CI_Model
 {
 	private $_worksheet;
 	private $_row;
-	public $per_page = 20;
+	public $per_page = 100;
 
 	public $part_field_types = array(
 			'name'		=> 'Ориг. имя детали',

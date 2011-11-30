@@ -117,12 +117,14 @@ class Import extends MY_Controller {
 
 		if ($existing_data['model'] <= 0) {// if provided model does not exist - create it
 			$model = $this->input->post('model_input');
-			$post_data['model_select'] = $this->phones_model->getOrCreateModel($model, $post_data['vendor_id']);
-			$this->phones_model->saveModel($post_data['model_select'], array(
-						'rev_num' => $post_data['rev_num'],
-						'rev_desc' => $post_data['rev_desc'],
-						'rev_date' => date('Y-m-d H:i:s')
-					));
+			if (!empty($model)) {
+				$post_data['model_select'] = $this->phones_model->getOrCreateModel($model, $post_data['vendor_id']);
+				$this->phones_model->saveModel($post_data['model_select'], array(
+							'rev_num' => $post_data['rev_num'],
+							'rev_desc' => $post_data['rev_desc'],
+							'rev_date' => date('Y-m-d H:i:s')
+						));
+			}
 		}
 
 		// save import object
