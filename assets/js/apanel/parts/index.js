@@ -42,12 +42,14 @@ var partsManager = {
 		pm.v.delegate('li', 'click', function(){
 			pm.setVendorLiActive(this, false);
 			pm.getVendorModels($(this).data('id'));
+			pm.s.find('input.text').removeClass('active');
 		});
 
 		// dynamic models list
 		pm.m.delegate('li', 'click', function(e){
 			pm.setModelLiActive(this, false);
 			pm.getModelParts($(this).data('id'));
+			pm.s.find('input.text').removeClass('active');
 		});
 
 		// init sortables
@@ -69,6 +71,7 @@ var partsManager = {
 				pm.showPartInfo(i.data('id'));
 				app.log('dblclicked', i);
 			});
+
 		//live search
 		$('form[name="search_parts_code"] input.text', pm.s).livesearch({
 			searchCallback: function(){ pm.s.find('form[name="search_parts_code"]').trigger('submit'); },
@@ -94,23 +97,20 @@ var partsManager = {
 			e.preventDefault();
 			pm.setVendorLiActive(false, -1);
 			pm.setModelLiActive(false, -1);
-			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 			pm.s.find('input.text').removeClass('active');
-			$(this).find('input.text').addClass('active');
+			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 		}).delegate('form[name="search_model_name"]', 'submit', function(e){
 			e.preventDefault();
 			pm.setVendorLiActive(false, -1);
 			pm.setModelLiActive(false, -1);
-			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 			pm.s.find('input.text').removeClass('active');
-			$(this).find('input.text').addClass('active');
+			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 		}).delegate('form[name="search_parts_name"]', 'submit', function(e){
 			e.preventDefault();
 			pm.setVendorLiActive(false, -1);
 			pm.setModelLiActive(false, -1);
-			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 			pm.s.find('input.text').removeClass('active');
-			$(this).find('input.text').addClass('active');
+			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
 		});
 
 		// init check all
@@ -217,6 +217,8 @@ var partsManager = {
 	searchParts: function(query, param){
 		var pm = this;
 		if ((param == 'model_name' || param == 'parts_code' || param == 'parts_name') && query.length > 0) {
+			$('form[name="search_' + param + '"]').find('input.text').addClass('active').val(query);
+
 			app.showLoading(pm.p);
 			pm.pchbx.prop('checked', false);
 			document.location.hash = param + '/' + encodeURI(query);
