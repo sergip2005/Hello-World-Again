@@ -3,7 +3,6 @@
 	<li><a href="/how-to-order">Как заказать</a></li>
 	<li><a href="/contacts">Контакты</a></li>
 </ul>
-
 		<!--
 		<span value="code">Код</span>
 		<ul>
@@ -14,6 +13,7 @@
 		-->
 <div id="search">
 	<div  class="select-and-input">
+		<label>Код запчасти:</label>
 		<form name="search_parts_code">
 			<div class="search_field search_code">
 				<input class="text" placeholder="Код" type="text" name="parts_code">
@@ -24,6 +24,7 @@
 		</form>
 	</div>
 	<div class="select-and-input">
+		<label>Имя модели:</label>
 		<form name="search_model_name">
 			<div class="search_field search_model">
 				<input class="text" type="text" placeholder="Модель" name="model_name">
@@ -34,6 +35,7 @@
 		</form>
 	</div>
 	<div class="select-and-input">
+		<label>Имя запчасти:</label>
 		<form name="search_parts_name">
 		<div class="search_field search_name">
 				<input class="text" type="text" placeholder="Название" name="parts_name">

@@ -95,16 +95,22 @@ var partsManager = {
 			pm.setVendorLiActive(false, -1);
 			pm.setModelLiActive(false, -1);
 			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
+			pm.s.find('input.text').removeClass('active');
+			$(this).find('input.text').addClass('active');
 		}).delegate('form[name="search_model_name"]', 'submit', function(e){
 			e.preventDefault();
 			pm.setVendorLiActive(false, -1);
 			pm.setModelLiActive(false, -1);
 			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
+			pm.s.find('input.text').removeClass('active');
+			$(this).find('input.text').addClass('active');
 		}).delegate('form[name="search_parts_name"]', 'submit', function(e){
 			e.preventDefault();
 			pm.setVendorLiActive(false, -1);
 			pm.setModelLiActive(false, -1);
 			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
+			pm.s.find('input.text').removeClass('active');
+			$(this).find('input.text').addClass('active');
 		});
 
 		// init check all
