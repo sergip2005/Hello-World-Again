@@ -831,6 +831,10 @@ table.desc select { min-width: 150px }
 	border:solid 1px #848388;
 	background-color: white;
 	float: left;
+	color: #999;
+}
+.search .select-and-input div.search_field input.text:focus {
+	color: #000;
 }
 .search .select-and-input div.search_code, .select-and-input div.search_model, .select-and-input div.search_name{
 	margin-top: 7px;

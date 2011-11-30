@@ -474,6 +474,7 @@ div.main-menu #search{
 	display: inline-block;
 	margin-bottom: 7px;
 }
+
 /*
 .select-and-input span {
 	z-index: 1;
@@ -519,6 +520,10 @@ div.main-menu #search{
 	border:solid 1px #848388;
 	background-color: white;
 	float: left;
+	color: #999;
+}
+.select-and-input div.search_field input.text:focus {
+	color: #000;
 }
 .select-and-input div.search_code, .select-and-input div.search_model, .select-and-input div.search_name{
 	margin-top: 7px;
