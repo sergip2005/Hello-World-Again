@@ -149,8 +149,9 @@
 						<?php } elseif (in_array($sheet['type'], array('prices'))) { // for price sheet ?>
 						<tr class="current<?php echo $ii % 2 ? ' odd' : ' even' ?>">
 							<td class="check"></td>
-							<?php foreach ($row as $fieldN => $field) { ?>
-								<?php
+							<?php foreach ($row as $fieldN => $field) {
+									if ($fieldN == 'row_id') continue;
+
 									$fieldType = '';
 									if (preg_match('/^price_/', $fieldN)) {
 										$fieldN = (string)end(explode('_', $fieldN));
