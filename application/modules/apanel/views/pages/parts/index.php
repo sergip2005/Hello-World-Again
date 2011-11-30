@@ -1,6 +1,6 @@
 <div id="main" class="parts-navigation">
 
-	<div id="search">
+	<div id="search" class="search">
 	<div  class="select-and-input">
 		<form name="search_parts_code">
 			<div class="search_field search_code">
