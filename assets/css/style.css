@@ -469,7 +469,7 @@ div.main-menu #search{
 	width: 970px;
 }
 .select-and-input {
-	height: 30px;
+	height: 50px;
 	width: 320px;
 	display: inline-block;
 	margin-bottom: 7px;
@@ -524,6 +524,9 @@ div.main-menu #search{
 }
 .select-and-input div.search_field input.text:focus {
 	color: #000;
+}
+.search .select-and-input div.search_field input.active {
+	border:solid 1px red;
 }
 .select-and-input div.search_code, .select-and-input div.search_model, .select-and-input div.search_name{
 	margin-top: 7px;
