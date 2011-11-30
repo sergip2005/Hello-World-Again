@@ -34,6 +34,24 @@ $(document).ready(function () {
 	});*/
 	var search = $(".select-and-input");
 
+	/*$('form[name="search_parts_code"] input.text', search).livesearch({
+		searchCallback: function(){ search.find('form[name="search_parts_code"]').trigger('submit'); },
+		queryDelay: 250,
+		innerText: "Код",
+		minimumSearchLength: 2
+	});
+	$('form[name="search_model_name"] input.text', search).livesearch({
+		searchCallback: function(){ search.find('form[name="search_model_name"]').trigger('submit'); },
+		queryDelay: 250,
+		innerText: "Модель",
+		minimumSearchLength: 2
+	});
+	$('form[name="search_parts_name"] input.text', search).livesearch({
+		searchCallback: function(){ search.find('form[name="search_parts_name"]').trigger('submit'); },
+		queryDelay: 250,
+		innerText: "Название",
+		minimumSearchLength: 2
+	});*/
 	search.delegate('form[name="search_parts_code"]', 'submit', function(e){
 			e.preventDefault();
 			if($.trim($(this).find('input.text').val()) !== '') {
