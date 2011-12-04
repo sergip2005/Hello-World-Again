@@ -55,7 +55,8 @@
 		<input type="hidden" name="sheets_data[<?php echo $sheet['id'] ?>][type]" value="<?php echo $sheet['type'] ?>">
 		<h2><?php echo $sheet['name'] ?></h2>
 
-		<?php if (isset($sheet['data']) && count($sheet['data']) > 0) { ?>
+	<?php if ($sheet['type'] != 'prices') {
+			if (isset($sheet['data']) && count($sheet['data']) > 0) { ?>
 		<table>
 			<thead>
 					<th><input type="checkbox" class="check-all" id="check-all<?php echo $sheet['id'] ?>" checked="checked"></th>
@@ -67,7 +68,6 @@
 			<?php
 			$ii = 1;
 			$prev_exists = isset($sheet['prev_state']) && count($sheet['prev_state']) > 0;// cache condition
-			if ($sheet['type'] != 'prices') {
 			foreach ($sheet['data'] as $rowN => $row) {
 				if ($prev_exists) { // if there are already any parts in db
 					if (isset($sheet['prev_state']['parts'][$row['code']])) {
@@ -146,17 +146,15 @@
 			<?php
 				$ii += 1;
 			}
-			} else {
-				if (isset($sheet['results']) && !empty($sheet['results'])) print_r($sheet['results']);
-			} ?>
+			} else { ?>
+				<span class="no-data">Лист не отмечен или нет данных для импорта</span>
+			<?php } ?>
 			</tbody>
 		</table>
 
-		<?php } else { // no data ?>
-
-			<span class="no-data">Лист не отмечен или нет данных для импорта</span>
-
-		<?php } ?>
+		<?php } else {
+			if (isset($sheet['results']) && !empty($sheet['results'])) echo $sheet['results'];
+		} ?>
 
 	</div>
 
@@ -199,7 +197,8 @@
 	</div>
 	<?php } ?>
 
-	<input type="submit" value="Внести изменения">
+	<input type="submit" disabled="disabled" value="Внести изменения"><br><br><br>
+	<a href="/apanel/import/">Вернуться на страницу импорта</a>
 
 </form>
 

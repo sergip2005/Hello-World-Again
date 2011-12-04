@@ -194,6 +194,12 @@ class Import extends MY_Controller {
 						$this->parts_model->save($part['id'], array('price' => 0));
 					}
 				}
+
+				$m = $n['new'] > 0 ? 'Создано: ' . $n['new'] . '<br><br>' : '';
+				$m .= $n['existing'] > 0 ? 'Обновлено: ' . $n['existing'] . '<br><br>' : '';
+				$m .= $n['excluded'] > 0 ? 'Нет данных: ' . $n['excluded'] . '<br><br>' : '';
+				$this->session->set_flashdata('message', $m);
+
 				$sheets_data[$sheet]['results'] = $this->_show_import_results($n, $data);
 			}
 		}

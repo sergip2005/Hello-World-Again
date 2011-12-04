@@ -23,16 +23,16 @@ var partsManager = {
 				'<td><%= name %></td>' +
 				'<td><%= name_rus %></td>' +
 				'<td><%= (available ? "+" : "-") %></td>' +
-				'<td><%= price %></td>' +
+				'<td><%= price > 0 ? price : "нет данных" %></td>' +
 				'<td><%= min_num %></td>' +
 			'</tr>'
 	},
 
 	init: function(){
-		this.v = $('#vendors'),
-		this.m = $('#models'),
-		this.p = $('#parts'),
-		this.pchbx = this.p.parent().find(':checkbox.check-all'),
+		this.v = $('#vendors');
+		this.m = $('#models');
+		this.p = $('#parts');
+		this.pchbx = this.p.parent().find(':checkbox.check-all');
 		this.c = $('#controls');
 		this.s = $('#search');
 
