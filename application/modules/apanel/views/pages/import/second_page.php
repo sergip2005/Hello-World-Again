@@ -40,7 +40,7 @@
 				<p class="current-data" id="rev-num" style="display: none"></p><br>
 				Описание ревизии листа:<br>
 				<input name="rev_desc" value=""><br>
-				<p class="current-data" id="rev-desc" style="display: none"></p><br>
+				<p class="current-data" id="rev-desc" style="display: none"></p><br><br>
 				<p class="current-data" id="rev-date" style="display: none"></p>
 			</td>
 		</tr>

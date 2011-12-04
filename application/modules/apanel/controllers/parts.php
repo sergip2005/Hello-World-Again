@@ -50,7 +50,7 @@ class Parts extends MY_Controller {
 
 					switch ($search_params['parameter']){
 						case 'parts_code':
-							$parts = $this->parts_model->getPartsByNumber($search_params['query']);
+							$parts = $this->parts_model->getPartsByCode($search_params['query']);
 						break;
 						case 'model_name':
 							$parts = $this->parts_model->searchParts($search_params['query'], 'models');
@@ -75,7 +75,7 @@ class Parts extends MY_Controller {
 
 		}
 		$parts = $this->phones_model->getParts($search_params['vendor_id'], $search_params['model_id'], 'all');
-		if ($parts !== false && count($parts) > 0) {
+		if (!empty($parts) && count($parts) > 0) {
 			$this->output->set_output(json_encode(array( 'status' => 1, 'data' => $parts )));
 		} else {
 			$this->output->set_output(json_encode(array( 'status' => 0 )));

@@ -1,0 +1,1 @@
+ALTER TABLE `parts` ADD `last_updated` DATETIME NOT NULL AFTER `id` ;

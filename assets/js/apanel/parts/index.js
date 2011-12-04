@@ -17,6 +17,7 @@ var partsManager = {
 				'<td><%= vendor_name %></td>' +
 				'<td><%= model_name %></td>' +
 				'<td><%= cct_ref %></td>' +
+				'<td><%= ptype %></td>' +
 				'<td><%= code %></td>' +
 				'<td><%= num %></td>' +
 				'<td><%= name %></td>' +
@@ -24,7 +25,6 @@ var partsManager = {
 				'<td><%= (available ? "+" : "-") %></td>' +
 				'<td><%= price %></td>' +
 				'<td><%= min_num %></td>' +
-				'<td><%= ptype %></td>' +
 			'</tr>'
 	},
 
@@ -72,25 +72,25 @@ var partsManager = {
 				app.log('dblclicked', i);
 			});
 
-		//live search
+		/*live search
 		$('form[name="search_parts_code"] input.text', pm.s).livesearch({
 			searchCallback: function(){ pm.s.find('form[name="search_parts_code"]').trigger('submit'); },
-			queryDelay: 250,
+			queryDelay: 2000,
 			innerText: "Код",
 			minimumSearchLength: 2
         });
 		$('form[name="search_model_name"] input.text', pm.s).livesearch({
 			searchCallback: function(){ pm.s.find('form[name="search_model_name"]').trigger('submit'); },
-			queryDelay: 250,
+			queryDelay: 2000,
 			innerText: "Модель",
 			minimumSearchLength: 2
         });
 		$('form[name="search_parts_name"] input.text', pm.s).livesearch({
 			searchCallback: function(){ pm.s.find('form[name="search_parts_name"]').trigger('submit'); },
-			queryDelay: 250,
+			queryDelay: 2000,
 			innerText: "Название",
 			minimumSearchLength: 2
-        });
+        });*/
 
 		//search bottoms clicks
 		pm.s.delegate('form[name="search_parts_code"]', 'submit', function(e){

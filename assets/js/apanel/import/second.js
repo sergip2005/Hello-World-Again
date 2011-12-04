@@ -38,7 +38,7 @@ $(document).ready(function () {
 			if (s.val() != 0) {
 				if (os.data('rev-num') != '') $('#rev-num').show().text('Текущее: ' + os.data('rev-num'));
 				if (os.data('rev-desc') != '') $('#rev-desc').show().text('Текущее: ' + os.data('rev-desc'));
-				if (os.data('rev-date') != '0000-00-00 00:00:00') $('#rev-date').show().text(_.template(app.messages.importpage.rev_date, {date: os.data('rev-date')}));
+				if (os.data('rev-date') != '0000-00-00 00:00:00') $('#rev-date').show().html(_.template(app.messages.importpage.rev_date, {date: os.data('rev-date')}));
 			} else {
 				$('#rev-num, #rev-desc, #rev-date').hide();
 			}
