@@ -13,16 +13,15 @@ class Phones extends My_Controller {
 		$this->load->model('pages_m');
 		$page = $this->pages_m->get_page('index');
 
-		$catalog  = $this->phones_model->getAllParts();
 		$data = array(
 			'title' 		=> $page['title'],
 			'description' 	=> $page['description'],
 			'keywords' 		=> $page['keywords'],
-			'body' 			=> $this->load->view('pages/phones/index',
-													array(
-														'catalog' => $catalog,
-														'body' => $page['body']
-													), true),
+			'body' 			=> $this->load->view(
+										'pages/phones/index',
+										array(
+											'body' => $page['body']
+										), true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}
@@ -32,7 +31,6 @@ class Phones extends My_Controller {
 		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $vendor);
 		$model  = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $model);
 		$region = $region == 'all' ? $region : '';
-		$catalog  = $this->phones_model->getAllParts();
 		$parts = $this->phones_model->getPartsByName($vendor, str_replace('_', ' ', $model), $region);
 		$data = array(
 			'title' 		=> 'Раскладка ' . $vendor . ' ' . $model,
@@ -40,28 +38,27 @@ class Phones extends My_Controller {
 			'css'			=> array('jquery.jqzoom.css', 'jquery.tablesorter.blue.css'),
 			'description' 	=> $vendor . ', ' . $model,
 			'keywords' 		=> $vendor . ', ' . $model,
-			'body' 			=> $this->load->view('pages/phones/parts', array('parts'   => $parts,
-																			 'catalog' => $catalog,
-																			 'region'  => $region,
-																			 'vendor'  => $vendor,
-																			 'model'   => $model),
-												 true),
+			'body' 			=> $this->load->view(
+									'pages/phones/parts',
+									array('parts'   => $parts,
+											'region'  => $region,
+											'vendor'  => $vendor,
+											'model'   => $model
+									),
+									true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}
 
-	public function Vendor($vendor)
+	public function vendor($vendor)
 	{
 		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $vendor);
-		$catalog  = $this->phones_model->getAllParts();
 		$models = $this->phones_model->getVendorModels($vendor);
 		$data = array(
-			'title' 		=> 'Вендор: ' . $vendor ,
+			'title' 		=> 'Производитель: ' . $vendor ,
 			'description' 	=> $vendor ,
 			'keywords' 		=> $vendor ,
-			'body' 			=> $this->load->view('pages/phones/vendor', array('catalog' => $catalog,
-																			  'models'   => $models),
-				true),
+			'body' 			=> $this->load->view('pages/phones/vendor', array('vendor' => $vendor, 'models' => $models), true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}

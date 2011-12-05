@@ -12,14 +12,13 @@ class Parts extends My_Controller {
 	{
 		$number = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', urldecode($number));
 		$parts  = $this->parts_model->getPartsByCode($number);
-		$catalog  = $this->phones_model->getAllParts();
 		$data   = array(
 			'title' 		=> 'Код: ' . urldecode($number),
 			'description' 	=> '',
 			'keywords' 		=> '',
 			'css'			=> array('jquery.tablesorter.blue.css'),
 			'js'			=> array('site/parts.js', '/libs/jquery.tablesorter.min.js'),
-			'body' 			=> $this->load->view('pages/parts/index', array('parts' => $parts, 'catalog' => $catalog), true),
+			'body' 			=> $this->load->view('pages/parts/index', array('parts' => $parts), true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}
@@ -28,7 +27,6 @@ class Parts extends My_Controller {
 	{
 		$q = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', urldecode($query));
 		$p = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $parameter);
-		$catalog  = $this->phones_model->getAllParts();
 		$parts  = $this->parts_model->searchParts($q, $p);
 		$data = array(
 			'title' 		=> 'Поиск',
@@ -36,7 +34,7 @@ class Parts extends My_Controller {
 			'keywords' 		=> '',
 			'css'			=> array('jquery.tablesorter.blue.css'),
 			'js'			=> array('site/search.js', '/libs/jquery.tablesorter.min.js'),
-			'body' 			=> $this->load->view('pages/parts/search', array('parts' => $parts, 'catalog' => $catalog), true),
+			'body' 			=> $this->load->view('pages/parts/search', array('parts' => $parts), true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}

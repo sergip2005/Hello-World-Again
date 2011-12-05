@@ -1,21 +1,4 @@
-<div class="models-menu">
-	<ul>
-	<?php foreach ($catalog as  $key => $models) { ?>
-		<li><a href="/phones/<?php echo $key ?>"><?php echo $key ?></a>
-		<?php if (count($models) > 0) { ?>
-			<ul>
-			<?php foreach ($models as $k => $m) { ?>
-				<li><a href="/phones/<?php echo strtolower($key) ?>/<?php echo strtolower(str_replace(' ', '_', $m)) ?>"><?php echo $m ?></a></li>
-			<?php } ?>
-			</ul>
-		<?php } ?>
-		</li>
-	<?php } ?>
-	</ul>
-</div>
-<?php
-	if (count($parts) > 0) {
-?>
+<?php if (count($parts) > 0) { ?>
 <div class="parts-content full-transparent">
 	<div id="parts">
 		<span class="s selected">Корпусные </span>
@@ -36,15 +19,16 @@
 		}
 
 		if (count($cabinet) > 0) { ?>
-			<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="cabinet_img" title="E75_RM-412_RM-413_Schematics_v0_1">
-				<img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
+			<a class="zoom" href="/assets/images/phones/<?php echo $cabinet[0]['cabinet_image'] ?>" title="корпусные элементы <?php echo $model ?>">
+				<img class="zoom_src" src="/assets/images/phones/<?php echo $cabinet[0]['cabinet_image'] ?>" alt="корпусные элементы <?php echo $model ?>">
 			</a>
 
-			<table class="tablesorter separate" >
+			<table class="tablesorter separate clearfix">
 			<thead>
-			<tr><th class="not_header">v.<?php echo $cabinet[0]['rev_num'] ?></th><th class="not_header" colspan="7"></th></tr>
+			<tr><th class="not_header">v.<?php echo $cabinet[0]['rev_num'] ?></th><th class="not_header" colspan="8"></th></tr>
 			<tr>
 				<th class="header" data-field="phones_parts.cct_ref">Позиция</th>
+				<th class="header" data-field="parts.ptype">Тип</th>
 				<th class="header" data-field="parts.code">Код</th>
 				<th class="header" data-field="phones_parts.num">Испол.</th>
 				<th class="header" data-field="parts.name">Описание(eng)</th>
@@ -59,13 +43,14 @@
 			<?php foreach ($cabinet as $c) { ?>
 			<tr>
 				<td><?php echo $c['cct_ref'] ?></td>
+				<td><?php echo $c['ptype'] ?></td>
 				<td><?php echo $c['code'] ?></td>
 				<td><?php echo $c['num'] ?></td>
 				<td><?php echo $c['name'] ?></td>
 				<td><?php echo $c['name_rus'] ?></td>
-				<td></td>
+				<td><input type="text" value="0" class="w45"></td>
 				<td><?php echo $c['min_num'] ?></td>
-				<td><?php echo $c['price'] ?></td>
+				<td><?php echo $c['price'] > 0 ? $c['price'] : 'нет данных' ?></td>
 			</tr>
 			<?php } ?>
 			</tbody>
@@ -78,16 +63,17 @@
 	<div class="solder">
 		<?php if (count($solder) > 0) { ?>
 
-			<a href="/assets/images/testimg/E75_RM-412_RM-413_Schematics_v0_1.png" id="solder_img" title="E75_RM-412_RM-413_Schematics_v0_1">
-				<img src="/assets/images/testimg/small_E75_RM-412_RM-413_Schematics_v0_1.png" style="border: solid 1px #999;" title="E75_RM-412_RM-413_Schematics_v0_1">
-			</a>
+		<a class="zoom" href="/assets/images/phones/<?php echo $cabinet[0]['solder_image'] ?>" title="паечные элементы <?php echo $model ?>">
+			<img class="zoom_src" src="/assets/images/phones/<?php echo $cabinet[0]['solder_image'] ?>" alt="паечные элементы <?php echo $model ?>">
+		</a>
 
-			<table class="tablesorter separate" >
+		<table class="tablesorter separate clearfix">
 			<thead>
-			<tr><th class="not_header">v.<?php echo $solder[0]['rev_num'] ?></th><th class="not_header" colspan="7"></th></tr>
+			<tr><th class="not_header">v.<?php echo $solder[0]['rev_num'] ?></th><th class="not_header" colspan="8"></th></tr>
 			<tr>
 				<th class="header" data-field="phones_parts.cct_ref">Позиция</th>
-				<th class="header" data-field="parts.code">Код</th>
+				<th class="header" data-field="parts.ptype">Тип</th>
+				<th class="header" data-field="parts.code">Парт-номер</th>
 				<th class="header" data-field="phones_parts.num">Испол.</th>
 				<th class="header" data-field="parts.name">Описание(eng)</th>
 				<th class="header" data-field="parts.name_rus">Описание(рус)</th>
@@ -101,17 +87,18 @@
 			<?php foreach ($solder as $s) { ?>
 			<tr>
 				<td><?php echo $s['cct_ref'] ?></td>
+				<td><?php echo $s['ptype'] ?></td>
 				<td><?php echo $s['code'] ?></td>
 				<td><?php echo $s['num'] ?></td>
 				<td><?php echo $s['name'] ?></td>
 				<td><?php echo $s['name_rus'] ?></td>
-				<td></td>
+				<td><input type="text" value="0" class="w45"></td>
 				<td><?php echo $s['min_num'] ?></td>
-				<td><?php echo $s['price'] ?></td>
+				<td><?php echo $s['price'] > 0 ? $c['price'] : 'нет данных' ?></td>
 			</tr>
 			<?php } ?>
 			</tbody>
-			</table>
+		</table>
 		<?php } else { ?>
 			Нет паечных запчастей
 		<?php } ?>

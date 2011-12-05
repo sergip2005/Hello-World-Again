@@ -9,6 +9,15 @@ $(document).ready(function(){
 					$('.solder').hide();
 					$('.c').removeClass("selected");
 					$('.s').addClass("selected");
+					setTimeout(function(){
+						$('div.cabinet a.zoom').jqzoom({
+								zoomType: 'drag',
+								lens:true,
+								zoomWidth: $('div.cabinet').width() - $('div.cabinet img.zoom_src').width() - 15,
+								zoomHeight: 300,
+								position:'right'
+							});
+					}, 50);
 				}
 
 				if(part == '#s') {
@@ -16,12 +25,19 @@ $(document).ready(function(){
 					$('.cabinet').hide();
 					$('.s').removeClass("selected");
 					$('.c').addClass("selected");
+					setTimeout(function(){
+						$('div.solder a.zoom').jqzoom({
+								zoomType: 'drag',
+								lens:true,
+								zoomWidth: $('div.solder').width() - $('div.solder img.zoom_src').width() - 15,
+								zoomHeight: 300,
+								position:'right'
+							});
+					}, 50);
 				}
 
 				window.location.hash = part;
 			};
-
-	$('#cabinet_img, #solder_img').jqzoom({zoomType: 'drag'});
 
 	// prepare layout, fade in
 	$('.solder').hide();

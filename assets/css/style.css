@@ -177,7 +177,8 @@ body {
 .main-menu .wrapper,
 .footer .wrapper,
 .content .wrapper,
-.copyright .wrapper {
+.copyright .wrapper,
+.models-menu .wrapper{
 	width: 1000px;
 	margin: 0 auto;
 	text-align: left;
@@ -245,7 +246,7 @@ body {
 }
 
 .content {
-	padding-bottom: 40px;
+	padding: 40px 0;
 }
 
 .main-menu ul li a:hover,
@@ -259,23 +260,12 @@ body {
 	clear: both;
 }
 
-.models-menu {
-	float: left;
-	width: 200px;
-}
-
 .models-menu ul {
 	list-style: none;
 	margin: 0;
 }
 
-.models-menu li li {
-	padding-left: 10px;
-}
-
-.parts-content {
-	margin-left:200px;
-}
+.models-menu li li { padding-left: 10px }
 
 /** USER-MENU
 ---------------------*/
@@ -368,7 +358,7 @@ body {
 /* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
 .clearfix { zoom: 1; clear: both; }
  
- 
+ .w45 { width: 45px }
  
 /**
  * Media queries for responsive design.
@@ -555,4 +545,19 @@ div.main-menu #search{
 table.separate{
 	border-collapse: separate;
 	border-spacing: 1px;
+}
+
+/** parts page */
+.parts-content .tablesorter { width: 100% }
+
+.parts-content .zoom_src {
+	max-height: 300px;
+	max-width: 300px;
+	border: 1px solid #999;
+}
+
+.models-menu .wrapper {
+	border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
+	padding: 5px 0;
 }
