@@ -44,16 +44,18 @@ class Parts_model extends CI_Model
 
 		$partData = array();
 
+		if (isset($sheetData['type']) && isset($this->partType[$sheetData['type']])) {
+			$partData['type'] = $this->partType[$sheetData['type']];
+		}
+
 		// save part data
 		foreach ($rowData as $n => $v) {
 			if (in_array($n, $this->partFields)) {
 				$partData[$n] = $v;
 			}
 		}
+
 		$partData['vendor_id'] = $sheetData['vendor_id'];
-		if (isset($this->partType[$sheetData['type']])) {
-			$partData['type'] = $this->partType[$sheetData['type']];
-		}
 		$partData['show'] = 1;
 		// default vals for min_num
 		if (!isset($partData['min_num']) || empty($partData['min_num']) || $partData['min_num'] == 0) {
@@ -69,7 +71,6 @@ class Parts_model extends CI_Model
 		// process price value
 		foreach ($this->currency_model->priceFields as $priceField) {
 			if (isset($rowData[$priceField]) && floatval($rowData[$priceField]) > 0) {
-				// @TODO add money convertion
 				$partData['price'] =
 						$priceField === $this->currency_model->base
 								? floatval($rowData[$priceField])
@@ -93,6 +94,8 @@ class Parts_model extends CI_Model
 			$id = $part->num_rows() > 0 ? $part->row()->id : 0;
 		}
 
+		$data['last_updated'] = date('Y-m-d H:i:s');
+
 		if ($id > 0) { // update
 			$this->db->where('id', $id)->update('parts', $data);
 		} else { // insert
@@ -102,7 +105,7 @@ class Parts_model extends CI_Model
 		return $id;
 	}
 
-	function getPartsByNumber($number)
+	function getPartsByCode($number)
 	{
 		$q = 'SELECT
 			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
@@ -114,6 +117,7 @@ class Parts_model extends CI_Model
 			  WHERE pa.code LIKE ?';
 		return $this->db->query($q, $number . '%')->result_array();
 	}
+
 	function searchParts($query, $parameter)
 	{
 		if($parameter == 'models' ) {

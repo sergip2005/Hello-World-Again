@@ -1,22 +1,9 @@
-<div class="models-menu">
-<ul>
-	<?php foreach ($catalog as  $key => $model) { ?>
-	<li><a href="/phones/<?php echo $key ?>"><?php echo $key ?></a>
-	<?php if (count($model) > 0) { ?>
-		<ul>
-		<?php foreach ($model as $k => $m) { ?>
-			<li><a href="phones/<?php echo strtolower($key) ?>/<?php echo strtolower(str_replace(' ', '_', $m)) ?>"><?php echo $m ?></a></li>
-		<?php } ?>
-		</ul>
-	<?php } ?>
-	</li>
-	<?php } ?>
-</ul>
-</div>
+<?php if (is_array($models) && count($models) > 0) { ?>
 <div class="models-menu">
 	<ul>
-	<?php foreach ($models as $m) {
-		echo $m;
+	<?php foreach ($models as $model) {
+		echo '<li id="' . $model['id'] . '"><a href="/phones/' . url_title($vendor, 'underscore', TRUE) . '/' . url_title($model['name'], 'underscore', TRUE) . '">' . $model['name'] . '</a></li>';
 	 } ?>
+	</ul>
 </div>
- 
+<?php } ?>

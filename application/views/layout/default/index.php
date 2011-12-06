@@ -53,7 +53,8 @@
 			<div class="user-menu clearfix"><div class="wrapper clearfix">
 				<?php echo $user_menu ?>
 			</div></div>
-			
+			<div class="models-menu clearfix"><div class="wrapper clearfix"><?php echo $models_menu ?></div></div>
+
 			<div class="content"><div class="wrapper"><?php echo $body; ?></div></div>
 
 			<div class="footer clearfix"><div class="wrapper clearfix">

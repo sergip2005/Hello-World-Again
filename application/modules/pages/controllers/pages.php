@@ -27,9 +27,14 @@ class Pages extends MY_Controller {
 
 	public function _return_page($data)
 	{
+		// get phones tree
+		$this->load->model('phones_model');
+		$catalog = $this->phones_model->getModelsTree();
+
 		$data['top_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/top_menu', '', true);
 		$data['user_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/user_menu', '', true);
 		$data['bottom_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/bottom_menu', '', true);
+		$data['models_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/models_menu', array('catalog' => $catalog), true);
 
 		$this->load->view($this->config->item('layout_dir') . 'index', $data);
 	}

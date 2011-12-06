@@ -6,7 +6,7 @@ class Phones_model extends CI_Model
 		'cct_ref', 'num', 'comment'
 	);
 
-	public function getAllParts()
+	public function getModelsTree()
 	{
 		$query = 'SELECT phones.model AS model, vendors.name AS vendor, vendors.id AS vendor_id
 				  FROM `phones`
@@ -31,9 +31,12 @@ class Phones_model extends CI_Model
 	 */
 	public function getPartsByName($vendor, $model, $region = '')
 	{
+		// @TODO get rid of model params dublicated for every row -> select model previously, and use there id, not name
 		$q1 = 'SELECT
-				  pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name,
-				  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type, p.rev_num as rev_num
+				  pa.min_num as min_num, pa.code as code, pa.name as name, pa.ptype,
+				  pa.name_rus as name_rus, pa.price as price, pa.type as type,
+				  pp.cct_ref as cct_ref, pp.num as num,
+				  p.rev_num as rev_num, p.image, p.solder_image, p.cabinet_image
 				  FROM `phones_parts` pp
 				  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 				  LEFT JOIN `phones` p ON pp.phone_id = p.id
@@ -41,60 +44,64 @@ class Phones_model extends CI_Model
 				  WHERE v.name = ? AND p.model = ?
 				  ORDER BY v.name';
 		$q2 = 'SELECT
-				  pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name,
-				  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.type as type, r.name as r_name, p.rev_num as rev_num
+				  pa.min_num as min_num, pa.code as code, pa.name as name, pa.ptype,
+				  pa.name_rus as name_rus, pa.price as price, pa.type as type,
+				  pp.cct_ref as cct_ref, pp.num as num,
+				  p.rev_num as rev_num, p.image, p.solder_image, p.cabinet_image
 				  FROM `phones_parts` pp
 				  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 				  LEFT JOIN `phones` p ON pp.phone_id = p.id
 				  LEFT JOIN `vendors` v ON p.vendor_id = v.id
-				  LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
-				  LEFT JOIN `regions` r ON r.id = pprr.region_id
+				  LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pp.id
 				  WHERE v.name = ? AND p.model = ?
-				  AND r.id = (SELECT id FROM regions where `default` = 1)
+				  AND pprr.region_id = (SELECT id FROM regions where `default` = 1)
 				  ORDER BY v.name';
 		$query = $region == 'all' ? $q1 : $q2;
 		return $this->db->query($query, array($vendor, $model, $region))->result_array();
 	}
 
 	/**
-	 * @param int $vendor_id
-	 * @param int $model_id
+	 * @param int|string $vendor_id
+	 * @param int|string $model_id
 	 * @param string $region
-	 * @return array
+	 * @param bool|array $options
+	 * @return array|bool
 	 */
 	public function getParts($vendor_id, $model_id, $region = '', $options = false)
 	{
 		$q1 = 'SELECT
-				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pp.num as num,
-				pa.code as code, pa.name as name, pa.ptype, pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
+				pp.id, pp.cct_ref as cct_ref, pp.num as num,
+				pa.id as part_id, pa.min_num as min_num, pa.code as code, pa.name as name, pa.ptype,
+				pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
 				v.name as vendor_name, v.id as vendor_id,
 				p.model as model_name, p.id as model_id
-				FROM `phones_parts` pp
-				LEFT JOIN `parts` pa ON pp.part_id = pa.id
+				FROM `parts` pa
+				LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id
 				LEFT JOIN `vendors` v ON pa.vendor_id = v.id
-				WHERE p.vendor_id = ?';
+				WHERE pa.vendor_id = ?';
 
 		$q2 = 'SELECT
-				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pp.num as num,
-				pa.code as code, pa.name as name, pa.ptype, pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
+				pp.id, pp.cct_ref as cct_ref, pp.num as num,
+				pa.id as part_id, pa.min_num as min_num, pa.code as code, pa.name as name, pa.ptype,
+				pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
 				v.name as vendor_name, v.id as vendor_id,
 				p.model as model_name, p.id as model_id
-				FROM `phones_parts` pp
-				LEFT JOIN `parts` pa ON pp.part_id = pa.id
+				FROM `parts` pa
+				LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id
 				LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
 				LEFT JOIN `vendors` v ON pa.vendor_id = v.id
 				LEFT JOIN `regions` r ON r.id = pprr.region_id
-				WHERE p.vendor_id = ?
+				WHERE pa.vendor_id = ?
 				AND r.id = (SELECT id FROM regions where `default` = 1)';
 		if ($model_id === 'all') {
 			$q1 .= '';
 			$q2 .= '';
 			$values = array($vendor_id, $region);
 		} elseif ($model_id === 'none') {
-			$q1 .= ' AND pp.phone_id = 0';
-			$q2 .= ' AND pp.phone_id = 0';
+			$q1 .= ' AND (pp.phone_id = 0 OR pp.phone_id IS NULL)';
+			$q2 .= ' AND (pp.phone_id = 0 OR pp.phone_id IS NULL)';
 			$values = array($vendor_id, $region);
 		} else {
 			$q1 .= ' AND pp.phone_id = ?';
@@ -102,21 +109,18 @@ class Phones_model extends CI_Model
 			$values = array($vendor_id, $model_id, $region);
 		}
 
-		if ($options !== false) {
-			if (isset($options['not_import']) && $options['not_import'] > 0) {
-				$q1 .= ' AND pp.import_id <> ' . $options['not_import'];
-				$q2 .= ' AND pp.import_id <> ' . $options['not_import'];
-			}
-		}
+		if ($options !== false) {}
 
 		$query = $region == 'all' ? $q1 : $q2;
+		//die(print_r(array($query, $values), true));
 		$p = $this->db->query($query, $values);
 		if ($p->num_rows() > 0) {
 			$p = $p->result_array();
 		} else {
 			return false;
 		}
-		$r = $this->getPhonePartsRegions(array_map('narrow_to_id_field_only', $p));
+		$pp = array_filter($p, 'get_only_phone_parts');
+		$r = count($pp) > 0 ? $this->getPhonePartsRegions(array_map('narrow_to_id_field_only', $pp)) : array();
 		return array(
 			'parts' => $p,
 			'regions' => $r
@@ -129,11 +133,7 @@ class Phones_model extends CI_Model
 				  FROM `phones` p
 				  LEFT JOIN `vendors` v ON p.vendor_id = v.id
 				  WHERE `name` = ? ORDER BY model';
-		$res = $this->db->query($query, array($vendor))->result_array();
-			foreach ($res as $model) {
-				$ret[] = '<li id="' . $model['id'] . '"><a href="/phones/' . strtolower($vendor) . '/' . str_replace(' ', '_', $model['name']) . '">' . $model['name'] . '</a></li>';
-			}
-			return $ret;
+		return $this->db->query($query, array($vendor))->result_array();
 	}
 
 	public function getAllVendorModels($vendor, $type = 'select', $format_options = array())
@@ -271,7 +271,6 @@ class Phones_model extends CI_Model
 				$phonePartData[$n] = $v;
 			}
 		}
-		$phonePartData['import_id'] = $sheetData['import_id'];
 		$phonePartData['phone_id'] = $sheetData['phone_id'];
 		$phonePartData['part_id'] = $pId;
 		// insert or update phone

@@ -13,6 +13,7 @@ partsManager = {
 
 	templates: {
 		partTr:
+
 				'<tr data-id="<%= id %>" class="<%= i % 2 ? \'even\' : \'odd\' %>">' +
 						'<td><input type="checkbox" value="<%= id %>"></td>' +
 						'<td><%= vendor_name %></td>' +
@@ -23,9 +24,8 @@ partsManager = {
 						'<td><%= name %></td>' +
 						'<td><%= name_rus %></td>' +
 						'<td><%= (available ? "+" : "-") %></td>' +
-						'<td><%= price %></td>' +
+						'<td><%= price > 0 ? price : "нет данных" %></td>' +
 						'<td><%= min_num %></td>' +
-						'<td><%= ptype %></td>' +
 						'</tr>',
 
 		popupMove:     '<select id="move-vendors" name="vendor">' +
@@ -90,31 +90,26 @@ partsManager = {
 			app.log('dblclicked', i);
 		});
 
-		//live search
+		/*live search
 		$('form[name="search_parts_code"] input.text', pm.s).livesearch({
-			searchCallback: function() {
-				pm.s.find('form[name="search_parts_code"]').trigger('submit');
-			},
-			queryDelay: 250,
+			searchCallback: function(){ pm.s.find('form[name="search_parts_code"]').trigger('submit'); },
+			queryDelay: 2000,
 			innerText: "Код",
 			minimumSearchLength: 2
 		});
 		$('form[name="search_model_name"] input.text', pm.s).livesearch({
-			searchCallback: function() {
-				pm.s.find('form[name="search_model_name"]').trigger('submit');
-			},
-			queryDelay: 250,
+			searchCallback: function(){ pm.s.find('form[name="search_model_name"]').trigger('submit'); },
+			queryDelay: 2000,
 			innerText: "Модель",
 			minimumSearchLength: 2
 		});
 		$('form[name="search_parts_name"] input.text', pm.s).livesearch({
-			searchCallback: function() {
-				pm.s.find('form[name="search_parts_name"]').trigger('submit');
-			},
-			queryDelay: 250,
+			searchCallback: function(){ pm.s.find('form[name="search_parts_name"]').trigger('submit'); },
+			queryDelay: 2000,
 			innerText: "Название",
 			minimumSearchLength: 2
-		});
+        });*/
+
 
 		//search bottoms clicks
 		pm.s.delegate('form[name="search_parts_code"]', 'submit',
