@@ -11,12 +11,12 @@ $(document).ready(function(){
 					$('.s').addClass("selected");
 					setTimeout(function(){
 						$('div.cabinet a.zoom').jqzoom({
-								zoomType: 'drag',
-								lens:true,
-								zoomWidth: $('div.cabinet').width() - $('div.cabinet img.zoom_src').width() - 15,
-								zoomHeight: 300,
-								position:'right'
-							});
+								zoomType: 'innerzoom'//'drag',
+								//lens:true,
+								//zoomWidth: $('div.cabinet').width() - $('div.cabinet img.zoom_src').width() - 15,
+								//zoomHeight: $('div.cabinet img.zoom_src').height(),
+								//position:'right'
+							}).css('marginLeft', Math.floor(($('div.cabinet').width() - $('div.cabinet img.zoom_src').width()) / 2) + 'px');
 					}, 50);
 				}
 
@@ -27,17 +27,27 @@ $(document).ready(function(){
 					$('.c').addClass("selected");
 					setTimeout(function(){
 						$('div.solder a.zoom').jqzoom({
-								zoomType: 'drag',
-								lens:true,
-								zoomWidth: $('div.solder').width() - $('div.solder img.zoom_src').width() - 15,
-								zoomHeight: 300,
-								position:'right'
-							});
+								zoomType: 'innerzoom'//'drag',
+								//lens:true,
+								//zoomWidth: $('div.solder').width() - $('div.solder img.zoom_src').width() - 15,
+								//zoomHeight: $('div.solder img.zoom_src').height(),
+								//position:'right'
+							}).css('marginLeft', Math.floor(($('div.solder').width() - $('div.solder img.zoom_src').width()) / 2) + 'px');
 					}, 50);
 				}
 
 				window.location.hash = part;
-			};
+			},
+		updateTotalSum = function(cont){
+			var t = $(cont).find('table'), totalElm = t.find('#total'), total = 0;
+			t.find('input.num[value!=0][data-price!="0.00"]').each(function(){
+				var n = parseInt(this.value), p = parseFloat($(this).data('price'));
+				n = n > 0 ? n : 0;
+				p = p > 0 ? p : 0;
+				total += n * p;
+			});
+			totalElm.html(round(total, 2));
+		};
 
 	// prepare layout, fade in
 	$('.solder').hide();
@@ -60,4 +70,21 @@ $(document).ready(function(){
 	});
 	// tablesorter
 	$("table").tablesorter();
+	$('input.num').ForceNumericOnly();
+
+	$('.cabinet').delegate('input.num', 'keyup', function(){
+			updateTotalSum('.cabinet');
+		});
+
+	$('.solder').delegate('input.num', 'keyup', function(){
+			updateTotalSum('.solder');
+		});
+
+	updateTotalSum('.cabinet');
+	updateTotalSum('.solder');
 });
+
+function round(amount, precision){
+	var a = Math.pow(10, precision);
+	return Math.round(amount * a) / a;
+}

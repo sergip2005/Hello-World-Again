@@ -14,7 +14,7 @@ class Currency_model extends CI_Model
 			);
 	}
 
-	public function convert ($what, $to, $amount) {
+	public function convert($what, $to, $amount) {
 		if ($what == $to) {
 			return round($amount, 2);// don't convert nothing
 		} else {

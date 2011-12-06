@@ -28,22 +28,27 @@ class Phones extends My_Controller {
 
 	public function parts($vendor, $model, $region = '')
 	{
+		$this->load->model('regions_model');
+		$this->load->model('currency_model');
+
 		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $vendor);
 		$model  = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $model);
 		$region = $region == 'all' ? $region : '';
-		$parts = $this->phones_model->getPartsByName($vendor, str_replace('_', ' ', $model), $region);
+		$default_region = $region == '' ? $this->regions_model->getDefault() : false;
 		$data = array(
 			'title' 		=> 'Раскладка ' . $vendor . ' ' . $model,
-			'js'			=> array('libs/jquery.jqzoom-core-pack.js', 'site/phones.js', '/libs/jquery.tablesorter.min.js'),
+			'js'			=> array('libs/jquery.jqzoom-core-pack.js', '/libs/jquery.metadata.js', '/libs/jquery.tablesorter.min.js', 'site/phones.js'),
 			'css'			=> array('jquery.jqzoom.css', 'jquery.tablesorter.blue.css'),
 			'description' 	=> $vendor . ', ' . $model,
 			'keywords' 		=> $vendor . ', ' . $model,
 			'body' 			=> $this->load->view(
 									'pages/phones/parts',
-									array('parts'   => $parts,
-											'region'  => $region,
-											'vendor'  => $vendor,
-											'model'   => $model
+									array(
+										'parts' => $this->phones_model->getPartsByName($vendor, str_replace('_', ' ', $model), $region),
+										'region' => $region,
+										'vendor' => $vendor,
+										'model' => $model,
+										'default_region' => $default_region,
 									),
 									true),
 		);
