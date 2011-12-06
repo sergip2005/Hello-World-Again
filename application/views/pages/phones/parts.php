@@ -25,26 +25,26 @@
 
 			<table class="tablesorter separate clearfix">
 			<thead>
-			<tr>
-				<th class="{sorter: false}">v.<?php echo $cabinet[0]['rev_num'] ?></th>
-				<th class="{sorter: false}" colspan="7"><?php
-					if ($region == '') {
-						echo 'Регион: ' . $default_region['name'];
-					} else {
-						echo 'Регион: все регионы';
-					}
-					?></th>
-			</tr>
-			<tr>
-				<th class="header">Позиция</th>
-				<th class="header">Тип</th>
-				<th class="header">Парт-<br>номер</th>
-				<th class="header">Исп-<br>ольз.</th>
-				<th class="header">Описание(eng)</th>
-				<th class="header">Описание(рус)</th>
-				<th class="header">Кол-во</th>
-				<th class="header">Цена, грн</th>
-			</tr>
+				<tr>
+					<th class="{sorter: false}">v.<?php echo $cabinet[0]['rev_num'] ?></th>
+					<th class="{sorter: false}" colspan="7"><?php
+						if ($region == '') {
+							echo 'Регион: ' . $default_region['name'];
+						} else {
+							echo 'Регион: все регионы';
+						}
+						?></th>
+				</tr>
+				<tr>
+					<th class="header">Позиция</th>
+					<th class="header">Тип</th>
+					<th class="header">Парт-<br>номер</th>
+					<th class="header">Исп-<br>ольз.</th>
+					<th class="header">Описание(eng)</th>
+					<th class="header">Описание(рус)</th>
+					<th class="header">Кол-во</th>
+					<th class="header">Цена, грн</th>
+				</tr>
 			</thead>
 
 			<tbody>
@@ -83,17 +83,26 @@
 
 		<table class="tablesorter separate clearfix">
 			<thead>
-			<tr><th class="{sorter: false}">v.<?php echo $solder[0]['rev_num'] ?></th><th class="{sorter: false}" colspan="7"></th></tr>
-			<tr>
-				<th class="header">Позиция</th>
-				<th class="header">Тип</th>
-				<th class="header">Парт-<br>номер</th>
-				<th class="header">Исп-<br>ольз.</th>
-				<th class="header">Описание(eng)</th>
-				<th class="header">Описание(рус)</th>
-				<th class="header">Кол-во</th>
-				<th class="header">Цена, грн</th>
-			</tr>
+				<tr>
+					<th class="{sorter: false}">v.<?php echo $solder[0]['rev_num'] ?></th>
+					<th class="{sorter: false}" colspan="7"><?php
+						if ($region == '') {
+							echo 'Регион: ' . $default_region['name'];
+						} else {
+							echo 'Регион: все регионы';
+						}
+						?></th>
+				</tr>
+				<tr>
+					<th class="header">Позиция</th>
+					<th class="header">Тип</th>
+					<th class="header">Парт-<br>номер</th>
+					<th class="header">Исп-<br>ольз.</th>
+					<th class="header">Описание(eng)</th>
+					<th class="header">Описание(рус)</th>
+					<th class="header">Кол-во</th>
+					<th class="header">Цена, грн</th>
+				</tr>
 			</thead>
 			<tbody>
 
