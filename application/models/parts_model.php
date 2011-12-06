@@ -139,4 +139,12 @@ class Parts_model extends CI_Model
 		return $this->db->query($q, array($query . '%', $query . '%'))->result_array();
 		}
 	}
+	function moveParts($data){
+
+		$q = 'UPDATE `phones_parts`
+			  SET phone_id  = ?
+			  WHERE part_id IN(?)';
+		$this->db->query($q, array($data['model_id'], $data['part_id']));
+		return true;
+	}
 }

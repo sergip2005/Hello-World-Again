@@ -81,4 +81,26 @@ class Parts extends MY_Controller {
 			$this->output->set_output(json_encode(array( 'status' => 0 )));
 		}
 	}
+
+	public function move(){
+
+		$this->load->model('parts_model');
+
+		$move['model_id'] = $this->input->post('model_id');
+		$move['part_id'] = $this->input->post('parts_id');
+
+		if (isset($move['model_id']) && isset($move['parts_id'])) {
+			$move = $this->parts_model->moveParts($move);
+			if ($move) {
+				$this->output->set_output(json_encode(array( 'status' => 1 )));
+				return;
+			} else {
+				$this->output->set_output(json_encode(array( 'status' => 0 )));
+				return;
+			}
+		} else {
+			$this->output->set_output(json_encode(array( 'status' => 0 )));
+			return;
+		}
+	}
 }
