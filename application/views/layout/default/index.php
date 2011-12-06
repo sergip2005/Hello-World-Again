@@ -50,6 +50,9 @@
 			<div class="main-menu clearfix"><div class="wrapper clearfix">
 				<?php echo $top_menu ?>
 			</div></div>
+			<div class="search clearfix"><div class="wrapper clearfix">
+				<?php echo $search ?>
+			</div></div>
 			<div class="user-menu clearfix"><div class="wrapper clearfix">
 				<?php echo $user_menu ?>
 			</div></div>

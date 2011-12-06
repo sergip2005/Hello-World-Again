@@ -35,6 +35,7 @@ class Pages extends MY_Controller {
 		$data['user_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/user_menu', '', true);
 		$data['bottom_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/bottom_menu', '', true);
 		$data['models_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/models_menu', array('catalog' => $catalog), true);
+		$data['search'] = $this->load->view($this->config->item('layout_dir') . 'partials/search', '', true);
 
 		$this->load->view($this->config->item('layout_dir') . 'index', $data);
 	}

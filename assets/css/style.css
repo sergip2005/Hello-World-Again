@@ -178,7 +178,8 @@ body {
 .footer .wrapper,
 .content .wrapper,
 .copyright .wrapper,
-.models-menu .wrapper{
+.models-menu .wrapper,
+.search .wrapper{
 	width: 1000px;
 	margin: 0 auto;
 	text-align: left;
@@ -457,10 +458,7 @@ border-right: 1px solid #69C;
 #parts span.selected{
 	background-color: #FCC;
 }
-div.main-menu #search{
-	float:left;
-	width: 970px;
-}
+
 .select-and-input {
 	height: 50px;
 	width: 320px;

@@ -97,13 +97,9 @@ $(document).ready(function () {
 	});*/
 });
 
-jQuery.fn.ForceNumericOnly =
-function()
-{
-	return this.each(function()
-	{
-		$(this).keydown(function(e)
-		{
+jQuery.fn.ForceNumericOnly = function(){
+	return this.each(function(){
+		$(this).keydown(function(e){
 			var key = e.charCode || e.keyCode || 0;
 			// allow backspace, tab, delete, arrows, numbers and keypad numbers ONLY
 			return (
