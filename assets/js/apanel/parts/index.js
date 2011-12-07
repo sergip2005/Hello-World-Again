@@ -19,6 +19,7 @@ partsManager = {
 						'<td><%= vendor_name %></td>' +
 						'<td><%= model_name %></td>' +
 						'<td><%= cct_ref %></td>' +
+						'<td><%= ptype %></td>' +
 						'<td><%= code %></td>' +
 						'<td><%= num %></td>' +
 						'<td><%= name %></td>' +
@@ -28,19 +29,7 @@ partsManager = {
 						'<td><%= min_num %></td>' +
 						'</tr>',
 
-		popupMove:     '<select id="move-vendors" name="vendor">' +
-					   '<% _.each(vendors, function(vendor){ %>' +
-					   '<option value="<%= vendor.id %>"><%= vendor.name %></option>' +
-					   '<% }); %>' +
-					   '</select>' +
-					   '<select id="move-models" name="model">' +
-					   '</select>' +
-					   '<button name="move" type="submit">Переместить</button>',
-
-		selectModels:  '<option value="0">Без модели</option>' +
-					   '<% _.each(models, function(model){ %>' +
-					   '<option value="<%= model.id %>"><%= model.name %></option>' +
-					   '<% }); %>'
+		selectVendors: '<option value="<%= id %>"><%= name %></option>' ,
 	},
 
 	init: function() {
@@ -51,6 +40,7 @@ partsManager = {
 		this.c = $('#controls');
 		this.s = $('#search');
 		this.mm = $('#move-models');
+		this.pc = $('#popup-content');
 
 		var pm = this;
 
@@ -61,6 +51,12 @@ partsManager = {
 			pm.s.find('input.text').removeClass('active');
 		});
 
+		//popup change vendor select
+		 pm.pc.delegate('select[name="vendor"]', 'change', function(e) {
+			pm.getVendorModels(-1, $('select[name="vendor"] option:selected').val());
+		 }).delegate('button[name="move"]', 'click', function(e) {
+			pm.moveParts(pm.pc.find('#move-models :selected').val(), pm.pc.find('input[name="move_parts_id"]').val())
+		 });
 		// dynamic models list
 		pm.m.delegate('li', 'click', function(e) {
 			pm.setModelLiActive(this, false);
@@ -232,6 +228,20 @@ partsManager = {
 					c();
 				}
 			});
+		} else {
+			if (c > 0 && parseInt(c)) {
+				$.getJSON(app.urls.getVendorModels + c, function(resp) {
+					var html = '<option value="0">Без модели</option>';
+					if (resp.status === 1) {
+						_.each(resp.data, function(v) {
+							html +=  '<option value="' + v.id + '">' + v.name + '</option>';
+
+						});
+
+					}
+					$('#move-models').html(html);
+				});
+			}
 		}
 	},
 
@@ -309,17 +319,55 @@ partsManager = {
 		}
 	},
 
+	moveParts: function(m, p) {
+		$.ajax({
+			url: '/apanel/parts/move',
+			type: 'post',
+			dataType: 'json',
+			data: {
+				parts_id: p,
+				model_id: m
+			},
+			success: function(resp) {
+				if (resp.status === 1) {
+
+				}
+			}
+		});
+	},
+
+	showMoveParts: function() {
+		var html = '<select id="move-vendors" name="vendor">';
+		var vnd;
+		var val = '';
+		var pm = partsManager;
+		pm.v.find('li').each(function(i) {
+			vnd = {
+					'id':$(this).data('id'),
+					'name':$(this).text()
+				  }
+			html += _.template( pm.templates.selectVendors, vnd);
+		});
+		html += '</select>' +
+				'<select id="move-models" name="model">' +
+				'</select>' +
+				'<button name="move" type="submit">Переместить</button><br>';
+		pm.p.find(':checked').each(function(i) {
+			val += $(this).val() + ' ,';
+		});
+		html += val + '<input type="hidden" name="move_parts_id" value="' + val + '">'
+		app.showPopup({html: html, c: function() {
+			}});
+		pm.getVendorModels(-1, pm.v.find('li').first().data('id'));
+	},
+
 	initControls: function() {
 		this.c.find('button').attr('disabled', false);
 
 		this.c.delegate('button.move', 'click',
 				function(e) {
 					e.preventDefault();
-					_.each( partsManager.v.find('li'), function(v, i) {
-						v['id'].i = v.data('id');
-						v['name'] = v.text();
-						html += _.template( partsManager.templates.popupMove, v);
-					});
+					partsManager.showMoveParts();
 					app.log('move');
 				}).delegate('button.remove', 'click',
 				function(e) {

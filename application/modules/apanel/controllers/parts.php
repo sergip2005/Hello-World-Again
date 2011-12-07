@@ -89,7 +89,7 @@ class Parts extends MY_Controller {
 		$move['model_id'] = $this->input->post('model_id');
 		$move['part_id'] = $this->input->post('parts_id');
 
-		if (isset($move['model_id']) && isset($move['parts_id'])) {
+		if (isset($move['model_id']) && isset($move['part_id'])) {
 			$move = $this->parts_model->moveParts($move);
 			if ($move) {
 				$this->output->set_output(json_encode(array( 'status' => 1 )));
