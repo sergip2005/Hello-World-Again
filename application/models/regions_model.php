@@ -93,6 +93,11 @@ class Regions_model extends CI_Model
 		return $regions;
 	}
 
+	public function getDefault(){
+		$d = $this->db->where('default', 1)->get(self::TABLE)->row_array();
+		return $d;
+	}
+
 	public function getDefaultRegionId()
 	{
 		$d = $this->db->where('default', 1)->get(self::TABLE)->row();

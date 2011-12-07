@@ -178,7 +178,8 @@ body {
 .footer .wrapper,
 .content .wrapper,
 .copyright .wrapper,
-.models-menu .wrapper{
+.models-menu .wrapper,
+.search .wrapper{
 	width: 1000px;
 	margin: 0 auto;
 	text-align: left;
@@ -357,7 +358,10 @@ body {
 .clearfix:after { clear: both; }
 /* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
 .clearfix { zoom: 1; clear: both; }
- 
+
+.tar { text-align: right }
+.tal { text-align: left }
+.tac { text-align: center }
  .w45 { width: 45px }
  
 /**
@@ -454,10 +458,7 @@ border-right: 1px solid #69C;
 #parts span.selected{
 	background-color: #FCC;
 }
-div.main-menu #search{
-	float:left;
-	width: 970px;
-}
+
 .select-and-input {
 	height: 50px;
 	width: 320px;
@@ -527,8 +528,7 @@ div.main-menu #search{
 	position: relative;
 }
 .select-and-input div.search_field div.button{
-	background: url(../images/icons/ui-default.png) no-repeat 1px 5px;
-	background-position: -160px -109px;
+	background: url(../images/icons/ui-default.png) no-repeat -160px -109px;
 	width:15px;
 	height:20px;
 	opacity: 1;
@@ -551,10 +551,18 @@ table.separate{
 .parts-content .tablesorter { width: 100% }
 
 .parts-content .zoom_src {
-	max-height: 300px;
-	max-width: 300px;
+	max-width: 1000px;
 	border: 1px solid #999;
 }
+
+.parts-content a.zoom { display: block }
+
+.parts-content table tfoot .label { text-align: center; font-weight: bold }
+.parts-content table tfoot .value { text-align: center; font-weight: bold }
+
+.parts-content table tbody .price { text-align: center }
+.parts-content table tbody .num_inp { text-align: center }
+.parts-content table tbody .num { text-align: center }
 
 .models-menu .wrapper {
 	border-bottom: 1px solid #DDDDDD;
