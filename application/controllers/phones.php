@@ -36,12 +36,12 @@ class Phones extends My_Controller {
 		$region = $region == 'all' ? $region : '';
 		$default_region = $region == '' ? $this->regions_model->getDefault() : false;
 		$data = array(
-			'title' 		=> 'Раскладка ' . $vendor . ' ' . $model,
+			'title'			=> 'Раскладка ' . $vendor . ' ' . $model,
 			'js'			=> array('libs/jquery.jqzoom-core-pack.js', '/libs/jquery.metadata.js', '/libs/jquery.tablesorter.min.js', 'site/phones.js'),
 			'css'			=> array('jquery.jqzoom.css', 'jquery.tablesorter.blue.css'),
-			'description' 	=> $vendor . ', ' . $model,
-			'keywords' 		=> $vendor . ', ' . $model,
-			'body' 			=> $this->load->view(
+			'description'	=> $vendor . ', ' . $model,
+			'keywords'		=> $vendor . ', ' . $model,
+			'body'			=> $this->load->view(
 									'pages/phones/parts',
 									array(
 										'parts' => $this->phones_model->getPartsByName($vendor, str_replace('_', ' ', $model), $region),
