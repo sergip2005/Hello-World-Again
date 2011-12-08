@@ -24,7 +24,9 @@ class Settings extends MY_Controller {
 
 	public function save(){
 		$val = array(
-				'currency_eur' => floatval($this->input->post('currency_eur'))
+				'currency_eur' => floatval($this->input->post('currency_eur')),
+				'cache_enabled' => intval($this->input->post('cache_enabled')) == 0 ? 0 : 1,
+				'cache_live_time' => intval($this->input->post('cache_live_time')),
 			);
 		write_ini_file($val, $this->config->item('ini_path') . 'settings.ini');
 		redirect('/apanel/settings/');

@@ -8,7 +8,7 @@ class Vendors_model extends CI_Model
 	const CREATE_SUCCESS = 'Вендор успешно создан';
 	const REMOVE_SUCCESS = 'Вендор успешно удален';
 	const APP_SUBMIT_ERROR = 'Извините, но возникла проблема с обработкой полученных данных. Пожалуйста, попробуйте еще раз.';
-	
+
 	public function save($id, $data)
 	{
 		$error = false;

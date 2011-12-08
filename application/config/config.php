@@ -14,7 +14,9 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://originalspareparts.com/';
+$url = ENVIRONMENT == 'development' ? 'originalspareparts.com' : 'originalspareparts.com.ua';
+
+$config['base_url'] = 'http://' . $url . '/';
 
 /*
 |--------------------------------------------------------------------------
@@ -266,7 +268,7 @@ $config['sess_time_to_update']	= 300;
 |
 */
 $config['cookie_prefix']	= '';
-$config['cookie_domain']	= 'originalspareparts.com';
+$config['cookie_domain']	= $url;
 $config['cookie_path']		= '/';
 $config['cookie_secure']	= FALSE;
 
@@ -379,6 +381,9 @@ $config['apanel_css_version'] = 1;
 $config['upload_path'] = BASEPATH . '../assets/.uploads/';
 
 $config['ini_path'] = BASEPATH . '../' . APPPATH . 'ini/';
+
+$config['cache_enabled'] = FALSE;
+$config['cache_live_time'] = 300;
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

@@ -3,6 +3,7 @@
  * @property CI_DB_active_record $db
  * @property CI_DB_forge $dbforge
  * @property CI_Benchmark $benchmark
+ * @property CI_Cache $cache
  * @property CI_Calendar $calendar
  * @property CI_Cart $cart
  * @property CI_Config $config
@@ -53,25 +54,26 @@
  */
 
 class MY_Controller extends MX_Controller {
+	public $cache_live_time = 0;
+
 	function __construct() {
 		parent::__construct();
 
+		// init sessions
 		$this->load->library('session');
 
-		//load fireignition
-		$this->load->config('fireignition');
-
-		if ($this->config->item('fireignition_enabled')) {
-			if (floor(phpversion()) < 5) {
-				log_message('error', 'PHP 5 is required to run fireignition');
-			} else {
-				$this->load->library('firephp');
-				$this->load->helper('my_fireignition');
-			}
+		// init caching
+		// http://originalspareparts.com.ua/user_guide/libraries/caching.html
+		// http://codeigniter.com/user_guide/database/caching.html
+		if ($this->config->item('cache_enabled') === TRUE) {
+			$this->load->driver('cache', array('adapter' => 'file'));
 		} else {
-			$this->load->library('firephp_fake');
-			$this->firephp =& $this->firephp_fake;
+			$this->load->driver('cache', array('adapter' => 'dummy'));
 		}
+
+		// parse settings.ini file to CI config
+		$this->_load_ini_config();
+		$this->cache_live_time = $this->config->item('cache_live_time');
 
 		//what to load in development enveronment
 		if (defined('ENVIRONMENT') && ENVIRONMENT === 'development') {
@@ -91,12 +93,28 @@ class MY_Controller extends MX_Controller {
 			$this->output->enable_profiler(FALSE);
 		}
 
-		// parse settings.ini file to CI config
-		$this->_load_ini_config();
+		//load fireignition
+		$this->load->config('fireignition');
+
+		if ($this->config->item('fireignition_enabled')) {
+			if (floor(phpversion()) < 5) {
+				log_message('error', 'PHP 5 is required to run fireignition');
+			} else {
+				$this->load->library('firephp');
+				$this->load->helper('my_fireignition');
+			}
+		} else {
+			$this->load->library('firephp_fake');
+			$this->firephp =& $this->firephp_fake;
+		}
 	}
 
 	private function _load_ini_config(){
-		$dConf = parse_ini_file($this->config->item('ini_path') . 'settings.ini');
+		$dConf = $this->cache->get('ini_config');
+		if ($dConf === FALSE) {
+			$dConf = parse_ini_file($this->config->item('ini_path') . 'settings.ini');
+			$this->cache->save('ini_config', $dConf, 3000);
+		}
 		foreach ($dConf as $key => $val) {
 			$this->config->set_item($key, $val);
 		}
