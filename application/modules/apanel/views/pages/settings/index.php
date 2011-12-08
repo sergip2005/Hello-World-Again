@@ -3,7 +3,19 @@
 		<tr>
 			<td class="title">Курс евро:</td>
 			<td class="value">
-				<input class="text w50" type="text" value="<?php echo $config['currency_eur'] ?>" name="currency_eur" />
+				<input class="text w50" type="text" value="<?php echo floatval($config['currency_eur']) ?>" name="currency_eur" />
+			</td>
+		</tr>
+		<tr>
+			<td class="title">Разрешить кеширование<br>(0 - запретить,<br>1 - разрешить):</td>
+			<td class="value">
+				<input class="text w50" type="text" value="<?php echo intval($config['cache_enabled']) ?>" name="cache_enabled" />
+			</td>
+		</tr>
+		<tr>
+			<td class="title">Время жизни кеша, секунд:</td>
+			<td class="value">
+				<input class="text w50" type="text" value="<?php echo intval($config['cache_live_time']) ?>" name="cache_live_time" />
 			</td>
 		</tr>
 		<tr>
