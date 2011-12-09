@@ -1,13 +1,16 @@
+//_.sortBy(partsManager.cache.parts, function(a){ return a.code; });
 var partsManager = {
 
 	config: {
 		vendor_id: 0,
-		model_id: 0
+		model_id: 0,
+		per_page: 200
 	},
 
 	cache: {
 		vendors: {},
-		models: {}
+		models: {},
+		parts: {}
 	},
 
 	templates: {
@@ -193,24 +196,37 @@ var partsManager = {
 	},
 
 	getVendorModels: function(s, c){
-		var pm = this;
-		if (s > 0) {
-			app.showLoading(pm.m);
-			pm.config.vendor_id = s;
-			document.location.hash = s;
-			$.getJSON(app.urls.getVendorModels + s, function(resp){
+		var pm = this,
+			success = function(resp, cache){
+				app.log('fromJSON', cache, arguments);
+				cache = typeof cache !== 'boolean' ? false : !! cache;
 				var html = '<li data-id="all" class="fixed">все</li><li data-id="none" class="fixed">без модели</li>';
 				if (resp.status === 1) {
 					_.each(resp.data, function(v) {
 						html += '<li data-id="' + v.id + '">' + v.name + '</li>';
 					});
 				}
+				if (!cache) {
+					pm.cache.models[app.urls.getVendorModels + s] = resp;
+				}
 				pm.m.html(html);
 				pm.updateControls();
 				if (_.isFunction(c)) {
 					c();
 				}
-			});
+			};
+
+		if (s > 0) {
+			app.showLoading(pm.m);
+			pm.config.vendor_id = s;
+			document.location.hash = s;
+			if (pm.cache.models.hasOwnProperty(app.urls.getVendorModels + s)) {
+				app.log('from cache', pm.cache.models[app.urls.getVendorModels + s]);
+				success(pm.cache.models[app.urls.getVendorModels + s], true);
+			} else {
+				app.log('getJSON', app.urls.getVendorModels + s);
+				$.getJSON(app.urls.getVendorModels + s, success);
+			}
 		}
 	},
 
@@ -234,9 +250,10 @@ var partsManager = {
 					if (resp.status === 1) {
 						if (!_.isEmpty(resp.data.parts)) {
 							var html = '';
+							pm.cache.parts = resp.data.parts;
 							_.each(resp.data.parts, function(v, i){
 								v.i = i;
-								html += _.template(pm.templates.partTr, v);
+								if (i < pm.config.per_page) html += _.template(pm.templates.partTr, v);
 							});
 							pm.p.html(html);
 							pm.p.parents('table').trigger('update');
@@ -269,9 +286,10 @@ var partsManager = {
 					if (resp.status === 1) {
 						if (!_.isEmpty(resp.data.parts)) {
 							var html = '';
+							pm.cache.parts = resp.data.parts;
 							_.each(resp.data.parts, function(v, i){
 								v.i = i;
-								html += _.template(pm.templates.partTr, v);
+								if (i < pm.config.per_page) html += _.template(pm.templates.partTr, v);
 							});
 							pm.p.html(html);
 							pm.p.parents('table').trigger('update');

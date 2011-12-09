@@ -69,6 +69,13 @@ function process_to_id_keyed_array($a)
 	return $b;
 }
 
-function get_only_phone_parts($a){
-	return intval($a['id']) > 0;
+/**
+ * array_filter callback
+ * checks if 'id' (phone id) property of array is not zero
+ * @param array $a
+ * @return bool
+ */
+function get_only_phone_parts($a)
+{
+	return (intval($a['id']) > 0);
 }
