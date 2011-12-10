@@ -28,10 +28,12 @@ var partsManager = {
 				'<td><%= price > 0 ? price : "нет данных" %></td>' +
 				'<td><%= min_num %></td>' +
 			'</tr>',
-		pagination: '<p>Показано <%= current.begin + " - " + current.end %> из <%= items %> элементов на <%= pages %> страницах</p>' +
+		pagination: '<p>Показано <%= current.begin + " - " + current.end %> из <%= items %> элементов на <%= pages + (pages == 1 || pages%10 == 1 ? " странице" : " страницах") %></p>' +
+				'<% if (pages > 1) { %>' +
 				'<ul><% for (var i = 1; i <= pages; i += 1) { %>' +
 					'<li><a href="#" data-page="<%= i - 1 %>"<%= (i - 1) == page ? " class=\'active\'" : "" %>><%= i %></a></li>' +
-				'<% } %></ul>'
+				'<% } %></ul>' +
+				'<% } %>'
 	},
 
 	init: function(){
@@ -279,6 +281,7 @@ var partsManager = {
 						}
 					} else {
 						pm.p.html(app.messages.noData);
+						pm.updatePages(false);
 					}
 					pm.updateControls();
 				}
@@ -318,6 +321,7 @@ var partsManager = {
 						}
 					} else {
 						pm.p.html(app.messages.noData);
+						pm.updatePages(false);
 					}
 					pm.updateControls();
 					if (_.isFunction(c)) {
@@ -361,7 +365,11 @@ var partsManager = {
 
 	updatePages: function(p){
 		var pm = this;
-		pm.pages.html(_.template(pm.templates.pagination, p));
+		if (p !== false) {
+			pm.pages.html(_.template(pm.templates.pagination, p)).show();
+		} else {
+			pm.pages.hide();
+		}
 	}
 };
 

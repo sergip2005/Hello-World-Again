@@ -72,7 +72,7 @@ class Parts extends MY_Controller {
 					}
 					if (count($parts) > 0) {
 						calculatePaginationParams($search_params['pagination']);
-						$this->output->set_output(json_encode(array( 'status' => 1, 'data' => array('parts' => $parts, 'pagination' => $search_params['pagination']))));
+						$this->output->set_output(json_encode(array( 'status' => 1, 'data' => array('parts' => $parts), 'pagination' => $search_params['pagination'])));
 						return;
 					} else {
 						$this->output->set_output(json_encode(array( 'status' => 0 )));

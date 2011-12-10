@@ -122,20 +122,19 @@ class Parts_model extends CI_Model
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
 			  LEFT JOIN `vendors` v ON p.vendor_id = v.id
 			  WHERE pa.code LIKE ?';
-		return $this->db->limit($page * $pp, $pp)->query($q, $number . '%')->result_array();
+		return $this->db->limit($page * $pp, $pp)->query($q, '%' . $number . '%')->result_array();
 	}
 
 	function countGetPartsByCode($number)
 	{
-		$pp = $this->config->item('per_page');
 		$q = 'SELECT
-			  COUNT (*) as num
+			  COUNT(*) as num
 			  FROM `phones_parts` pp
 			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
 			  LEFT JOIN `vendors` v ON p.vendor_id = v.id
 			  WHERE pa.code LIKE ?';
-		return $this->db->query($q, $number . '%')->row()->num;
+		return $this->db->query($q, '%' . $number . '%')->row()->num;
 	}
 
 	/**
