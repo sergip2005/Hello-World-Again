@@ -188,7 +188,6 @@ class Parts_model extends CI_Model
 	}
 
 	function moveParts($data){
-
 		$q = 'UPDATE `phones_parts`
 			  SET phone_id  = ?
 			  WHERE part_id IN(?)';

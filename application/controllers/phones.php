@@ -35,6 +35,8 @@ class Phones extends My_Controller {
 		$model  = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $model);
 		$region = $region == 'all' ? $region : '';
 		$default_region = $region == '' ? $this->regions_model->getDefault() : false;
+		$vendor_id = $this->phones_model->getElementId($vendor, 'Vendor');
+		$model_id = $this->phones_model->getElementId(str_replace('_', ' ', $model), 'Model');
 		$data = array(
 			'title'			=> 'Раскладка ' . $vendor . ' ' . $model,
 			'js'			=> array('libs/jquery.jqzoom-core-pack.js', '/libs/jquery.metadata.js', '/libs/jquery.tablesorter.min.js', 'site/phones.js'),
@@ -44,7 +46,7 @@ class Phones extends My_Controller {
 			'body'			=> $this->load->view(
 									'pages/phones/parts',
 									array(
-										'parts' => $this->phones_model->getPartsByName($vendor, str_replace('_', ' ', $model), $region),
+										'parts' => $this->phones_model->getParts($vendor_id, $model_id, 'all', false, 0),
 										'region' => $region,
 										'vendor' => $vendor,
 										'model' => $model,

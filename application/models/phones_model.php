@@ -59,7 +59,20 @@ class Phones_model extends CI_Model
 		$query = $region == 'all' ? $q1 : $q2;
 		return $this->db->query($query, array($vendor, $model, $region))->result_array();
 	}
+public function getElementId($name, $parameter)
+	{
+		switch ($parameter) {
+			case 'Vendor':
+				$q = 'SELECT id FROM `vendors` WHERE name = ? LIMIT 1';
 
+				return $this->db->query($q, $name)->row('id');
+			break;
+			case 'Model':
+				$q = 'SELECT id FROM `phones` WHERE model = ? LIMIT 1';
+				return $this->db->query($q, $name)->row('id');
+			break;
+		}
+	}
 	/**
 	 * @param int|string $vendor_id
 	 * @param int|string $model_id
@@ -74,7 +87,7 @@ class Phones_model extends CI_Model
 				pa.id as part_id, pa.min_num as min_num, pa.code as code, pa.name as name, pa.ptype,
 				pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
 				v.name as vendor_name, v.id as vendor_id,
-				p.model as model_name, p.id as model_id
+				p.model as model_name, p.rev_num as rev_num, p.id as model_id
 				FROM `parts` pa
 				LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id
@@ -86,7 +99,7 @@ class Phones_model extends CI_Model
 				pa.id as part_id, pa.min_num as min_num, pa.code as code, pa.name as name, pa.ptype,
 				pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
 				v.name as vendor_name, v.id as vendor_id,
-				p.model as model_name, p.id as model_id
+				p.model as model_name, p.rev_num as rev_num, p.id as model_id
 				FROM `parts` pa
 				LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id

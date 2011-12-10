@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$url = ENVIRONMENT == 'development' ? 'originalspareparts.com' : 'originalspareparts.com.ua';
+$url = ENVIRONMENT == 'development' ? 'osp.com' : 'originalspareparts.com.ua';
 
 $config['base_url'] = 'http://' . $url . '/';
 

@@ -1,5 +1,5 @@
 <div class="parts-content full-transparent">
-
+<?php $parts = $parts['parts'] ?>
 <?php if (count($parts) > 0) { ?>
 	<div id="parts">
 		<span class="s selected">Корпусные </span>
