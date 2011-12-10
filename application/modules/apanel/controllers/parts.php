@@ -40,15 +40,10 @@ class Parts extends MY_Controller {
 		$search_params['model_id'] = $this->input->post('model_id');
 		$search_params['page'] = get_posted_page($this->input->post('page'));
 
-		$search_params['query'] = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', urldecode($this->input->post('query')));
-		$search_params['parameter'] = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $this->input->post('param'));
+		$search_params['query'] = sanitate_input_string(urldecode($this->input->post('query')));
+		$search_params['parameter'] = sanitate_input_string($this->input->post('param'));
 
-		$search_params['pagination'] = array(
-			'items' => 0,
-			'page' => $search_params['page'],
-			'per_page' => $this->config->item('per_page'),
-			'pages' => 0,
-		);
+		$search_params['pagination'] = array( 'page' => $search_params['page'] );
 
 		if (!in_array($search_params['model_id'], array('all', 'none'))) {
 			$search_params['model_id'] = intval($search_params['model_id']);

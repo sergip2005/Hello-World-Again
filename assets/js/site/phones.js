@@ -10,13 +10,7 @@ $(document).ready(function(){
 					$('.c').removeClass("selected");
 					$('.s').addClass("selected");
 					setTimeout(function(){
-						$('div.cabinet a.zoom').jqzoom({
-								zoomType: 'innerzoom'//'drag',
-								//lens:true,
-								//zoomWidth: $('div.cabinet').width() - $('div.cabinet img.zoom_src').width() - 15,
-								//zoomHeight: $('div.cabinet img.zoom_src').height(),
-								//position:'right'
-							}).css('marginLeft', Math.floor(($('div.cabinet').width() - $('div.cabinet img.zoom_src').width()) / 2) + 'px');
+						$('div.cabinet a.zoom').jqzoom({ zoomType: 'innerzoom' }).css('marginLeft', Math.floor(($('div.cabinet').width() - $('div.cabinet img.zoom_src').width()) / 2) + 'px');
 					}, 50);
 				}
 
@@ -26,13 +20,7 @@ $(document).ready(function(){
 					$('.s').removeClass("selected");
 					$('.c').addClass("selected");
 					setTimeout(function(){
-						$('div.solder a.zoom').jqzoom({
-								zoomType: 'innerzoom'//'drag',
-								//lens:true,
-								//zoomWidth: $('div.solder').width() - $('div.solder img.zoom_src').width() - 15,
-								//zoomHeight: $('div.solder img.zoom_src').height(),
-								//position:'right'
-							}).css('marginLeft', Math.floor(($('div.solder').width() - $('div.solder img.zoom_src').width()) / 2) + 'px');
+						$('div.solder a.zoom').jqzoom({ zoomType: 'innerzoom' }).css('marginLeft', Math.floor(($('div.solder').width() - $('div.solder img.zoom_src').width()) / 2) + 'px');
 					}, 50);
 				}
 
@@ -83,8 +71,3 @@ $(document).ready(function(){
 	updateTotalSum('.cabinet');
 	updateTotalSum('.solder');
 });
-
-function round(amount, precision){
-	var a = Math.pow(10, precision);
-	return Math.round(amount * a) / a;
-}

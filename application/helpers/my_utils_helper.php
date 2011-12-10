@@ -96,8 +96,13 @@ function get_posted_page($val)
 	}
 }
 
+/**
+ * calculates total pages num, num of elems on current page
+ * @param array $p
+ */
 function calculatePaginationParams(&$p)
 {
+	$p['per_page'] = $this->config->item('per_page');
 	$p['pages'] = ceil($p['items'] / $p['per_page']);
 	$b = $p['page'] * $p['per_page'];
 	$e = $b + $p['per_page'];
@@ -105,4 +110,9 @@ function calculatePaginationParams(&$p)
 						'begin' => $b + 1,
 						'end' => $e > $p['items'] ? $p['items'] : $e
 					);
+}
+
+function sanitate_input_string($s)
+{
+	return preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $s);
 }

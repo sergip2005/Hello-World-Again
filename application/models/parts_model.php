@@ -168,7 +168,6 @@ class Parts_model extends CI_Model
 	}
 
 	function countSearchParts($query, $parameter){
-		$pp = $this->config->item('per_page');
 		$where = ' WHERE ';
 		if($parameter == 'models' ) {
 			$where .= ' p.model LIKE ?';
