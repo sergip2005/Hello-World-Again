@@ -30,13 +30,14 @@ class Phones extends My_Controller {
 	{
 		$this->load->model('regions_model');
 		$this->load->model('currency_model');
+		$this->load->model('vendors_model');
 
-		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $vendor);
-		$model  = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $model);
+		$vendor = sanitate_input_string($vendor);
+		$model  = sanitate_input_string($model);
 		$region = $region == 'all' ? $region : '';
 		$default_region = $region == '' ? $this->regions_model->getDefault() : false;
-		$vendor_id = $this->phones_model->getElementId($vendor, 'Vendor');
-		$model_id = $this->phones_model->getElementId(str_replace('_', ' ', $model), 'Model');
+		$vendor_id = $this->vendors_model->getByName($vendor);
+		$model_id = $this->phones_model->getModelByName(str_replace('_', ' ', $model));
 		$data = array(
 			'title'			=> 'Раскладка ' . $vendor . ' ' . $model,
 			'js'			=> array('libs/jquery.jqzoom-core-pack.js', '/libs/jquery.metadata.js', '/libs/jquery.tablesorter.min.js', 'site/phones.js'),

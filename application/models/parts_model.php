@@ -149,12 +149,12 @@ class Parts_model extends CI_Model
 		$where = ' WHERE ';
 		if($parameter == 'models' ) {
 			$where .= ' p.model LIKE ?';
-			$params = $query . '%';
+			$params = '%' . $query . '%';
 		}
 
 		if($parameter == 'part_name' ) {
 			$where .= ' pa.name LIKE ? OR pa.name_rus LIKE ?';
-			$params = array($query . '%', $query . '%');
+			$params = array('%' . $query . '%', '%' . $query . '%');
 		}
 
 		$q = 'SELECT
@@ -163,8 +163,10 @@ class Parts_model extends CI_Model
 			  FROM `phones_parts` pp
 			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
-			  LEFT JOIN `vendors` v ON p.vendor_id = v.id ' . $where;
-		return $this->db->limit($page * $pp, $pp)->query($q, $params)->result_array();
+			  LEFT JOIN `vendors` v ON p.vendor_id = v.id ' . $where
+			. ' ORDER BY pa.code'
+			. ' LIMIT ' . ($page * $pp) . ', ' . $pp;
+		return $this->db->query($q, $params)->result_array();
 	}
 
 	function countSearchParts($query, $parameter){
@@ -195,4 +197,3 @@ class Parts_model extends CI_Model
 		return true;
 	}
 }
-

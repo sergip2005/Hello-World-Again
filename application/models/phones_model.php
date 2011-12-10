@@ -59,20 +59,13 @@ class Phones_model extends CI_Model
 		$query = $region == 'all' ? $q1 : $q2;
 		return $this->db->query($query, array($vendor, $model, $region))->result_array();
 	}
-public function getElementId($name, $parameter)
-	{
-		switch ($parameter) {
-			case 'Vendor':
-				$q = 'SELECT id FROM `vendors` WHERE name = ? LIMIT 1';
 
-				return $this->db->query($q, $name)->row('id');
-			break;
-			case 'Model':
-				$q = 'SELECT id FROM `phones` WHERE model = ? LIMIT 1';
-				return $this->db->query($q, $name)->row('id');
-			break;
-		}
+	public function getModelByName($name)
+	{
+		$q = 'SELECT id FROM `phones` WHERE model = ? LIMIT 1';
+		return $this->db->query($q, $name)->row('id');
 	}
+
 	/**
 	 * @param int|string $vendor_id
 	 * @param int|string $model_id

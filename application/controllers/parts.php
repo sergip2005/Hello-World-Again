@@ -23,14 +23,15 @@ class Parts extends My_Controller {
 		Modules::run('pages/_return_page', $data);
 	}
 
-	public function search($parameter, $query)
+	public function search($parameter, $query, $page = 0)
 	{
 		$this->load->model('currency_model');
 
 		$search_params['query'] = sanitate_input_string(urldecode($query));
 		$search_params['parameter'] = sanitate_input_string($parameter);
-		$search_params['pagination']['page'] = get_posted_page($this->input->post('page'));
+		$search_params['pagination']['page'] = get_posted_page($page);
 		$parts = $this->parts_model->searchParts($search_params['query'], $search_params['parameter'], $search_params['pagination']['page']);
+		$search_params['pagination']['items'] = $this->parts_model->countSearchParts($search_params['query'], $search_params['parameter']);
 		calculatePaginationParams($search_params['pagination']);
 		$data = array(
 			'title' 		=> 'Поиск',

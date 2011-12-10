@@ -81,6 +81,7 @@ class Parts extends MY_Controller {
 			}
 
 		}
+
 		$parts = $this->phones_model->getParts($search_params['vendor_id'], $search_params['model_id'], 'all', false, $search_params['page']);
 		$search_params['pagination']['items'] = $this->phones_model->countGetParts($search_params['vendor_id'], $search_params['model_id'], 'all');
 		if (!empty($parts) && count($parts) > 0) {

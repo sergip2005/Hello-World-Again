@@ -117,3 +117,19 @@ function sanitate_input_string($s)
 {
 	return preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $s);
 }
+
+function generate_pagination_html($p, $href)
+{
+	$html  = '<p>Показано ' . $p['current']['begin'] . ' - ' . $p['current']['end']
+			. ' из ' . $p['items'] . ' элементов на '
+			. ($p['pages'] + ($p['pages'] == 1 || $p['pages'] % 10 == 1 ? " странице" : " страницах"))
+			. '</p>';
+	if ($p['pages'] > 1) {
+		$html .= '<ul>';
+		for ($i = 1; $i <= $p['pages']; $i += 1) {
+			$html .= '<li><a href="' . str_replace('%page%', $i, $href) . '"' . (($i - 1) == $p['page'] ? ' class="active"' : '') . '>' . $i . '</a></li>';
+		}
+		$html .= '</ul>';
+	}
+	return $html;
+}
