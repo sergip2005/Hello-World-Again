@@ -102,7 +102,8 @@ function get_posted_page($val)
  */
 function calculatePaginationParams(&$p)
 {
-	$p['per_page'] = $this->config->item('per_page');
+	$CI =& get_instance();
+	$p['per_page'] = $CI->config->item('per_page');
 	$p['pages'] = ceil($p['items'] / $p['per_page']);
 	$b = $p['page'] * $p['per_page'];
 	$e = $b + $p['per_page'];
