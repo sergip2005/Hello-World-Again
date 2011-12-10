@@ -82,6 +82,11 @@ class CI_Config {
 		}
 	}
 
+	public function get_all_config()
+	{
+		return $this->config;
+	}
+
 	// --------------------------------------------------------------------
 
 	/**

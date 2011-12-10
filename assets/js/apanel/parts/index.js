@@ -1,5 +1,6 @@
-var partsManager;
-partsManager = {
+//_.sortBy(partsManager.cache.parts, function(a){ return a.code; });
+var partsManager = {
+
 
 	config: {
 		vendor_id: 0,
@@ -8,28 +9,35 @@ partsManager = {
 
 	cache: {
 		vendors: {},
-		models: {}
+		models: {},
+		parts: {}
 	},
 
 	templates: {
 		partTr:
-
 				'<tr data-id="<%= id %>" class="<%= i % 2 ? \'even\' : \'odd\' %>">' +
-						'<td><input type="checkbox" value="<%= id %>"></td>' +
-						'<td><%= vendor_name %></td>' +
-						'<td><%= model_name %></td>' +
-						'<td><%= cct_ref %></td>' +
-						'<td><%= ptype %></td>' +
-						'<td><%= code %></td>' +
-						'<td><%= num %></td>' +
-						'<td><%= name %></td>' +
-						'<td><%= name_rus %></td>' +
-						'<td><%= (available ? "+" : "-") %></td>' +
-						'<td><%= price > 0 ? price : "нет данных" %></td>' +
-						'<td><%= min_num %></td>' +
-						'</tr>',
+					'<td><input type="checkbox" value="<%= id %>"></td>' +
+					'<td><%= vendor_name %></td>' +
+					'<td><%= model_name %></td>' +
+					'<td><%= cct_ref %></td>' +
+					'<td><%= ptype %></td>' +
+					'<td><%= code %></td>' +
+					'<td><%= num %></td>' +
+					'<td><%= name %></td>' +
+					'<td><%= name_rus %></td>' +
+					'<td><%= (available ? "+" : "-") %></td>' +
+					'<td><%= price > 0 ? price : "нет данных" %></td>' +
+					'<td><%= min_num %></td>' +
+				'</tr>',
 
 		selectVendors: '<option value="<%= id %>"><%= name %></option>' ,
+
+		pagination: '<p>Показано <%= current.begin + " - " + current.end %> из <%= items %> элементов на <%= pages + (pages == 1 || pages%10 == 1 ? " странице" : " страницах") %></p>' +
+				'<% if (pages > 1) { %>' +
+				'<ul><% for (var i = 1; i <= pages; i += 1) { %>' +
+					'<li><a href="#" data-page="<%= i - 1 %>"<%= (i - 1) == page ? " class=\'active\'" : "" %>><%= i %></a></li>' +
+				'<% } %></ul>' +
+				'<% } %>'
 	},
 
 	init: function() {
@@ -39,8 +47,11 @@ partsManager = {
 		this.pchbx = this.p.parent().find(':checkbox.check-all'),
 		this.c = $('#controls');
 		this.s = $('#search');
+
 		this.mm = $('#move-models');
 		this.pc = $('#popup-content');
+
+		this.pages = $('#pages-bottom, #pages-top');
 
 		var pm = this;
 
@@ -60,7 +71,7 @@ partsManager = {
 		// dynamic models list
 		pm.m.delegate('li', 'click', function(e) {
 			pm.setModelLiActive(this, false);
-			pm.getModelParts($(this).data('id'));
+			pm.getModelParts($(this).data('id'), 1);
 			pm.s.find('input.text').removeClass('active');
 		});
 
@@ -108,26 +119,26 @@ partsManager = {
 
 
 		//search bottoms clicks
-		pm.s.delegate('form[name="search_parts_code"]', 'submit',
-				function(e) {
-					e.preventDefault();
-					pm.setVendorLiActive(false, -1);
-					pm.setModelLiActive(false, -1);
-					pm.s.find('input.text').removeClass('active');
-					pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
-				}).delegate('form[name="search_model_name"]', 'submit',
-				function(e) {
-					e.preventDefault();
-					pm.setVendorLiActive(false, -1);
-					pm.setModelLiActive(false, -1);
-					pm.s.find('input.text').removeClass('active');
-					pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
-				}).delegate('form[name="search_parts_name"]', 'submit', function(e) {
+
+		pm.s.delegate('form[name="search_parts_code"]', 'submit', function(e){
 			e.preventDefault();
 			pm.setVendorLiActive(false, -1);
 			pm.setModelLiActive(false, -1);
 			pm.s.find('input.text').removeClass('active');
-			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val());
+			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val(), 1);
+		}).delegate('form[name="search_model_name"]', 'submit', function(e){
+			e.preventDefault();
+			pm.setVendorLiActive(false, -1);
+			pm.setModelLiActive(false, -1);
+			pm.s.find('input.text').removeClass('active');
+			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val(), 1);
+		}).delegate('form[name="search_parts_name"]', 'submit', function(e){
+
+			e.preventDefault();
+			pm.setVendorLiActive(false, -1);
+			pm.setModelLiActive(false, -1);
+			pm.s.find('input.text').removeClass('active');
+			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val(), 1);
 		});
 
 		// init check all
@@ -143,14 +154,27 @@ partsManager = {
 
 		//if there is path in hash -> load it
 		pm.initLocationHash();
+
+		pm.pages.delegate('a', 'click', function(e){
+			e.preventDefault();
+			var a = $(this),
+				h = location.hash.substr(1).split('/'),
+				p = a.data('page');
+
+			h[h.length - 1] = p + 1;
+			location.hash = h.join('/');
+
+			pm.initLocationHash();
+		});
 	},
 
 	/**
 	 * loads url saved in hash
 	 */
-	initLocationHash: function() {
-		var h = document.location.hash.replace('#', ''),
-				pm = this;
+
+	initLocationHash: function(){
+		var h = document.location.hash.substr(1),
+			pm = this;
 		if (h !== '') {
 			h = h.split('/');
 			if (h.length > 0) {
@@ -159,13 +183,14 @@ partsManager = {
 					pm.getVendorModels(v, function() {
 						pm.setVendorLiActive(false, v);
 						if (parseInt(h[1], 10) > 0 || h[1] == 'all' || h[1] == 'none') {
-							pm.getModelParts(h[1]);
+							pm.getModelParts(h[1], parseInt(h[2], 10));
 							pm.setModelLiActive(false, h[1]);
 						}
 					});
-				} else {
-					if (h[0] == 'model_name' || h[0] == 'parts_code' || h[0] == 'parts_name') {
-						pm.searchParts(h[1], h[0]);
+				}else{
+					if(h[0] == 'model_name' || h[0] == 'parts_code' || h[0] == 'parts_name')
+					{
+						pm.searchParts(h[1], h[0], parseInt(h[2], 10));
 					}
 				}
 			}
@@ -209,71 +234,79 @@ partsManager = {
 		}
 	},
 
-	getVendorModels: function(s, c) {
-		var pm = this;
-		if (s > 0) {
-			app.showLoading(pm.m);
-			pm.config.vendor_id = s;
-			document.location.hash = s;
-			$.getJSON(app.urls.getVendorModels + s, function(resp) {
+
+	getVendorModels: function(s, c){
+		var pm = this,
+			success = function(resp, cache){
+				app.log('getJSON', cache);
+				cache = typeof cache !== 'boolean' ? false : !! cache;
 				var html = '<li data-id="all" class="fixed">все</li><li data-id="none" class="fixed">без модели</li>';
 				if (resp.status === 1) {
 					_.each(resp.data, function(v) {
 						html += '<li data-id="' + v.id + '">' + v.name + '</li>';
 					});
 				}
+				if (!cache) {
+					pm.cache.models[app.urls.getVendorModels + s] = resp;
+				}
 				pm.m.html(html);
 				pm.updateControls();
 				if (_.isFunction(c)) {
 					c();
 				}
-			});
-		} else {
-			if (c > 0 && parseInt(c)) {
-				$.getJSON(app.urls.getVendorModels + c, function(resp) {
-					var html = '<option value="0">Без модели</option>';
-					if (resp.status === 1) {
-						_.each(resp.data, function(v) {
-							html +=  '<option value="' + v.id + '">' + v.name + '</option>';
 
-						});
+			};
 
-					}
-					$('#move-models').html(html);
-				});
+		if (s > 0) {
+			app.showLoading(pm.m);
+			pm.config.vendor_id = s;
+			document.location.hash = s;
+			if (pm.cache.models.hasOwnProperty(app.urls.getVendorModels + s)) {
+				app.log('cache', pm.cache.models[app.urls.getVendorModels + s]);
+				success(pm.cache.models[app.urls.getVendorModels + s], true);
+			} else {
+				app.log('getJSON', app.urls.getVendorModels + s);
+				$.getJSON(app.urls.getVendorModels + s, success);
 			}
 		}
 	},
 
-	searchParts: function(query, param) {
+
+	searchParts: function(query, param, p){
 		var pm = this;
 		if ((param == 'model_name' || param == 'parts_code' || param == 'parts_name') && query.length > 0) {
 			$('form[name="search_' + param + '"]').find('input.text').addClass('active').val(query);
 
 			app.showLoading(pm.p);
 			pm.pchbx.prop('checked', false);
-			document.location.hash = param + '/' + encodeURI(query);
+			pm.config.page = p;
+			document.location.hash = param + '/' + encodeURI(query) + '/' + p;
 			$.ajax({
 				url: '/apanel/parts/search',
 				type: 'post',
 				dataType: 'json',
 				data: {
 					query: query,
-					param: param
+					param: param,
+					page: parseInt(p, 10)
 				},
 				success: function(resp) {
 					if (resp.status === 1) {
 						if (!_.isEmpty(resp.data.parts)) {
 							var html = '';
-							_.each(resp.data.parts, function(v, i) {
+							pm.cache.parts = resp.data.parts;
+							_.each(resp.data.parts, function(v, i){
+
 								v.i = i;
 								html += _.template(pm.templates.partTr, v);
 							});
 							pm.p.html(html);
 							pm.p.parents('table').trigger('update');
+							pm.updatePages(resp.pagination);
 						}
 					} else {
 						pm.p.html(app.messages.noData);
+						pm.updatePages(false);
 					}
 					pm.updateControls();
 				}
@@ -281,18 +314,21 @@ partsManager = {
 		}
 	},
 
-	getModelParts: function(s, c) {
+	getModelParts: function(s, p, c){
+
 		var pm = this;
 		if (s > 0 || s === 'none' || s === 'all') {
 			app.showLoading(pm.p);
 			pm.pchbx.prop('checked', false);
 			pm.config.model_id = s;
-			document.location.hash = pm.config.vendor_id + '/' + s;
+			pm.config.page = p;
+			document.location.hash = pm.config.vendor_id + '/' + s + '/' + p;
 			$.ajax({
 				url: '/apanel/parts/search',
 				type: 'post',
 				dataType: 'json',
 				data: {
+					page: parseInt(p, 10),
 					vendor_id: pm.config.vendor_id,
 					model_id: pm.config.model_id
 				},
@@ -300,15 +336,19 @@ partsManager = {
 					if (resp.status === 1) {
 						if (!_.isEmpty(resp.data.parts)) {
 							var html = '';
-							_.each(resp.data.parts, function(v, i) {
+							pm.cache.parts = resp.data.parts;
+							_.each(resp.data.parts, function(v, i){
+
 								v.i = i;
 								html += _.template(pm.templates.partTr, v);
 							});
 							pm.p.html(html);
 							pm.p.parents('table').trigger('update');
+							pm.updatePages(resp.pagination);
 						}
 					} else {
 						pm.p.html(app.messages.noData);
+						pm.updatePages(false);
 					}
 					pm.updateControls();
 					if (_.isFunction(c)) {
@@ -393,6 +433,15 @@ partsManager = {
 		var pm = this;
 		$(tr).removeClass('checked');
 		pm.updateControls();
+	},
+
+	updatePages: function(p){
+		var pm = this;
+		if (p !== false) {
+			pm.pages.html(_.template(pm.templates.pagination, p)).show();
+		} else {
+			pm.pages.hide();
+		}
 	}
 };
 

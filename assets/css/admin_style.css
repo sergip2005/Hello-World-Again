@@ -363,7 +363,7 @@ table.desc select { min-width: 150px }
 #popup-content .buttons {
 	text-align: right;
 	padding-top: 10px;
-	margin-top: 10px;
+	margin-top: 5px;
 	border-top: solid 1px #AAA;
 }
 
@@ -766,7 +766,7 @@ table.desc select { min-width: 150px }
 }
 
 .parts-navigation .parts-table {
-	margin-top: 10px;
+	margin-top: 5px;
 	border-top:  1px solid #DDD;
 	padding-top: 5px;
 }
@@ -779,7 +779,7 @@ table.desc select { min-width: 150px }
 
 .parts-navigation .controls {
 	border-top: 1px solid #DDDDDD;
-	margin-top: 10px;
+	margin-top: 5px;
 	padding-top: 5px;
 }
 
@@ -861,3 +861,24 @@ table.desc select { min-width: 150px }
 	left: -13px;
 	display: inline-block;
 }
+
+/** pages */
+.pages {
+	border-top: 1px solid #DDDDDD;
+	margin-top: 5px;
+	padding-top: 5px;
+}
+
+.pages ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.pages ul li {
+	padding: 0;
+	float: left;
+	margin-right: 3px;
+}
+
+.pages ul li a.active { color: red; font-weight: bold; text-decoration: none }

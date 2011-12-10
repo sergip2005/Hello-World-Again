@@ -105,44 +105,88 @@ class Parts_model extends CI_Model
 		return $id;
 	}
 
-	function getPartsByCode($number)
+	/**
+	 * @TODO pagination
+	 * @param  $number
+	 * @return mixed
+	 */
+	function getPartsByCode($number, $page = 0)
 	{
+		$pp = $this->config->item('per_page');
 		$q = 'SELECT
 			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
-			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype, pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
+			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype,
+			  pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
 			  FROM `phones_parts` pp
 			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
 			  LEFT JOIN `vendors` v ON p.vendor_id = v.id
 			  WHERE pa.code LIKE ?';
-		return $this->db->query($q, $number . '%')->result_array();
+		return $this->db->limit($page * $pp, $pp)->query($q, '%' . $number . '%')->result_array();
 	}
 
-	function searchParts($query, $parameter)
+	function countGetPartsByCode($number)
 	{
-		if($parameter == 'models' ) {
 		$q = 'SELECT
-			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
-			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype, pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
+			  COUNT(*) as num
 			  FROM `phones_parts` pp
 			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
 			  LEFT JOIN `vendors` v ON p.vendor_id = v.id
-			  WHERE p.model LIKE ?';
-		return $this->db->query($q, $query . '%')->result_array();
-		}
-		if($parameter == 'part_name' ) {
-		$q = 'SELECT
-			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
-			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype, pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
-			  FROM `phones_parts` pp
-			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
-			  LEFT JOIN `phones` p ON pp.phone_id = p.id
-			  LEFT JOIN `vendors` v ON p.vendor_id = v.id
-			  WHERE pa.name LIKE ? OR pa.name_rus LIKE ?';
-		return $this->db->query($q, array($query . '%', $query . '%'))->result_array();
-		}
+			  WHERE pa.code LIKE ?';
+		return $this->db->query($q, '%' . $number . '%')->row()->num;
 	}
+
+	/**
+	 * @TODO pagination
+	 * @param $query
+	 * @param $parameter
+	 * @return mixed
+	 */
+	function searchParts($query, $parameter, $page)
+	{
+		$pp = $this->config->item('per_page');
+		$where = ' WHERE ';
+		if($parameter == 'models' ) {
+			$where .= ' p.model LIKE ?';
+			$params = $query . '%';
+		}
+
+		if($parameter == 'part_name' ) {
+			$where .= ' pa.name LIKE ? OR pa.name_rus LIKE ?';
+			$params = array($query . '%', $query . '%');
+		}
+
+		$q = 'SELECT
+			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
+			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype, pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
+			  FROM `phones_parts` pp
+			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
+			  LEFT JOIN `phones` p ON pp.phone_id = p.id
+			  LEFT JOIN `vendors` v ON p.vendor_id = v.id ' . $where;
+		return $this->db->limit($page * $pp, $pp)->query($q, $params)->result_array();
+	}
+
+	function countSearchParts($query, $parameter){
+		$where = ' WHERE ';
+		if($parameter == 'models' ) {
+			$where .= ' p.model LIKE ?';
+			$params = $query . '%';
+		}
+
+		if($parameter == 'part_name' ) {
+			$where .= ' pa.name LIKE ? OR pa.name_rus LIKE ?';
+			$params = array($query . '%', $query . '%');
+		}
+
+		$q = 'SELECT COUNT(*) as num
+			  FROM `phones_parts` pp
+			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
+			  LEFT JOIN `phones` p ON pp.phone_id = p.id
+			  LEFT JOIN `vendors` v ON p.vendor_id = v.id ' . $where;
+		return $this->db->query($q, $params)->row()->num;
+	}
+
 	function moveParts($data){
 
 		$q = 'UPDATE `phones_parts`
@@ -152,3 +196,4 @@ class Parts_model extends CI_Model
 		return true;
 	}
 }
+

@@ -67,7 +67,7 @@ class Phones_model extends CI_Model
 	 * @param bool|array $options
 	 * @return array|bool
 	 */
-	public function getParts($vendor_id, $model_id, $region = '', $options = false)
+	public function getParts($vendor_id, $model_id, $region = '', $options = false, $page = 0)
 	{
 		$q1 = 'SELECT
 				pp.id, pp.cct_ref as cct_ref, pp.num as num,
@@ -95,6 +95,7 @@ class Phones_model extends CI_Model
 				LEFT JOIN `regions` r ON r.id = pprr.region_id
 				WHERE pa.vendor_id = ?
 				AND r.id = (SELECT id FROM regions where `default` = 1)';
+
 		if ($model_id === 'all') {
 			$q1 .= '';
 			$q2 .= '';
@@ -109,10 +110,17 @@ class Phones_model extends CI_Model
 			$values = array($vendor_id, $model_id, $region);
 		}
 
+		if ($page !== 'all') {
+			$pp = $this->config->item('per_page');
+			$l = ' LIMIT ' . $page * $pp . ', ' . $pp;
+			$q1 .= $l;
+			$q2 .= $l;
+		}
+
 		if ($options !== false) {}
 
 		$query = $region == 'all' ? $q1 : $q2;
-		//die(print_r(array($query, $values), true));
+
 		$p = $this->db->query($query, $values);
 		if ($p->num_rows() > 0) {
 			$p = $p->result_array();
@@ -125,6 +133,46 @@ class Phones_model extends CI_Model
 			'parts' => $p,
 			'regions' => $r
 		);
+	}
+
+	public function countGetParts($vendor_id, $model_id, $region = '')
+	{
+		$q1 = 'SELECT
+				COUNT(*) as num
+				FROM `parts` pa
+				LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
+				LEFT JOIN `phones` p ON pp.phone_id = p.id
+				LEFT JOIN `vendors` v ON pa.vendor_id = v.id
+				WHERE pa.vendor_id = ?';
+
+		$q2 = 'SELECT
+				COUNT(*) as num
+				FROM `parts` pa
+				LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
+				LEFT JOIN `phones` p ON pp.phone_id = p.id
+				LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
+				LEFT JOIN `vendors` v ON pa.vendor_id = v.id
+				LEFT JOIN `regions` r ON r.id = pprr.region_id
+				WHERE pa.vendor_id = ?
+				AND r.id = (SELECT id FROM regions where `default` = 1)';
+
+		if ($model_id === 'all') {
+			$q1 .= '';
+			$q2 .= '';
+			$values = array($vendor_id, $region);
+		} elseif ($model_id === 'none') {
+			$q1 .= ' AND (pp.phone_id = 0 OR pp.phone_id IS NULL)';
+			$q2 .= ' AND (pp.phone_id = 0 OR pp.phone_id IS NULL)';
+			$values = array($vendor_id, $region);
+		} else {
+			$q1 .= ' AND pp.phone_id = ?';
+			$q2 .= ' AND pp.phone_id = ?';
+			$values = array($vendor_id, $model_id, $region);
+		}
+
+		$query = $region == 'all' ? $q1 : $q2;
+
+		return $this->db->query($query, $values)->row()->num;
 	}
 
 	public function getVendorModels($vendor)

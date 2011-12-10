@@ -7,7 +7,6 @@ class Currency_model extends CI_Model
 	public $base = 'price_eur';
 
 	function __construct(){
-		// @TODO get this from db
 		$this->rates = array(
 				'hrn' => 1,
 				'eur' => $this->config->item('currency_eur'),// base currency
