@@ -79,3 +79,30 @@ function get_only_phone_parts($a)
 {
 	return (intval($a['id']) > 0);
 }
+
+/**
+ * returns intvaled and decreased parameter of 0
+ *
+ * @param string|int $val
+ * @return int
+ */
+function get_posted_page($val)
+{
+	if ($val === 'all') {
+		return 'all';
+	} else {
+		$val = intval($val);
+		return $val > 0 ? $val - 1 : 0;
+	}
+}
+
+function calculatePaginationParams(&$p)
+{
+	$p['pages'] = ceil($p['items'] / $p['per_page']);
+	$b = $p['page'] * $p['per_page'];
+	$e = $b + $p['per_page'];
+	$p['current'] = array(
+						'begin' => $b + 1,
+						'end' => $e > $p['items'] ? $p['items'] : $e
+					);
+}

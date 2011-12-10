@@ -19,6 +19,12 @@
 			</td>
 		</tr>
 		<tr>
+			<td class="title">Кол-во элементов на странице:</td>
+			<td class="value">
+				<input class="text w50" type="text" value="<?php echo floatval($config['per_page']) ?>" name="per_page" />
+			</td>
+		</tr>
+		<tr>
 			<td colspan="2" class="controls"><input type="submit" value="Сохранить" /></td>
 		</tr>
 	</table>

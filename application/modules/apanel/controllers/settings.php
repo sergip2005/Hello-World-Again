@@ -27,8 +27,12 @@ class Settings extends MY_Controller {
 				'currency_eur' => floatval($this->input->post('currency_eur')),
 				'cache_enabled' => intval($this->input->post('cache_enabled')) == 0 ? 0 : 1,
 				'cache_live_time' => intval($this->input->post('cache_live_time')),
+				'per_page' => intval($this->input->post('per_page')),
 			);
 		write_ini_file($val, $this->config->item('ini_path') . 'settings.ini');
+		// update cache for settings file
+		$this->cache->delete('ini_config');
+		$this->cache->save('ini_config', $val, 3000);
 		redirect('/apanel/settings/');
 	}
 }

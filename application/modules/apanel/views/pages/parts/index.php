@@ -49,6 +49,10 @@
 		</div>
 	</div>
 
+	<div id="pages-top" class="pages top clearfix">
+		<ul></ul>
+	</div>
+
 	<div id="controls" class="controls clearfix">
 		<button disabled="disabled" class="move">Переместить</button>
 		<button disabled="disabled" class="change-pn">Изменить парт-номер</button>
@@ -73,6 +77,10 @@
 			</thead>
 			<tbody id="parts"></tbody>
 		</table>
+	</div>
+
+	<div id="pages-bottom" class="pages bottom clearfix">
+		<ul></ul>
 	</div>
 
 </div>
