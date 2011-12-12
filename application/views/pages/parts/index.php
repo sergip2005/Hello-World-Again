@@ -1,6 +1,10 @@
+<?php
+	$pages_html = generate_pagination_html($search_params['pagination'], '/parts/' . $search_params['query'] . '/%page%/');
+?>
 <div class="parts-content">
 <?php
 if (count($parts) > 0) { ?>
+			<div class="pages top"><?php echo $pages_html ?></div>
 
 			<table class="tablesorter separate" >
 			<thead>
@@ -34,6 +38,8 @@ if (count($parts) > 0) { ?>
 			<?php } ?>
 			</tbody>
 			</table>
+
+			<div class="pages bottom"><?php echo $pages_html ?></div>
 		<?php } else { ?>
 			Не найдено запчастей
 		<?php } ?>
