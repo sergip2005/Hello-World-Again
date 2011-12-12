@@ -34,10 +34,25 @@ class Phones extends My_Controller {
 
 		$vendor = sanitate_input_string($vendor);
 		$model  = sanitate_input_string($model);
-		$region = $region == 'all' ? $region : '';
-		$default_region = $region == '' ? $this->regions_model->getDefault() : false;
 		$vendor_id = $this->vendors_model->getByName($vendor);
-		$model_id = $this->phones_model->getModelByName(str_replace('_', ' ', $model));
+		$default_region = $region == '' ? $this->regions_model->getDefault() : false;
+		if ($model == 'none')
+		{
+			$model_id = 'none';
+			$page = $region == '' ? 0 : $region;
+			$search_params['pagination']['page'] = get_posted_page($page);
+			$search_params['vendor'] = $vendor;
+			$search_params['pagination']['items'] = $this->phones_model->countGetParts($vendor_id, $model_id, 'all');
+			$parts = $this->phones_model->getParts($vendor_id, $model_id, $default_region, false, $search_params['pagination']['page']);
+			calculatePaginationParams($search_params['pagination']);
+			$view = 'pages/parts/unsorted';
+		}else{
+			$model_id = $this->phones_model->getModelByName(str_replace('_', ' ', $model));
+			$region = $region == 'all' ? $region : '';
+			$view = 'pages/phones/parts';
+			$parts = $this->phones_model->getParts($vendor_id, $model_id, $default_region, false, 0);
+			$search_params = '';
+		}
 		$data = array(
 			'title'			=> 'Раскладка ' . $vendor . ' ' . $model,
 			'js'			=> array('libs/jquery.jqzoom-core-pack.js', '/libs/jquery.metadata.js', '/libs/jquery.tablesorter.min.js', 'site/phones.js'),
@@ -45,13 +60,14 @@ class Phones extends My_Controller {
 			'description'	=> $vendor . ', ' . $model,
 			'keywords'		=> $vendor . ', ' . $model,
 			'body'			=> $this->load->view(
-									'pages/phones/parts',
+									$view,
 									array(
-										'parts' => $this->phones_model->getParts($vendor_id, $model_id, 'all', false, 0),
+										'parts' => $parts,
 										'region' => $region,
 										'vendor' => $vendor,
 										'model' => $model,
 										'default_region' => $default_region,
+										'search_params' => $search_params,
 									),
 									true),
 		);

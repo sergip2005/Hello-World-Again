@@ -8,17 +8,21 @@ class Parts extends My_Controller {
 		$this->load->model('phones_model');
 	}
 
-	public function index($number)
+	public function index($number, $page = 0)
 	{
-		$number = sanitate_input_string(urldecode($number));
-		$parts = $this->parts_model->getPartsByCode($number);
+		$search_params['query'] = sanitate_input_string(urldecode($number));
+		$search_params['parameter'] = 'part_code';
+		$search_params['pagination']['page'] = get_posted_page($page);
+		$search_params['pagination']['items'] = $this->parts_model->countSearchParts($search_params['query'], $search_params['parameter']);
+		$parts = $this->parts_model->getPartsByCode($search_params['query'], $search_params['pagination']['page']);
+		calculatePaginationParams($search_params['pagination']);
 		$data = array(
 			'title' 		=> 'Код: ' . urldecode($number),
 			'description' 	=> '',
 			'keywords' 		=> '',
 			'css'			=> array('jquery.tablesorter.blue.css'),
 			'js'			=> array('site/parts.js', '/libs/jquery.tablesorter.min.js'),
-			'body' 			=> $this->load->view('pages/parts/index', array('parts' => $parts), true),
+			'body' 			=> $this->load->view('pages/parts/index', array('parts' => $parts, 'search_params' => $search_params), true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}
