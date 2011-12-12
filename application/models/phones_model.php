@@ -80,7 +80,8 @@ class Phones_model extends CI_Model
 				pa.id as part_id, pa.min_num as min_num, pa.code as code, pa.name as name, pa.ptype,
 				pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
 				v.name as vendor_name, v.id as vendor_id,
-				p.model as model_name, p.rev_num as rev_num, p.id as model_id
+				p.model as model_name, p.rev_num as rev_num, p.id as model_id,
+				p.image, p.solder_image, p.cabinet_image
 				FROM `parts` pa
 				LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id
@@ -92,7 +93,8 @@ class Phones_model extends CI_Model
 				pa.id as part_id, pa.min_num as min_num, pa.code as code, pa.name as name, pa.ptype,
 				pa.name_rus as name_rus, pa.price as price, pa.type as type, pa.mktel_has as available,
 				v.name as vendor_name, v.id as vendor_id,
-				p.model as model_name, p.rev_num as rev_num, p.id as model_id
+				p.model as model_name, p.rev_num as rev_num, p.id as model_id,
+				p.image, p.solder_image, p.cabinet_image
 				FROM `parts` pa
 				LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id

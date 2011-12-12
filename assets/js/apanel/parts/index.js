@@ -41,10 +41,10 @@ var partsManager = {
 	},
 
 	init: function() {
-		this.v = $('#vendors'),
-		this.m = $('#models'),
-		this.p = $('#parts'),
-		this.pchbx = this.p.parent().find(':checkbox.check-all'),
+		this.v = $('#vendors');
+		this.m = $('#models');
+		this.p = $('#parts');
+		this.pchbx = this.p.parent().find(':checkbox.check-all');
 		this.c = $('#controls');
 		this.s = $('#search');
 
@@ -68,6 +68,7 @@ var partsManager = {
 		 }).delegate('button[name="move"]', 'click', function(e) {
 			pm.moveParts(pm.pc.find('#move-models :selected').val(), pm.pc.find('input[name="move_parts_id"]').val())
 		 });
+
 		// dynamic models list
 		pm.m.delegate('li', 'click', function(e) {
 			pm.setModelLiActive(this, false);
@@ -79,19 +80,17 @@ var partsManager = {
 		pm.p.parents('table').tablesorter({ headers: { 0: { sorter: false} }, widgets: ['zebra', 'repeatHeaders'] });
 
 		// rows clicks
-		pm.p.delegate('tr', 'click',
-				function(e) {
-					$(this).find(':checkbox').trigger('click');
-				}).delegate('tr :checkbox', 'click',
-				function(e) {
-					e.stopPropagation();
-					var i = $(this);
-					if (i.prop('checked')) {
-						pm.checkRow($(this).parents('tr'));
-					} else {
-						pm.uncheckRow($(this).parents('tr'));
-					}
-				}).delegate('tr', 'dblclick', function(e) {
+		pm.p.delegate('tr', 'click', function(e){
+			$(this).find(':checkbox').trigger('click');
+		}).delegate('tr :checkbox', 'click', function(e){
+			e.stopPropagation();
+			var i = $(this);
+			if (i.prop('checked')) {
+				pm.checkRow($(this).parents('tr'));
+			} else {
+				pm.uncheckRow($(this).parents('tr'));
+			}
+		}).delegate('tr', 'dblclick', function(e) {
 			var i = $(this);
 			pm.showPartInfo(i.data('id'));
 			app.log('dblclicked', i);
@@ -143,11 +142,7 @@ var partsManager = {
 
 		// init check all
 		pm.pchbx.click(function(e) {
-			if (this.checked === true) {
-				$(this).parents('table').find(':checkbox').attr('checked', true);
-			} else {
-				$(this).parents('table').find(':checkbox').attr('checked', false);
-			}
+			$(this).parents('table').find(':checkbox').attr('checked', this.checked);
 		});
 
 		pm.initControls();
@@ -315,7 +310,6 @@ var partsManager = {
 	},
 
 	getModelParts: function(s, p, c){
-
 		var pm = this;
 		if (s > 0 || s === 'none' || s === 'all') {
 			app.showLoading(pm.p);
@@ -385,7 +379,7 @@ var partsManager = {
 			vnd = {
 					'id':$(this).data('id'),
 					'name':$(this).text()
-				  }
+				  };
 			html += _.template( pm.templates.selectVendors, vnd);
 		});
 		html += '</select>' +
@@ -419,7 +413,7 @@ var partsManager = {
 		});
 	},
 
-	updateControls: function() {
+	updateControls: function(){
 
 	},
 
