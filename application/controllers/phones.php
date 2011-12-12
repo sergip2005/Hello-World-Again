@@ -42,8 +42,8 @@ class Phones extends My_Controller {
 			$model_id = 'none';
 			$search_params['pagination']['page'] = get_posted_page($page);
 			$search_params['vendor'] = $vendor;
-			$search_params['pagination']['items'] = $this->phones_model->countGetParts($vendor_id, $model_id, $region);
-			$parts = $this->phones_model->getParts($vendor_id, $model_id, $region, false, $search_params['pagination']['page']);
+			$search_params['pagination']['items'] = $this->phones_model->countGetParts($vendor_id, $model_id, 'all');
+			$parts = $this->phones_model->getParts($vendor_id, $model_id, 'all', false, $search_params['pagination']['page']);
 			calculatePaginationParams($search_params['pagination']);
 			$view = 'pages/parts/unsorted';
 		}else{
