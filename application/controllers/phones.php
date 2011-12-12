@@ -26,7 +26,7 @@ class Phones extends My_Controller {
 		Modules::run('pages/_return_page', $data);
 	}
 
-	public function parts($vendor, $model, $region = '')
+	public function parts($vendor, $model, $page = 0, $region = '')
 	{
 		$this->load->model('regions_model');
 		$this->load->model('currency_model');
@@ -36,19 +36,18 @@ class Phones extends My_Controller {
 		$model  = sanitate_input_string($model);
 		$vendor_id = $this->vendors_model->getByName($vendor);
 		$default_region = $region == '' ? $this->regions_model->getDefault() : false;
+		$region = $region == 'all' ? $region : '';
 		if ($model == 'none')
 		{
 			$model_id = 'none';
-			$page = $region == '' ? 0 : $region;
 			$search_params['pagination']['page'] = get_posted_page($page);
 			$search_params['vendor'] = $vendor;
-			$search_params['pagination']['items'] = $this->phones_model->countGetParts($vendor_id, $model_id, 'all');
-			$parts = $this->phones_model->getParts($vendor_id, $model_id, $default_region, false, $search_params['pagination']['page']);
+			$search_params['pagination']['items'] = $this->phones_model->countGetParts($vendor_id, $model_id, $region);
+			$parts = $this->phones_model->getParts($vendor_id, $model_id, $region, false, $search_params['pagination']['page']);
 			calculatePaginationParams($search_params['pagination']);
 			$view = 'pages/parts/unsorted';
 		}else{
 			$model_id = $this->phones_model->getModelByName(str_replace('_', ' ', $model));
-			$region = $region == 'all' ? $region : '';
 			$view = 'pages/phones/parts';
 			$parts = $this->phones_model->getParts($vendor_id, $model_id, $default_region, false, 0);
 			$search_params = '';
