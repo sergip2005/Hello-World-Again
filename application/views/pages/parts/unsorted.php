@@ -1,6 +1,6 @@
 <?php
 	$parts = $parts['parts'];
-	$pages_html = generate_pagination_html($search_params['pagination'], '/parts/' . $search_params['vendor'] . '/none/%page%/');
+	$pages_html = generate_pagination_html($search_params['pagination'], '/phones/' . $search_params['vendor'] . '/none/%page%/');
 ?>
 <div class="parts-content">
 <?php if (count($parts) > 0) { ?>
@@ -30,7 +30,7 @@
 			<tr>
 				<td><a href="/phones/<?php echo strtolower($p['vendor_name']) ?>"><?php echo $p['vendor_name'] ?></a></td>
 				<td><?php echo $p['cct_ref'] ?></td>
-				<td><?php echo $p['type'] == 'c' ? 'паечный' : 'корпусний' ?></td>
+				<td><?php echo $p['type'] == 'c' ? 'паечный' : 'корпусной' ?></td>
 				<td><?php echo $p['ptype'] ?></td>
 				<td><?php echo $p['code'] ?></td>
 				<td><?php echo $p['num'] ?></td>
