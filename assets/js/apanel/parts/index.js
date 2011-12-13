@@ -70,9 +70,23 @@ var partsManager = {
 		 });
 		// dynamic models list
 		pm.m.delegate('li', 'click', function(e) {
-			pm.setModelLiActive(this, false);
-			pm.getModelParts($(this).data('id'), 1);
+			var id = $(this).data('id');
 			pm.s.find('input.text').removeClass('active');
+			if(id == 'add_model'){
+				pm.addModel($(this).data('vendor_id'));
+			}else{
+				if(id == 'edit_model')
+				{
+					pm.editModel($(this).data('model_id'));
+				}else{
+					if(id == 'remove_model'){
+						pm.removeModel($(this).data('model_id'));
+					}else{
+						pm.setModelLiActive(this, false);
+						pm.getModelParts($(this).data('id'), 1);
+					}
+				}
+			}
 		});
 
 		// init sortables
@@ -240,10 +254,14 @@ var partsManager = {
 			success = function(resp, cache){
 				app.log('getJSON', cache);
 				cache = typeof cache !== 'boolean' ? false : !! cache;
-				var html = '<li data-id="all" class="fixed">все</li><li data-id="none" class="fixed">без модели</li>';
+				var html = '<li data-id="add_model" data-vendor_id="' + s + '" class="fixed add">создать модель</li><li data-id="all" class="fixed">все</li><li data-id="none" class="fixed">без модели</li>';
 				if (resp.status === 1) {
 					_.each(resp.data, function(v) {
-						html += '<li data-id="' + v.id + '">' + v.name + '</li>';
+						html += '<li data-id="' + v.id + '">' + v.name + '</li>' +
+								'<li data-id="edit_model" data-model_id="' + v.id + '" class="fixed button"><span class="edit-item icon-container fr" title="Редактировать модель '+ v.name +'">' +
+								'<span class="ui-icon ui-icon-pencil"></span></span></li>' +
+								'<li data-id="remove_model" data-model_id="' + v.id + '" class="fixed button"><span class="remove-item icon-container fr" title="Удалить модель '+ v.name +'">' +
+								'<span class="ui-icon ui-icon-close"></span></span></li>';
 					});
 				}
 				if (!cache) {
@@ -271,6 +289,17 @@ var partsManager = {
 		}
 	},
 
+	addModel: function(id){
+
+	},
+
+	editModel: function(id){
+
+	},
+
+	removeModel: function(id){
+
+	},
 
 	searchParts: function(query, param, p){
 		var pm = this;
