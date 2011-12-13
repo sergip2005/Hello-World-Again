@@ -70,7 +70,7 @@ var partsManager = {
 		 });
 
 		// dynamic models list
-		pm.m.delegate('li', 'click', function(e) {
+		pm.m.delegate('li:not(.add)', 'click', function(e) {
 			pm.s.find('input.text').removeClass('active');
 			pm.setModelLiActive(this, false);
 			pm.getModelParts($(this).data('id'), 1);
@@ -282,15 +282,15 @@ var partsManager = {
 	},
 
 	addModel: function(id){
-
+		app.log('add');
 	},
 
 	editModel: function(id){
-
+		app.log('edit');
 	},
 
 	removeModel: function(id){
-
+		app.log('remove');
 	},
 
 	searchParts: function(query, param, p){
