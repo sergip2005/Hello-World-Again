@@ -70,23 +70,22 @@ var partsManager = {
 		 });
 		// dynamic models list
 		pm.m.delegate('li', 'click', function(e) {
-			var id = $(this).data('id');
 			pm.s.find('input.text').removeClass('active');
-			if(id == 'add_model'){
-				pm.addModel($(this).data('vendor_id'));
-			}else{
-				if(id == 'edit_model')
-				{
-					pm.editModel($(this).data('model_id'));
-				}else{
-					if(id == 'remove_model'){
-						pm.removeModel($(this).data('model_id'));
-					}else{
-						pm.setModelLiActive(this, false);
-						pm.getModelParts($(this).data('id'), 1);
-					}
-				}
-			}
+			pm.setModelLiActive(this, false);
+			pm.getModelParts($(this).data('id'), 1);
+		});
+
+		pm.m.delegate('li span.edit-item', 'click', function(e) {
+			e.stopPropagation();
+			pm.editModel($(this).data('id'));
+		});
+		pm.m.delegate('li span.remove-item', 'click', function(e) {
+			e.stopPropagation();
+			pm.removeModel($(this).data('id'));
+		});
+		pm.m.delegate('li.add', 'click', function(e) {
+			e.stopPropagation();
+			pm.addModel($(this).data('vendor_id'));;
 		});
 
 		// init sortables
@@ -257,11 +256,9 @@ var partsManager = {
 				var html = '<li data-id="add_model" data-vendor_id="' + s + '" class="fixed add">создать модель</li><li data-id="all" class="fixed">все</li><li data-id="none" class="fixed">без модели</li>';
 				if (resp.status === 1) {
 					_.each(resp.data, function(v) {
-						html += '<li data-id="' + v.id + '">' + v.name + '</li>' +
-								'<li data-id="edit_model" data-model_id="' + v.id + '" class="fixed button"><span class="edit-item icon-container fr" title="Редактировать модель '+ v.name +'">' +
-								'<span class="ui-icon ui-icon-pencil"></span></span></li>' +
-								'<li data-id="remove_model" data-model_id="' + v.id + '" class="fixed button"><span class="remove-item icon-container fr" title="Удалить модель '+ v.name +'">' +
-								'<span class="ui-icon ui-icon-close"></span></span></li>';
+						html += '<li data-id="' + v.id + '">' + v.name + '<span data-id="' + v.id + '" class="remove-item icon-container fr" title="Удалить модель '+ v.name +'">' +
+								'<span class="ui-icon ui-icon-close"></span></span><span data-id="' + v.id + '" class="edit-item icon-container fr" title="Редактировать модель '+ v.name +'">' +
+								'<span class="ui-icon ui-icon-pencil"></span></span></li>';
 					});
 				}
 				if (!cache) {
