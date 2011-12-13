@@ -752,6 +752,9 @@ table.desc select { min-width: 150px }
 
 .parts-navigation .models-list { margin-left: 220px }
 .parts-navigation .models-list ul { margin: 0 }
+.parts-navigation .models-list li.add {color:green; font-weight: bold;}
+.parts-navigation .models-list li.button {width: 15px; padding: 2px 1px;}
+.parts-navigation .models-list li.button:hover { background: none; }
 .parts-navigation .models-list li {
 	cursor: pointer;
 	list-style: none;
