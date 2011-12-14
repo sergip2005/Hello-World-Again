@@ -37,7 +37,14 @@ var partsManager = {
 				'<ul><% for (var i = 1; i <= pages; i += 1) { %>' +
 					'<li><a href="#" data-page="<%= i - 1 %>"<%= (i - 1) == page ? " class=\'active\'" : "" %>><%= i %></a></li>' +
 				'<% } %></ul>' +
-				'<% } %>'
+				'<% } %>',
+
+		formModel:  '<label>Модель принадлежит вендору:</label><select id="vendors" name="vendor"></select><br>' +
+					'<label>Имя модели:</label><input type="text" name="" value="<%= name %>"><br>' +
+					'<label>Изображение модели:</label><input type="file" id="file_upload" name="file_upload" /><br>' +
+					'<label>Изображение корпусных деталей:</label><input type="file" id="file_upload" name="file_upload" /><br>' +
+					'<label>Изображение паечных деталей:</label><input type="file" id="file_upload" name="file_upload" /><br>' +
+					'<a href="javascript:$(\'#file_upload\').uploadifyUpload();">Upload Files</a>'
 	},
 
 	init: function() {
@@ -281,8 +288,11 @@ var partsManager = {
 		}
 	},
 
-	addModel: function(id){
-		app.log('add');
+	addModel: function(vendor_id){
+		var v = '';
+		var html = _.template(this.templates.formModel, v);
+		app.showPopup({html: html, c: function() {
+			}});
 	},
 
 	editModel: function(id){
