@@ -10,7 +10,7 @@
 	<table class="tablesorter separate" >
 		<thead>
 			<tr>
-				<th class="header" data-field="vendor"> Произв-ль</th>
+				<th class="header">Произв-ль</th>
 				<th class="header">Позиция</th>
 				<th class="header">Тип детали</th>
 				<th class="header">Тип</th>
@@ -22,17 +22,16 @@
 				<th class="header">Цена, грн</th>
 			</tr>
 		</thead>
-
 		<tbody>
 			<?php foreach ($parts as $p) {
 				$p['price'] = $this->currency_model->convert('eur', 'hrn', $p['price']);
 				?>
 			<tr>
-				<td><a href="/phones/<?php echo strtolower($p['vendor_name']) ?>"><?php echo $p['vendor_name'] ?></a></td>
+				<td><a href="/phones/<?php echo url_title($p['vendor_name'], '_', TRUE) ?>"><?php echo $p['vendor_name'] ?></a></td>
 				<td><?php echo $p['cct_ref'] ?></td>
 				<td><?php echo $p['type'] == 'c' ? 'паечный' : 'корпусной' ?></td>
 				<td><?php echo $p['ptype'] ?></td>
-				<td><?php echo $p['code'] ?></td>
+				<td><a href="/parts/<?php echo url_title($p['code'], '_', TRUE) ?>/<?php echo url_title($p['name'], '_', TRUE) ?>/"><?php echo $p['code'] ?></a></td>
 				<td><?php echo $p['num'] ?></td>
 				<td><?php echo $p['name'] ?></td>
 				<td><?php echo $p['name_rus'] ?></td>
@@ -41,7 +40,6 @@
 			</tr>
 			<?php } ?>
 		</tbody>
-
 		<tfoot>
 			<tr><td colspan="8"></td><td class="label">Всего:</td><td class="value"><span id="total">0</span> грн</td></tr>
 		</tfoot>

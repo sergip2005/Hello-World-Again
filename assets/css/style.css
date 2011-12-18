@@ -564,6 +564,10 @@ table.separate{
 .parts-content table tbody .num_inp { text-align: center }
 .parts-content table tbody .num { text-align: center }
 
+.parts-content .pages {}
+.parts-content .pages ul { list-style: none; margin: 0; padding: 0; }
+.parts-content .pages ul li { float: left; margin-right: 5px }
+
 .models-menu .wrapper {
 	border-bottom: 1px solid #DDDDDD;
 	border-top: 1px solid #DDDDDD;

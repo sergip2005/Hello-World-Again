@@ -166,7 +166,7 @@ var partsManager = {
 		});
 
 		// init check all
-		pm.pchbx.click(function(e) {
+		pm.pchbx.click(function(){
 			$(this).parents('table').find(':checkbox').attr('checked', this.checked);
 		});
 
@@ -473,7 +473,7 @@ var partsManager = {
 		pm.p.find(':checked').each(function(i) {
 			val += $(this).val() + ' ,';
 		});
-		html += val + '<input type="hidden" name="move_parts_id" value="' + val + '">'
+		html += val + '<input type="hidden" name="move_parts_id" value="' + val + '">';
 		app.showPopup({html: html, c: function() {
 			}});
 		pm.getVendorModels(-1, pm.v.find('li').first().data('id'));
