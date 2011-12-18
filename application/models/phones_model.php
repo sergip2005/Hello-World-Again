@@ -2,6 +2,10 @@
 
 class Phones_model extends CI_Model
 {
+	const SAVE_SUCCESS = 'Модель успешно сохранена';
+	const CREATE_SUCCESS = 'Модель успешно создана';
+	const REMOVE_SUCCESS = 'Модель успешно удалена';
+	const APP_SUBMIT_ERROR = 'Извините, но возникла проблема с обработкой полученных данных. Пожалуйста, попробуйте еще раз. Возможно имя модели не уникально.';
 	public $phonePartFields = array(
 		'cct_ref', 'num', 'comment'
 	);
@@ -307,7 +311,10 @@ class Phones_model extends CI_Model
 		if ($id > 0) { // update
 			$this->db->where('id', $id)->update('phones', $data);
 		} else { // insert
-			$this->db->insert('phones', $data);
+			$res = $this->db->query('SELECT * FROM phones WHERE model = "' . $data['model'] . '"');
+			if ($res->num_rows() > 0) {return false;}
+				$this->db->insert('phones', $data);
+
 			$id = $this->db->insert_id();
 		}
 		return $id;
@@ -491,6 +498,10 @@ class Phones_model extends CI_Model
 	 */
 	public function removePhoneParts($mId, $pIds){
 		$this->db->where('phone_id', $mId)->where_in('id', $pIds)->delete('phones_parts');
+		return true;
+	}
+	public function removeModel($mId){
+		$this->db->where('id', $mId)->delete('phones');
 		return true;
 	}
 }

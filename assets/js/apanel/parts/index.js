@@ -40,12 +40,12 @@ var partsManager = {
 				'<% } %>',
 
 		formModel:  '<table>' +
-					'<tr><td><label class="fr" for="model_name">Имя модели:</label></td><td  class="fl"><input type="text" id="model_name" name="model_name" value="<%= name %>"></td></tr>' +
-					'<tr><td><label class="fr" for="vendors">Модель принадлежит вендору:</label></td><td  class="fl"><select id="vendors" name="vendors"></select></td></tr>' +
-					'<tr><td><label class="fr" for="model_image">Изображение модели:</label></td><td  class="fl"><% if(model_image != "") { model_image == "" ? "" : \'<a href="/assets/images/phones/">\' + model_image + \'</a>\' } %><input type="file" id="model_image" name="model_image" /></td></tr>' +
-					'<tr><td><label class="fr" for="solder_image">Изображение корпусных деталей:</label></td><td class="fl"><input type="file" id="solder_image" name="solder_image" /></td></tr>' +
-					'<tr><td><label class="fr" for="cabinet_image">Изображение паечных деталей:</label></td><td class="fl"><input type="file" id="cabinet_image" name="cabinet_image" /></td></tr>' +
-					'<tr><td><button class="fr" name="create_model">Создать</button></td><td  class="fl"><button name="close">Отмена</button></td></tr></table>'
+					'<tr><td><label class="fr" for="model_name">Имя модели:</label></td><td  class="fl"><input type="text" data-id="<%= id %>" id="model_name" name="model_name" value="<%= name %>"></td></tr>' +
+					'<tr><td><label class="fr" for="vendors">Модель принадлежит вендору:</label></td><td  class="fl"><select id="vendors_popup" name="vendors"></select></td></tr>' +
+					'<tr><td><label class="fr" for="model_image">Изображение модели:</label></td><td  class="fl"><%=  model_image == "" ? "" : \'<a href="/assets/images/phones/\' + model_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="model_image" name="model_image" /></td></tr>' +
+					'<tr><td><label class="fr" for="solder_image">Изображение корпусных деталей:</label></td><td class="fl"><%=  solder_image == "" ? "" : \'<a href="/assets/images/phones/\' + solder_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="solder_image" name="solder_image" /></td></tr>' +
+					'<tr><td><label class="fr" for="cabinet_image">Изображение паечных деталей:</label></td><td class="fl"><%=  cabinet_image == "" ? "" : \'<a href="/assets/images/phones/\' + cabinet_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="cabinet_image" name="cabinet_image" /></td></tr>' +
+					'<tr><td><button class="fr" name="<%= type %>_model" <%=  type == "create" ? "disabled" : "" %>>Создать</button></td><td  class="fl"><button name="close">Отмена</button></td></tr></table>'
 	},
 
 	init: function() {
@@ -70,15 +70,23 @@ var partsManager = {
 			pm.s.find('input.text').removeClass('active');
 		});
 
-		//popup change vendor select
+		//popup form
 		 pm.pc.delegate('select[name="vendor"]', 'change', function(e) {
 			pm.getVendorModels(-1, $('select[name="vendor"] option:selected').val());
 		 }).delegate('button[name="move"]', 'click', function(e) {
 			pm.moveParts(pm.pc.find('#move-models :selected').val(), pm.pc.find('input[name="move_parts_id"]').val())
 		 }).delegate('button[name="create_model"]', 'click', function(e) {
+			pm.manageModel('save', '', $('#vendors_popup :selected').val());
+
+		 }).delegate('button[name="edit_model"]', 'click', function(e) {
+			pm.manageModel('save', $('#model_name').data('id'), $('#vendors_popup :selected').val());
 			$('#model_image').uploadifyUpload();
+			$('#cabinet_image').uploadifyUpload();
+			$('#solder_image').uploadifyUpload();
 		 }).delegate('button[name="close"]', 'click', function(e) {
 			app.popup.add(app.splash).hide();
+		 }).delegate('input[name="model_name"]', 'keyup', function(e) {
+			pm.pc.find('button[name="create_model"]').prop('disabled', false);
 		 });
 
 		// dynamic models list
@@ -94,7 +102,9 @@ var partsManager = {
 		});
 		pm.m.delegate('li span.remove-item', 'click', function(e) {
 			e.stopPropagation();
-			pm.removeModel($(this).data('id'));
+			if (confirm('Вы действительно хотите удалить модель ' + $(this).parent().text() + '?' )) {
+				pm.manageModel('remove', $(this).data('id'), '');
+			}
 		});
 		pm.m.delegate('li.add', 'click', function(e) {
 			e.stopPropagation();
@@ -296,12 +306,15 @@ var partsManager = {
 	formModel: function(model_id, vendor_id){
 		var pm = this;
 		var v = {
+				'id': '',
 				'name': '',
 				'model_image': '',
 				'cabinet_image': '',
-				'solder_image': ''
+				'solder_image': '',
+				'type': 'create'
 			}
 		var html = '';
+		var model_name = '';
 		if(model_id == 0)
 		{
 			html = _.template(pm.templates.formModel, v);
@@ -310,11 +323,14 @@ var partsManager = {
 			_.each(pm.cache.models['/apanel/models/get_by_vendor/' + vendor_id].data, function(e, i) {
 				if(e.id == model_id ){
 					v = {
+						'id': e.id,
 						'name': e.name,
 						'model_image': e.image,
 						'cabinet_image': e.cabinet_image,
-						'solder_image': e.solder_image
+						'solder_image': e.solder_image,
+						'type': 'edit'
 					}
+					model_name = e.name;
 				}
 			html = _.template(pm.templates.formModel, v);
 			app.showPopup({html: html, c: function() {}});
@@ -329,18 +345,68 @@ var partsManager = {
 				  };
 		html += _.template(pm.templates.selectVendors, v);
 		});
-		pm.pc.find('select#vendors').html(html);
+		pm.pc.find('select#vendors_popup').html(html);
+
 		$('#model_image').uploadify({
 		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
-		  'script'      : '/apanel/models/images_upload',
+		  'script'      : '../../uploadify.php',
 		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
-		  'folder'      : '/uploads',
+		  'folder'      : '/assets/images/phones/' + model_name,
+		  'scriptData'  : {'modelId': model_id, 'img': 'image'},
 		  'buttonText'  : 'browse'
 		});
+		$('#solder_image').uploadify({
+		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
+		  'script'      : '../../uploadify.php',
+		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
+		  'folder'      : '/assets/images/phones/' +  model_name,
+		  'scriptData'  : {'modelId': model_id, 'img': 'solder_'},
+		  'buttonText'  : 'browse'
+		});
+		$('#cabinet_image').uploadify({
+		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
+		  'script'      : '../../uploadify.php',
+		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
+		  'folder'      : '/assets/images/phones/' +  model_name,
+		  'scriptData'  : {'modelId': model_id, 'img': 'cabinet_'},
+		  'buttonText'  : 'browse'
+		});
+	
 	},
 
-	addModel: function(){
 
+	manageModel: function(url, m_id, v_id){
+		var model =  $('#model_name').val();
+		$.ajax({
+				url: '/apanel/models/' + url,
+				type: 'post',
+				dataType: 'json',
+				data: {
+					id: m_id,
+					vendor_id: v_id,
+					name: model
+				},
+				success: function(resp) {
+					if (resp.status === 1) {
+						app.showMessage({html: resp.message});
+						if(m_id == '') {
+							var id = resp.item.id;
+							$('#model_image').uploadifySettings('scriptData', {'modelId': id});
+							$('#solder_image').uploadifySettings('scriptData', {'modelId': id});
+							$('#cabinet_image').uploadifySettings('scriptData', {'modelId': id});
+							$('#model_image').uploadifySettings('folder' , '/assets/images/phones/' + resp.item.model);
+							$('#solder_image').uploadifySettings('folder' , '/assets/images/phones/' + resp.item.model);
+							$('#cabinet_image').uploadifySettings('folder', '/assets/images/phones/' + resp.item.model);
+							$('#model_image').uploadifyUpload();
+							$('#cabinet_image').uploadifyUpload();
+							$('#solder_image').uploadifyUpload();
+						}
+						
+					} else {
+						app.showMessage({html: resp.error});
+					}
+				}
+		});
 	},
 
 	editModel: function(id){

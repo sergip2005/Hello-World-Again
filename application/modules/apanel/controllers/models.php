@@ -40,17 +40,18 @@ class Models extends MY_Controller {
 	{
 		$id = intval($this->input->post('id'));
 		$name = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('name'));
-		$data = array('name' => $name);
+		$vendor_id = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('vendor_id'));
+		$data = array('model' => $name, 'vendor_id' => $vendor_id);
 
-		$data['id'] = $this->phones_model->save($id, $data );
+		$data['id'] = $this->phones_model->saveModel($id, $data );
 		if ($data['id'] > 0) {
 			$this->output->set_output(json_encode(array(
 				'status'  => 1,
 				'item'    => $data,
-				'message' => Regions_model::SAVE_SUCCESS
+				'message' => Phones_model::SAVE_SUCCESS
 				)));
 		}else {
-			echo json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR));
+			echo json_encode(array('status' => 0, 'error' => Phones_model::APP_SUBMIT_ERROR));
 		}
 	}
 
@@ -62,19 +63,19 @@ class Models extends MY_Controller {
 			$this->output->set_output( json_encode(array(
 				'status'  => 1,
 				'item'    => $data,
-				'message' => Regions_model::SAVE_SUCCESS
+				'message' => Phones_model::SAVE_SUCCESS
 				)));
 		} else {
-			$this->output->set_output(json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR)));
+			$this->output->set_output(json_encode(array('status' => 0, 'error' => Phones_model::APP_SUBMIT_ERROR)));
 		}
 	}
 	public function remove()
 	{
 		$id = intval($this->input->post('id'));
-		if ($this->phones_model->remove($id)) {
-			$this->output->set_output(json_encode(array('status' => 1, 'message' => Regions_model::REMOVE_SUCCESS)));
+		if ($this->phones_model->removeModel($id)) {
+			$this->output->set_output(json_encode(array('status' => 1, 'message' => Phones_model::REMOVE_SUCCESS)));
 		} else {
-			$this->output->set_output(json_encode(array('status' => 0, 'error' => Regions_model::APP_SUBMIT_ERROR)));
+			$this->output->set_output(json_encode(array('status' => 0, 'error' => Phones_model::APP_SUBMIT_ERROR)));
 		}
 
     }
