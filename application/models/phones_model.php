@@ -199,7 +199,7 @@ class Phones_model extends CI_Model
 			$vendor = $vendor['id'];
 		}
 
-		$query = 'SELECT id, model as name, rev_num, rev_desc, rev_date FROM `phones` WHERE vendor_id = ? ORDER BY model';
+		$query = 'SELECT id, model as name, rev_num, rev_desc, rev_date, image, solder_image, cabinet_image FROM `phones` WHERE vendor_id = ? ORDER BY model';
 		$res = $this->db->query($query, array($vendor));
 		if ($res->num_rows > 0) {
 			$res = $res->result_array();

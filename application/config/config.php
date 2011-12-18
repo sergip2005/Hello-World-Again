@@ -379,6 +379,7 @@ $config['apanel_css_version'] = 1;
 
 /** uploads */
 $config['upload_path'] = BASEPATH . '../assets/.uploads/';
+$config['model_images_upload_path'] = BASEPATH . '../assets/images/phones/';
 
 $config['ini_path'] = BASEPATH . '../' . APPPATH . 'ini/';
 

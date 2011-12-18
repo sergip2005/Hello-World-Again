@@ -42,6 +42,7 @@
 $route['default_controller'] = 'phones';
 
 //STATIC PAGES
+
 $route['about'] = '/static_page/view/about';
 $route['contacts'] = '/static_page/view/contacts';
 $route['how-to-order'] = '/static_page/view/how-to-order';
@@ -53,6 +54,7 @@ $route['parts/(:any)'] = '/parts/index/$1';
 $route['phones/(:any)/(:any)'] = '/phones/parts/$1/$2';
 $route['phones/(:any)/(:any)/(:any)'] = '/phones/parts/$1/$2/$3';
 $route['phones/(:any)'] = '/phones/vendor/$1';
+
 
 // AUTH
 $route['login'] = '/auth/login/';

@@ -78,5 +78,22 @@ class Models extends MY_Controller {
 		}
 
     }
+	public function images_upload()
+	{
+		$config = array(
+				'upload_path'	=> $this->config->item('model_images_upload_path') . '/test/',
+				'allowed_types' => 'xls|xlsx|pdf|jpg|png|gif',
+				'max_size'		=> '0',
+			);
+
+		$this->load->library('upload', $config);
+
+		if (! $this->upload->do_upload('model_image')) {
+			$this->session->set_flashdata('message', $this->upload->display_errors());
+			redirect('apanel/parts/');
+		} else {
+			$this->output->set_output(json_encode($this->upload->data()));
+		}
+	}
 }
  

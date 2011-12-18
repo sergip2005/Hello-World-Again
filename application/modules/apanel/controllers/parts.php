@@ -24,8 +24,8 @@ class Parts extends MY_Controller {
 
 		$template = array(
 			'title'	=> 'Запчасти',
-			'css'	=> array(),
-			'js'	=> array('apanel/parts/index.js'),
+			'css'	=> array('uploadify.css'),
+			'js'	=> array('apanel/parts/index.js', 'apanel/uploadify-v2.1.4/swfobject.js', 'apanel/uploadify-v2.1.4/jquery.uploadify.v2.1.4.min.js'),
 			'body'	=> $this->load->view('pages/parts/index', $data, true),
 		);
 
