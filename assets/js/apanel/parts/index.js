@@ -60,6 +60,7 @@ var partsManager = {
 		this.pc = $('#popup-content');
 
 		this.pages = $('#pages-bottom, #pages-top');
+		this.hasUploadQueue = new Array();
 
 		var pm = this;
 
@@ -360,7 +361,16 @@ var partsManager = {
 		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
 		  'folder'      : '/assets/images/phones/' + model_name,
 		  'scriptData'  : {'modelId': model_id, 'img': 'image'},
-		  'buttonText'  : 'browse'
+		  'buttonText'  : 'browse',
+		  'onOpen'      : function() {pm.hasUploadQueue.push(1)},
+		  'onComplete'  : function() {
+			              pm.hasUploadQueue.pop();
+						  if(!pm.hasUploadQueue.length){
+							pm.clearCache('models', $('#vendors_popup :selected').val());
+							pm.getVendorModels($('#vendors_popup :selected').val());
+							app.popup.add(app.splash).hide();
+						  }
+						}
 		});
 		$('#solder_image').uploadify({
 		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
@@ -368,7 +378,16 @@ var partsManager = {
 		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
 		  'folder'      : '/assets/images/phones/' +  model_name,
 		  'scriptData'  : {'modelId': model_id, 'img': 'solder_'},
-		  'buttonText'  : 'browse'
+		  'buttonText'  : 'browse',
+		  'onOpen'      : function() {pm.hasUploadQueue.push(1)},
+		  'onComplete'  : function() {
+			              pm.hasUploadQueue.pop();
+						  if(!pm.hasUploadQueue.length){
+							pm.clearCache('models', $('#vendors_popup :selected').val());
+							pm.getVendorModels($('#vendors_popup :selected').val());
+							app.popup.add(app.splash).hide();
+						  }
+						}
 		});
 		$('#cabinet_image').uploadify({
 		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
@@ -377,8 +396,14 @@ var partsManager = {
 		  'folder'      : '/assets/images/phones/' +  model_name,
 		  'scriptData'  : {'modelId': model_id, 'img': 'cabinet_'},
 		  'buttonText'  : 'browse',
-		  'onComplete'  : function(data) {
-						  alert('There are ' + data.fileCount + ' files remaining in the queue.');
+		  'onOpen'      : function() {pm.hasUploadQueue.push(1)},
+		  'onComplete'  : function() {
+			              pm.hasUploadQueue.pop();
+						  if(!pm.hasUploadQueue.length){
+							pm.clearCache('models', $('#vendors_popup :selected').val());
+							pm.getVendorModels($('#vendors_popup :selected').val());
+							app.popup.add(app.splash).hide();
+						  }
 						}
 		});
 	
