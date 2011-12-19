@@ -45,7 +45,7 @@ var partsManager = {
 					'<tr><td><label class="fr" for="model_image">Изображение модели:</label></td><td  class="fl"><%=  model_image == "" ? "" : \'<a href="/assets/images/phones/\' + model_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="model_image" name="model_image" /></td></tr>' +
 					'<tr><td><label class="fr" for="solder_image">Изображение корпусных деталей:</label></td><td class="fl"><%=  solder_image == "" ? "" : \'<a href="/assets/images/phones/\' + solder_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="solder_image" name="solder_image" /></td></tr>' +
 					'<tr><td><label class="fr" for="cabinet_image">Изображение паечных деталей:</label></td><td class="fl"><%=  cabinet_image == "" ? "" : \'<a href="/assets/images/phones/\' + cabinet_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="cabinet_image" name="cabinet_image" /></td></tr>' +
-					'<tr><td><button class="fr" name="<%= type %>_model" <%=  type == "create" ? "disabled" : "" %>>Создать</button></td><td  class="fl"><button name="close">Отмена</button></td></tr></table>'
+					'<tr><td><button class="fr" name="<%= type %>_model" <%=  type == "create" ? "disabled" : "" %>><%=  type == "create" ? "Создать" : "Изменить" %></button></td><td  class="fl"><button name="close">Отмена</button></td></tr></table>'
 	},
 
 	init: function() {
@@ -60,7 +60,7 @@ var partsManager = {
 		this.pc = $('#popup-content');
 
 		this.pages = $('#pages-bottom, #pages-top');
-		this.hasUploadQueue = new Array();
+		this.hasUploadQueue = [];
 
 		var pm = this;
 
@@ -355,58 +355,31 @@ var partsManager = {
 		});
 		pm.pc.find('select#vendors_popup').html(html);
 
-		$('#model_image').uploadify({
-		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
-		  'script'      : '../../uploadify.php',
-		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
-		  'folder'      : '/assets/images/phones/' + model_name,
-		  'scriptData'  : {'modelId': model_id, 'img': 'image'},
-		  'buttonText'  : 'browse',
-		  'onOpen'      : function() {pm.hasUploadQueue.push(1)},
-		  'onComplete'  : function() {
-			              pm.hasUploadQueue.pop();
-						  if(!pm.hasUploadQueue.length){
-							pm.clearCache('models', $('#vendors_popup :selected').val());
-							pm.getVendorModels($('#vendors_popup :selected').val());
-							app.popup.add(app.splash).hide();
-						  }
-						}
-		});
-		$('#solder_image').uploadify({
-		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
-		  'script'      : '../../uploadify.php',
-		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
-		  'folder'      : '/assets/images/phones/' +  model_name,
-		  'scriptData'  : {'modelId': model_id, 'img': 'solder_'},
-		  'buttonText'  : 'browse',
-		  'onOpen'      : function() {pm.hasUploadQueue.push(1)},
-		  'onComplete'  : function() {
-			              pm.hasUploadQueue.pop();
-						  if(!pm.hasUploadQueue.length){
-							pm.clearCache('models', $('#vendors_popup :selected').val());
-							pm.getVendorModels($('#vendors_popup :selected').val());
-							app.popup.add(app.splash).hide();
-						  }
-						}
-		});
-		$('#cabinet_image').uploadify({
-		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
-		  'script'      : '../../uploadify.php',
-		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
-		  'folder'      : '/assets/images/phones/' +  model_name,
-		  'scriptData'  : {'modelId': model_id, 'img': 'cabinet_'},
-		  'buttonText'  : 'browse',
-		  'onOpen'      : function() {pm.hasUploadQueue.push(1)},
-		  'onComplete'  : function() {
-			              pm.hasUploadQueue.pop();
-						  if(!pm.hasUploadQueue.length){
-							pm.clearCache('models', $('#vendors_popup :selected').val());
-							pm.getVendorModels($('#vendors_popup :selected').val());
-							app.popup.add(app.splash).hide();
-						  }
-						}
-		});
+		$('#model_image').uploadify(pm.getUploadifySettings(model_name, model_id, 'image'));
+		$('#solder_image').uploadify(pm.getUploadifySettings(model_name, model_id, 'solder_'));
+		$('#cabinet_image').uploadify(pm.getUploadifySettings(model_name, model_id, 'cabinet_'));
 	
+	},
+
+	getUploadifySettings: function(model_name, model_id, type ){
+		var v = $('#vendors_popup :selected').val();
+		var pm = partsManager;
+		return {
+		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
+		  'script'      : '../../uploadify.php',
+		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
+		  'folder'      : '/assets/images/phones/' +  model_name,
+		  'scriptData'  : {'modelId': model_id, 'img': type},
+		  'buttonText'  : 'browse',
+		  'onOpen'      : function() {pm.hasUploadQueue.push(1)},
+		  'onComplete'  : function() {
+			              pm.hasUploadQueue.pop();
+						  if(!pm.hasUploadQueue.length){
+							pm.clearCache('models', v);
+							pm.getVendorModels(v);
+							app.popup.add(app.splash).hide();
+						  }
+						}};
 	},
 
 
@@ -424,25 +397,31 @@ var partsManager = {
 				success: function(resp) {
 					if (resp.status === 1) {
 						app.showMessage({html: resp.message});
+						var pm = partsManager;
 						if(m_id == '') {
 							var id = resp.item.id;
-							$('#model_image').uploadifySettings('scriptData', {'modelId': id});
-							$('#solder_image').uploadifySettings('scriptData', {'modelId': id});
-							$('#cabinet_image').uploadifySettings('scriptData', {'modelId': id});
-							$('#model_image').uploadifySettings('folder' , '/assets/images/phones/' + resp.item.model);
-							$('#solder_image').uploadifySettings('folder' , '/assets/images/phones/' + resp.item.model);
-							$('#cabinet_image').uploadifySettings('folder', '/assets/images/phones/' + resp.item.model);
-							$('#model_image').uploadifyUpload();
-							$('#cabinet_image').uploadifyUpload();
-							$('#solder_image').uploadifyUpload();
-							partsManager.clearCache('models', $('#vendors_popup :selected').val());
-							partsManager.getVendorModels($('#vendors_popup :selected').val());
+							var m = resp.item.model;
+							var m_i = $('#model_image');
+							var s_i = $('#solder_image');
+							var c_i = $('#cabinet_image');
+							var v = $('#vendors_popup :selected').val();
+							m_i.uploadifySettings('scriptData', {'modelId': id});
+							s_i.uploadifySettings('scriptData', {'modelId': id});
+							c_i.uploadifySettings('scriptData', {'modelId': id});
+							m_i.uploadifySettings('folder' , '/assets/images/phones/' + m);
+							s_i.uploadifySettings('folder' , '/assets/images/phones/' + m);
+							c_i.uploadifySettings('folder', '/assets/images/phones/' + m);
+							m_i.uploadifyUpload();
+							c_i.uploadifyUpload();
+							s_i.uploadifyUpload();
+							pm.clearCache('models', v);
+							pm.getVendorModels(v);
 						}
 						if(url = 'remove'){
-							partsManager.clearCache('models', $('#vendors li.active').data('id'));
-							partsManager.getVendorModels($('#vendors li.active').data('id'));
+							var v = $('#vendors li.active').data('id');
+							pm.clearCache('models', v);
+							pm.getVendorModels(v);
 						}
-						
 					} else {
 						app.showMessage({html: resp.error});
 					}

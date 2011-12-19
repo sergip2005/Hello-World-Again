@@ -858,6 +858,8 @@ table.desc select { min-width: 150px }
 	width:15px;
 	height:20px;
 	opacity: 1;
+	filter:alpha(opacity=100);
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../images/icons/ui-default.png');
 }
 .search .select-and-input div.search_code input.submit, .select-and-input div.search_model input.submit, .select-and-input div.search_name input.submit{
 	display: inline-block;
@@ -867,7 +869,18 @@ table.desc select { min-width: 150px }
 	left: -13px;
 	display: inline-block;
 }
-
+.ie6 .search .select-and-input div.search_code div.button,.ie6 .select-and-input div.search_model div.button,.ie6 .select-and-input div.search_name div.button,
+.ie7 .search .select-and-input div.search_code div.button,.ie7 .select-and-input div.search_model div.button,.ie7 .select-and-input div.search_name div.button,
+.ie8 .search .select-and-input div.search_code div.button,.ie8 .select-and-input div.search_model div.button,.ie8 .select-and-input div.search_name div.button {
+	left: 0px;
+	display: block;
+}
+.ie6 .select-and-input div.search_code input.submit,.ie6 .select-and-input div.search_model input.submit,.ie6 .select-and-input div.search_name input.submit,
+.ie7 .select-and-input div.search_code input.submit,.ie7 .select-and-input div.search_model input.submit,.ie7 .select-and-input div.search_name input.submit,
+.ie8 .select-and-input div.search_code input.submit,.ie8 .select-and-input div.search_model input.submit,.ie8 .select-and-input div.search_name input.submit{
+	top:-22px;
+	filter:alpha(opacity=0);
+}
 /** pages */
 .pages {
 	border-top: 1px solid #DDDDDD;
