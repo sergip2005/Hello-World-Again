@@ -28,13 +28,14 @@ if (!empty($_FILES)) {
 
 	$success = mysql_select_db ('osp');
 	mysql_query('SET NAMES utf8 COLLATE utf8_general_ci');
-	$result = mysql_query('SELECT model FROM phones WHERE id = ' . $_POST['modelId'] . ' LIMIT 1');
+	$id = intval($_POST['modelId']);
+	$result = mysql_query('SELECT model FROM phones WHERE id = ' . $id . ' LIMIT 1');
 	$row = mysql_fetch_array($result);
 	$prefix = $_POST['img'] == 'image' ? '' : $_POST['img'];
 	$tempFile = $_FILES['Filedata']['tmp_name'];
 	$targetPath = $_SERVER['DOCUMENT_ROOT'] . $_REQUEST['folder'] . '/';
 
-	$targetFile =  str_replace('//','/',$targetPath) . $prefix . $row['model'] . '.jpg';
+	$targetFile =  str_replace('//','/',$targetPath) . $_FILES['Filedata']['name'];
 	mkdir(str_replace('//','/',$targetPath), 0755, true);
 	
 	// $fileTypes  = str_replace('*.','',$_REQUEST['fileext']);
@@ -47,7 +48,7 @@ if (!empty($_FILES)) {
 		// mkdir(str_replace('//','/',$targetPath), 0755, true);
 		
 		if(move_uploaded_file($tempFile,$targetFile)){
-			mysql_query('UPDATE phones SET ' . $prefix . 'image = "' . $row['model'] . '/' . $prefix . $row['model'] . '.jpg"' . ' WHERE id = ' . $_POST['modelId'] . ' LIMIT 1');
+			mysql_query('UPDATE phones SET ' . $prefix . 'image = "' . $row['model'] . '/' . $_FILES['Filedata']['name'] . '"' . ' WHERE id = ' . $id . ' LIMIT 1');
 		}
 		echo str_replace($_SERVER['DOCUMENT_ROOT'],'',$targetFile);
 	// } else {
