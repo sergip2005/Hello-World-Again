@@ -77,12 +77,13 @@ var partsManager = {
 			pm.moveParts(pm.pc.find('#move-models :selected').val(), pm.pc.find('input[name="move_parts_id"]').val())
 		 }).delegate('button[name="create_model"]', 'click', function(e) {
 			pm.manageModel('save', '', $('#vendors_popup :selected').val());
-
 		 }).delegate('button[name="edit_model"]', 'click', function(e) {
 			pm.manageModel('save', $('#model_name').data('id'), $('#vendors_popup :selected').val());
 			$('#model_image').uploadifyUpload();
 			$('#cabinet_image').uploadifyUpload();
 			$('#solder_image').uploadifyUpload();
+			pm.clearCache('models', $('#vendors_popup :selected').val());
+			pm.getVendorModels($('#vendors_popup :selected').val());
 		 }).delegate('button[name="close"]', 'click', function(e) {
 			app.popup.add(app.splash).hide();
 		 }).delegate('input[name="model_name"]', 'keyup', function(e) {
@@ -303,6 +304,12 @@ var partsManager = {
 		}
 	},
 
+	clearCache: function(object, id){
+		if(object == 'models'){
+			delete this.cache.models['/apanel/models/get_by_vendor/' + id];
+		}
+	},
+
 	formModel: function(model_id, vendor_id){
 		var pm = this;
 		var v = {
@@ -369,7 +376,10 @@ var partsManager = {
 		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
 		  'folder'      : '/assets/images/phones/' +  model_name,
 		  'scriptData'  : {'modelId': model_id, 'img': 'cabinet_'},
-		  'buttonText'  : 'browse'
+		  'buttonText'  : 'browse',
+		  'onComplete'  : function(data) {
+						  alert('There are ' + data.fileCount + ' files remaining in the queue.');
+						}
 		});
 	
 	},
@@ -400,6 +410,12 @@ var partsManager = {
 							$('#model_image').uploadifyUpload();
 							$('#cabinet_image').uploadifyUpload();
 							$('#solder_image').uploadifyUpload();
+							partsManager.clearCache('models', $('#vendors_popup :selected').val());
+							partsManager.getVendorModels($('#vendors_popup :selected').val());
+						}
+						if(url = 'remove'){
+							partsManager.clearCache('models', $('#vendors li.active').data('id'));
+							partsManager.getVendorModels($('#vendors li.active').data('id'));
 						}
 						
 					} else {
