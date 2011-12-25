@@ -74,11 +74,15 @@ class Import extends MY_Controller {
 		$objPHPExcel = $this->import_model->init_phpexcel_object($inputFileName);
 
 		$sheets = array();
+		$maxCols = $this->config->item('import_max_cols_num');
 		foreach($objPHPExcel->getSheetNames() as $idx => $sheetName) {
 			$s = $objPHPExcel->setActiveSheetIndex($idx);
 			$sheets[$idx]['id'] = $idx;
 			$sheets[$idx]['name'] = $sheetName;
+
 			$sheets[$idx]['cols_number'] = PHPExcel_Cell::columnIndexFromString($s->getHighestColumn());
+			$sheets[$idx]['cols_number'] = $sheets[$idx]['cols_number'] > $maxCols ? $maxCols : $sheets[$idx]['cols_number'];
+
 			$sheets[$idx]['rows_number'] = $s->getHighestRow();
 			$sheets[$idx]['demo'] = $this->import_model->getDemoRows($s, $sheets[$idx]['rows_number'], $sheets[$idx]['cols_number']);
 		}

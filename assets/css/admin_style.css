@@ -273,15 +273,16 @@ body {
 	font-style: italic;
 }
 
-.sheet-info {
+#sheets li .sheet-info {
 	border-left: 1px solid #666666;
 	margin: 10px 10px 10px 30px;
 	padding: 5px;
+	display: none;
 }
 
-.sheet-info .sheet-cols-values td { padding: 5px }
+#sheets li .sheet-info .sheet-cols-values td { padding: 5px }
 
-.sheet-info .data-template { float: right }
+#sheets li .sheet-info .data-template { float: right }
 
 /** tables */
 table.desc {

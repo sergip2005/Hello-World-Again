@@ -28,6 +28,8 @@ class Settings extends MY_Controller {
 				'cache_enabled' => intval($this->input->post('cache_enabled')) == 0 ? 0 : 1,
 				'cache_live_time' => intval($this->input->post('cache_live_time')),
 				'per_page' => intval($this->input->post('per_page')),
+				'import_max_cols_num' => intval($this->input->post('import_max_cols_num')),
+				'import_demo_rows_num' => intval($this->input->post('import_demo_rows_num')),
 			);
 		write_ini_file($val, $this->config->item('ini_path') . 'settings.ini');
 		// update cache for settings file

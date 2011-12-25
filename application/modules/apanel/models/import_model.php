@@ -154,7 +154,8 @@ class Import_model extends CI_Model
 		// Fetch the array with data of the rows
 		$data = array();
 		$row = 0;
-		while (count($data) < 4) {
+		$rowNum = $this->config->item('import_demo_rows_num');
+		while (count($data) < $rowNum) {
 			if ($row == 0) {// form first row with cols indexes
 				for ($col = 0; $col < $tCols; ++$col) {
 					$data[$row][$col] = PHPExcel_Cell::stringFromColumnIndex($col);

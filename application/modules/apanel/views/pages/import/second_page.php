@@ -101,7 +101,7 @@
 						<td>
 							<?php echo $cellIndex ?>. <?php echo $this->import_model->possible_values($sheet['id']) ?>
 						</td>
-						<?php if ($i != 0 && ($i + 1) % 5 == 0) { ?></tr><tr><?php } ?>
+						<?php if ($i != 0 && ($i + 1) % 4 == 0) { ?></tr><tr><?php } ?>
 						<?php } ?>
 					</tr>
 				</table>

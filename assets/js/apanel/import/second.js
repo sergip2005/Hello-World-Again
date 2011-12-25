@@ -8,7 +8,7 @@ app.messages.importpage = {
 	rev_date: 'Дата последнего импорта:<br><%= date %>'
 };
 
-$(document).ready(function () {
+$(document).ready(function(){
 	var f = $('form'),
 		m_sel = $('select[name="model_select"]', f),
 		v_sel = $('select[name="vendors"]', f),
@@ -105,6 +105,14 @@ $(document).ready(function () {
 					}
 				});
 				
+		}).delegate('li > label', 'click', function(){// hide slider only if sheet is not active
+			var p = $(this).parent(),
+				si = p.contents('div.sheet-info');
+				if (si.contents('select.sheet-type-select').val() == 0 && si.is(':visible')) {
+					si.stop().slideUp();
+				} else {
+					si.stop().slideDown();
+				}
 		});
 
 	$(f).submit(function(e){
