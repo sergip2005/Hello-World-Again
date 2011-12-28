@@ -9,7 +9,7 @@
 	<table class="tablesorter separate" >
 		<thead>
 			<tr>
-				<th class="header"> Произв-ль</th>
+				<th class="header">Произв-ль</th>
 				<th class="header">Модель</th>
 				<th class="header">Позиция</th>
 				<th class="header">Тип</th>

@@ -158,13 +158,18 @@ class Parts_model extends CI_Model
 			$params = array('%' . $query . '%', '%' . $query . '%');
 		}
 
+		if($parameter == 'part_code' ) {
+			$where .= ' pa.code LIKE ?';
+			$params = array('%' . $query . '%');
+		}
+
 		$q = 'SELECT
 			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
 			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype, pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
-			  FROM `phones_parts` pp
-			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
+			  FROM `parts` pa
+			  LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
-			  LEFT JOIN `vendors` v ON p.vendor_id = v.id ' . $where
+			  LEFT JOIN `vendors` v ON pa.vendor_id = v.id ' . $where
 			. ' ORDER BY pa.code'
 			. ' LIMIT ' . ($page * $pp) . ', ' . $pp;
 		return $this->db->query($q, $params)->result_array();
@@ -188,8 +193,8 @@ class Parts_model extends CI_Model
 		}
 
 		$q = 'SELECT COUNT(*) as num
-			  FROM `phones_parts` pp
-			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
+			  FROM `parts` pa
+			  LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
 			  LEFT JOIN `vendors` v ON p.vendor_id = v.id ' . $where;
 		return $this->db->query($q, $params)->row()->num;

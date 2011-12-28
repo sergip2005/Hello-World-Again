@@ -14,10 +14,10 @@ class Parts extends My_Controller {
 		$search_params['parameter'] = 'part_code';
 		$search_params['pagination']['page'] = get_posted_page($page);
 		$search_params['pagination']['items'] = $this->parts_model->countSearchParts($search_params['query'], $search_params['parameter']);
-		$parts = $this->parts_model->getPartsByCode($search_params['query'], $search_params['pagination']['page']);
+		$parts = $this->parts_model->searchParts($search_params['query'], $search_params['parameter'], $search_params['pagination']['page']);
 		calculatePaginationParams($search_params['pagination']);
 		$data = array(
-			'title' 		=> 'Код: ' . urldecode($number),
+			'title' 		=> 'Парт-номер: ' . urldecode($number),
 			'description' 	=> '',
 			'keywords' 		=> '',
 			'css'			=> array('jquery.tablesorter.blue.css'),
