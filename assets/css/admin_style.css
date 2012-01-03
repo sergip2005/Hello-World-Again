@@ -762,7 +762,7 @@ table.desc select { min-width: 150px }
 .parts-navigation .models-list li {
 	cursor: pointer;
 	list-style: none;
-	width: 150px;
+	margin-right: 20px;
 	float: left;
 	padding: 2px 5px;
 }
@@ -902,3 +902,7 @@ table.desc select { min-width: 150px }
 }
 
 .pages ul li a.active { color: red; font-weight: bold; text-decoration: none }
+
+.tar { text-align: right }
+.tal { text-align: left }
+.tac { text-align: center }

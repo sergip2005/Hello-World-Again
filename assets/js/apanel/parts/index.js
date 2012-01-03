@@ -39,13 +39,23 @@ var partsManager = {
 				'<% } %></ul>' +
 				'<% } %>',
 
-		formModel:  '<table>' +
-					'<tr><td><label class="fr" for="model_name">Имя модели:</label></td><td  class="fl"><input type="text" data-id="<%= id %>" id="model_name" name="model_name" value="<%= name %>"></td></tr>' +
-					'<tr><td><label class="fr" for="vendors">Модель принадлежит вендору:</label></td><td  class="fl"><select id="vendors_popup" name="vendors"></select></td></tr>' +
-					'<tr><td><label class="fr" for="model_image">Изображение модели:</label></td><td  class="fl"><%=  model_image == "" ? "" : \'<a href="/assets/images/phones/\' + model_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="model_image" name="model_image" /></td></tr>' +
-					'<tr><td><label class="fr" for="solder_image">Изображение корпусных деталей:</label></td><td class="fl"><%=  solder_image == "" ? "" : \'<a href="/assets/images/phones/\' + solder_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="solder_image" name="solder_image" /></td></tr>' +
-					'<tr><td><label class="fr" for="cabinet_image">Изображение паечных деталей:</label></td><td class="fl"><%=  cabinet_image == "" ? "" : \'<a href="/assets/images/phones/\' + cabinet_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="cabinet_image" name="cabinet_image" /></td></tr>' +
-					'<tr><td><button class="fr" name="<%= type %>_model" <%=  type == "create" ? "disabled" : "" %>><%=  type == "create" ? "Создать" : "Изменить" %></button></td><td  class="fl"><button name="close">Отмена</button></td></tr></table>'
+		formModel: '<table class="tal">' +
+					'<tr><td><label for="model_name">Имя модели:</label></td>' +
+						'<td><input type="text" data-id="<%= id %>" id="model_name" name="model_name" value="<%= name %>"></td></tr>' +
+					'<tr><td><label for="vendors">Производитель:</label></td>' +
+						'<td><select id="vendors_popup" name="vendors"></select></td></tr>' +
+					'<tr><td><label for="model_image">Изображение модели:</label></td><td></td></tr>' +
+						'<tr><td colspan="2" class="tac"><%=  model_image == "" ? "" : \'<a href="/assets/images/phones/\' + model_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="model_image" name="model_image" /></td></tr>' +
+					'<tr><td><label for="solder_image">Изображение корпусных деталей:</label></td><td></td></tr>' +
+						'<tr><td colspan="2" class="tac"><%=  solder_image == "" ? "" : \'<a href="/assets/images/phones/\' + solder_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="solder_image" name="solder_image" /></td></tr>' +
+					'<tr><td><label for="cabinet_image">Изображение паечных деталей:</label></td><td></td></tr>' +
+						'<tr><td colspan="2" class="tac"><%=  cabinet_image == "" ? "" : \'<a href="/assets/images/phones/\' + cabinet_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="cabinet_image" name="cabinet_image" /></td></tr>' +
+					'<tr><td><button name="<%= type %>_model" <%=  type == "create" ? "disabled" : "" %>><%=  type == "create" ? "Создать" : "Изменить" %></button></td>' +
+						'<td><button name="close">Отмена</button></td></tr></table>',
+
+		changeCode: '<div>' +
+				'Сменить парт-номер <input type="text" value="<%= code %>" disabled="disabled" /> на <input type="text" value="" id="change-pn" />' +
+				'</div>'
 	},
 
 	init: function() {
@@ -347,8 +357,8 @@ var partsManager = {
 		html = '';
 		pm.v.find('li').each(function(i) {
 			v = {
-					'id':$(this).data('id'),
-					'name':$(this).text(),
+					'id': $(this).data('id'),
+					'name': $(this).text(),
 					'vendor_id': vendor_id
 				  };
 		html += _.template(pm.templates.selectVendors, v);
@@ -365,23 +375,22 @@ var partsManager = {
 		var v = $('#vendors_popup :selected').val();
 		var pm = partsManager;
 		return {
-		  'uploader'    : '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
-		  'script'      : '../../uploadify.php',
-		  'cancelImg'   : '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
-		  'folder'      : '/assets/images/phones/' +  model_name,
-		  'scriptData'  : {'modelId': model_id, 'img': type},
-		  'buttonText'  : 'browse',
-		  'onOpen'      : function() {pm.hasUploadQueue.push(1)},
-		  'onComplete'  : function() {
-			              pm.hasUploadQueue.pop();
-						  if(!pm.hasUploadQueue.length){
-							pm.clearCache('models', v);
-							pm.getVendorModels(v);
-							app.popup.add(app.splash).hide();
-						  }
+		  'uploader'	: '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
+		  'script'		: '../../uploadify.php',
+		  'cancelImg'	: '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
+		  'folder'		: '/assets/images/phones/' +  model_name,
+		  'scriptData'	: {'modelId': model_id, 'img': type},
+		  'buttonText'	: 'browse',
+		  'onOpen'		: function() {pm.hasUploadQueue.push(1)},
+		  'onComplete'	: function() {
+							pm.hasUploadQueue.pop();
+							if(!pm.hasUploadQueue.length){
+								pm.clearCache('models', v);
+								pm.getVendorModels(v);
+								app.popup.add(app.splash).hide();
+							}
 						}};
 	},
-
 
 	manageModel: function(url, m_id, v_id){
 		var model =  $('#model_name').val();
@@ -541,28 +550,31 @@ var partsManager = {
 	},
 
 	showMoveParts: function() {
-		var html = '<select id="move-vendors" name="vendor">';
-		var vnd;
-		var val = '';
-		var pm = partsManager;
+		var html = '<select id="move-vendors" name="vendor">',
+			val = '',
+			pm = partsManager;
+
 		pm.v.find('li').each(function(i) {
-			vnd = {
-					'id':$(this).data('id'),
-					'name':$(this).text()
-				  };
+			var li = $(this),
+				vnd = {
+					id: li.data('id'),
+					name: li.text()
+				};
 			html += _.template( pm.templates.selectVendors, vnd);
 		});
 		html += '</select>' +
-				'<select id="move-models" name="model">' +
-				'</select>' +
+				'<select id="move-models" name="model"></select>' +
 				'<button name="move" type="submit">Переместить</button><br>';
-		pm.p.find(':checked').each(function(i) {
+		pm.p.find(':checked').each(function(){
 			val += $(this).val() + ' ,';
 		});
 		html += val + '<input type="hidden" name="move_parts_id" value="' + val + '">';
-		app.showPopup({html: html, c: function() {
-			}});
+		app.showPopup({html: html, c: function(){}});
 		pm.getVendorModels(-1, pm.v.find('li').first().data('id'));
+	},
+
+	changeCode: function(){
+		app.showPopup({html: _.template(pm.templates.changeCode, {}), c: function(){}});
 	},
 
 	initControls: function() {
@@ -578,8 +590,9 @@ var partsManager = {
 					e.preventDefault();
 					app.log('remove');
 				}).delegate('button.change-pn', 'click', function(e) {
-			e.preventDefault();
-			app.log('change-pn');
+					e.preventDefault();
+					app.log('change-pn');
+					partsManager.showChangePartCode();
 		});
 	},
 
@@ -611,4 +624,4 @@ var partsManager = {
 
 $(document).ready(function() {
 	partsManager.init();
-});
+})

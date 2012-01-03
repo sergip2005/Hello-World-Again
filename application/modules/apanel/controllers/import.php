@@ -281,7 +281,6 @@ class Import extends MY_Controller {
 		}
 		// form import message
 		$m = 'Записей импортировано: ' . $n;
-		if (!empty($to_remove) && count($to_remove) > 0) die(print_r(array($to_remove), true));
 		$m .= (!empty($to_remove) && count($to_remove) > 0) ? '<br>Записей удалено: ' . count($to_remove) : '';
 		$this->session->set_flashdata('message', $m);
 		redirect('/apanel/import/index');

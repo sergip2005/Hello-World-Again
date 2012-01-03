@@ -102,11 +102,13 @@ class Phones_model extends CI_Model
 				FROM `parts` pa
 				LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 				LEFT JOIN `phones` p ON pp.phone_id = p.id
-				LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pa.id
+				LEFT JOIN `phones_parts_regions_rel` pprr ON pprr.part_id = pp.id
 				LEFT JOIN `vendors` v ON pa.vendor_id = v.id
 				LEFT JOIN `regions` r ON r.id = pprr.region_id
 				WHERE pa.vendor_id = ?
-				AND r.id = (SELECT id FROM regions where `default` = 1)';
+				AND r.id = ?';
+
+		$region = is_array($region) && isset($region['id']) ? $region['id'] : $region;
 
 		if ($model_id === 'all') {
 			$q1 .= '';
@@ -119,7 +121,11 @@ class Phones_model extends CI_Model
 		} else {
 			$q1 .= ' AND pp.phone_id = ?';
 			$q2 .= ' AND pp.phone_id = ?';
-			$values = array($vendor_id, $model_id, $region);
+			if ($region == 'all') {
+				$values = array($vendor_id, $model_id);
+			} else {
+				$values = array($vendor_id, $region, $model_id);
+			}
 		}
 
 		if ($page !== 'all') {
@@ -132,7 +138,7 @@ class Phones_model extends CI_Model
 		if ($options !== false) {}
 
 		$query = $region == 'all' ? $q1 : $q2;
-
+		//die(print_r(array($query, $values), true));
 		$p = $this->db->query($query, $values);
 		if ($p->num_rows() > 0) {
 			$p = $p->result_array();

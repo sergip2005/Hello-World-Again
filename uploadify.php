@@ -23,10 +23,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-if (!empty($_FILES)) {
-	$success = mysql_pconnect ('localhost', 'root', '1111');
+define('BASEPATH', true);
+define('ENVIRONMENT', 'production');
 
-	$success = mysql_select_db ('osp');
+//$myFile = "testFile.txt";
+//$fh = fopen($myFile, 'w') or die("can't open file");
+//fwrite($fh, "checking file" . "\n\r"); //put as much copies of this line as you need
+
+if (!empty($_FILES)) {
+	require('application/config/database.php');
+
+	$success = mysql_pconnect ($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
+
+	$success = mysql_select_db ($db['default']['database']);
 	mysql_query('SET NAMES utf8 COLLATE utf8_general_ci');
 	$id = intval($_POST['modelId']);
 	$result = mysql_query('SELECT model FROM phones WHERE id = ' . $id . ' LIMIT 1');
@@ -36,17 +45,17 @@ if (!empty($_FILES)) {
 	$targetPath = $_SERVER['DOCUMENT_ROOT'] . $_REQUEST['folder'] . '/';
 
 	$targetFile =  str_replace('//','/',$targetPath) . $_FILES['Filedata']['name'];
-	mkdir(str_replace('//','/',$targetPath), 0755, true);
-	
+
+
 	// $fileTypes  = str_replace('*.','',$_REQUEST['fileext']);
 	// $fileTypes  = str_replace(';','|',$fileTypes);
 	// $typesArray = split('\|',$fileTypes);
 	// $fileParts  = pathinfo($_FILES['Filedata']['name']);
-	
+
 	// if (in_array($fileParts['extension'],$typesArray)) {
 		// Uncomment the following line if you want to make the directory if it doesn't exist
-		// mkdir(str_replace('//','/',$targetPath), 0755, true);
-		
+		mkdir(str_replace('//','/',$targetPath), 0755, true);
+
 		if(move_uploaded_file($tempFile,$targetFile)){
 			mysql_query('UPDATE phones SET ' . $prefix . 'image = "' . $row['model'] . '/' . $_FILES['Filedata']['name'] . '"' . ' WHERE id = ' . $id . ' LIMIT 1');
 		}
@@ -55,4 +64,5 @@ if (!empty($_FILES)) {
 	// 	echo 'Invalid file type.';
 	// }
 }
-?>
+
+//fclose($fh); //text is written here

@@ -49,7 +49,7 @@ class Phones extends My_Controller {
 		}else{
 			$model_id = $this->phones_model->getModelByName(str_replace('_', ' ', $model));
 			$view = 'pages/phones/parts';
-			$parts = $this->phones_model->getParts($vendor_id, $model_id, $default_region, false, 0);
+			$parts = $this->phones_model->getParts($vendor_id, $model_id, $default_region === false ? 'all' : $default_region, false, 0);
 			$search_params = '';
 		}
 		$data = array(
@@ -75,7 +75,7 @@ class Phones extends My_Controller {
 
 	public function vendor($vendor)
 	{
-		$vendor = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/ui', '', $vendor);
+		$vendor = sanitate_input_string($vendor);
 		$models = $this->phones_model->getVendorModels($vendor);
 		$data = array(
 			'title' 		=> 'Производитель: ' . $vendor ,
