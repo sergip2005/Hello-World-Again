@@ -18,7 +18,8 @@ class Parts_model extends CI_Model
 		'url', 'mktel_has', 'price', 'min_num'
 	);
 
-	public function getOrCreate($name, $vendor){
+	public function getOrCreate($name, $vendor)
+	{
 		if (empty($name)) { return false; }
 
 		$sql = 'SELECT id FROM `phones` WHERE `model` = ? AND `vendor` = ? LIMIT 1';
@@ -39,7 +40,8 @@ class Parts_model extends CI_Model
 		return $id > 0 ? $id : false;
 	}
 
-	public function updateOrCreate($rowData, $sheetData){
+	public function updateOrCreate($rowData, $sheetData)
+	{
 		$this->load->model('currency_model');
 
 		$partData = array();
@@ -106,11 +108,10 @@ class Parts_model extends CI_Model
 	}
 
 	/**
-	 * @TODO pagination
-	 * @param  $number
+	 * @param  $pn
 	 * @return mixed
 	 */
-	function getPartsByCode($number, $page)
+	function getPartsByCode($pn, $page)
 	{
 		$pp = $this->config->item('per_page');
 		$q = 'SELECT
@@ -123,7 +124,17 @@ class Parts_model extends CI_Model
 			  LEFT JOIN `vendors` v ON p.vendor_id = v.id
 			  WHERE pa.code LIKE ?
 			  LIMIT ' . ($page * $pp) . ', ' . $pp;
-		return $this->db->query($q, '%' . $number . '%')->result_array();
+		return $this->db->query($q, '%' . $pn . '%')->result_array();
+	}
+
+	function getPartsByVendor_Code($pn, $v)
+	{
+		$q = 'SELECT
+				id, min_num, code, name, ptype, name_rus, price, ptype, type
+			  FROM `parts`
+			  WHERE code = ?
+				AND vendor_id = ?';
+		return $this->db->query($q, array($pn, $v))->result_array();
 	}
 
 	function countGetPartsByCode($number)
@@ -139,7 +150,6 @@ class Parts_model extends CI_Model
 	}
 
 	/**
-	 * @TODO pagination
 	 * @param $query
 	 * @param $parameter
 	 * @return mixed
@@ -175,19 +185,23 @@ class Parts_model extends CI_Model
 		return $this->db->query($q, $params)->result_array();
 	}
 
-	function countSearchParts($query, $parameter){
+	function countSearchParts($query, $parameter)
+	{
 		$where = ' WHERE ';
-		if($parameter == 'models' ) {
+		if($parameter == 'models' )
+		{
 			$where .= ' p.model LIKE ?';
 			$params = '%' . $query . '%';
 		}
 
-		if($parameter == 'part_name' ) {
+		if($parameter == 'part_name' )
+		{
 			$where .= ' pa.name LIKE ? OR pa.name_rus LIKE ?';
 			$params = array('%' . $query . '%', '%' . $query . '%');
 		}
 
-		if($parameter == 'part_code' ) {
+		if($parameter == 'part_code' )
+		{
 			$where .= ' pa.code LIKE ?';
 			$params = array('%' . $query . '%');
 		}
@@ -200,11 +214,36 @@ class Parts_model extends CI_Model
 		return $this->db->query($q, $params)->row()->num;
 	}
 
-	function moveParts($data){
+	function moveParts($data)
+	{
 		$q = 'UPDATE `phones_parts`
 			  SET phone_id  = ?
 			  WHERE part_id IN(?)';
 		$this->db->query($q, array($data['model_id'], $data['part_id']));
 		return true;
+	}
+
+	function changePn($new_pn, $old_pn, $v)
+	{
+		// get existing parts with this pn
+		$parts = $this->getPartsByVendor_Code($old_pn, $v);
+		if (count($parts) == 0) return false;
+		$ids = array_map('narrow_to_id_field_only', $parts);
+		$q = '
+			UPDATE parts
+			SET
+				old_code = ?,
+				code = ?
+			WHERE
+				id IN (' . implode(', ', $ids) . ')';
+		if ($this->db->query($q, array($old_pn, $new_pn))) {
+			return array(
+				'old' => $old_pn,
+				'new' => $new_pn,
+				'ids' => $ids
+			);
+		} else {
+			return false;
+		}
 	}
 }

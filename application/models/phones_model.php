@@ -35,7 +35,6 @@ class Phones_model extends CI_Model
 	 */
 	public function getPartsByName($vendor, $model, $region = '')
 	{
-		// @TODO get rid of model params dublicated for every row -> select model previously, and use there id, not name
 		$q1 = 'SELECT
 				  pa.min_num as min_num, pa.code as code, pa.name as name, pa.ptype,
 				  pa.name_rus as name_rus, pa.price as price, pa.type as type,

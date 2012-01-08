@@ -16,18 +16,18 @@ var partsManager = {
 	templates: {
 		partTr:
 				'<tr data-id="<%= id %>" class="<%= i % 2 ? \'even\' : \'odd\' %>">' +
-					'<td><input type="checkbox" value="<%= id %>"></td>' +
-					'<td><%= vendor_name %></td>' +
+					'<td class="model" data-id="<%= model_id %>"><input type="checkbox" value="<%= id %>"></td>' +
+					'<td class="vendor" data-id="<%= vendor_id %>"><%= vendor_name %></td>' +
 					'<td><%= model_name %></td>' +
-					'<td><%= cct_ref %></td>' +
-					'<td><%= ptype %></td>' +
-					'<td><%= code %></td>' +
-					'<td><%= num %></td>' +
-					'<td><%= name %></td>' +
-					'<td><%= name_rus %></td>' +
-					'<td><%= (available ? "+" : "-") %></td>' +
-					'<td><%= price > 0 ? price : "нет данных" %></td>' +
-					'<td><%= min_num %></td>' +
+					'<td class="cct_ref"><%= cct_ref %></td>' +
+					'<td class="ptype"><%= ptype %></td>' +
+					'<td class="code"><%= code %></td>' +
+					'<td class="num"><%= num %></td>' +
+					'<td class="name"><%= name %></td>' +
+					'<td class="name_rus"><%= name_rus %></td>' +
+					'<td class="available"><%= (available ? "+" : "-") %></td>' +
+					'<td class="price"><%= price > 0 ? price : "нет данных" %></td>' +
+					'<td class="min_num"><%= min_num %></td>' +
 				'</tr>',
 
 		selectVendors: '<option value="<%= id %>" <% if(vendor_id != "") {%><%= id == vendor_id ? "selected" : ""%> <% } %>><%= name %></option>' ,
@@ -53,9 +53,16 @@ var partsManager = {
 					'<tr><td><button name="<%= type %>_model" <%=  type == "create" ? "disabled" : "" %>><%=  type == "create" ? "Создать" : "Изменить" %></button></td>' +
 						'<td><button name="close">Отмена</button></td></tr></table>',
 
-		changeCode: '<div>' +
-				'Сменить парт-номер <input type="text" value="<%= code %>" disabled="disabled" /> на <input type="text" value="" id="change-pn" />' +
-				'</div>'
+		changeCode: '<form>' +
+				'<input type="hidden" name="vendor_id" value="<%= vendor_id %>">' +
+				'<table>' +
+					'<tr><td>Сменить парт-номер</td>' +
+						'<td><input name="pn" type="text" value="<%= code %>" readonly="readonly" /></td></tr>' +
+					'<tr><td>на</td>' +
+						'<td><input type="text" name="change_pn" value="" id="change-pn" /></td></tr>' +
+					'<tr><td class="tar" colspan="2"><input type="submit" value="Сохранить"></td></tr>' +
+				'</table>' +
+			'</form>'
 	},
 
 	init: function() {
@@ -127,45 +134,25 @@ var partsManager = {
 		pm.p.parents('table').tablesorter({ headers: { 0: { sorter: false} }, widgets: ['zebra', 'repeatHeaders'] });
 
 		// rows clicks
-		pm.p.delegate('tr', 'click', function(e){
-			$(this).find(':checkbox').trigger('click');
-		}).delegate('tr :checkbox', 'click', function(e){
+		pm.p.delegate('tr :checkbox', 'click', function(e){
 			e.stopPropagation();
-			var i = $(this);
-			if (i.prop('checked')) {
-				pm.checkRow($(this).parents('tr'));
+			e.preventDefault();
+			$(this).parents('tr').trigger('click');
+		}).delegate('tr', 'click', function(){
+			var tr = $(this);
+			if (tr.hasClass('checked')) {
+				pm.uncheckRow(tr);
 			} else {
-				pm.uncheckRow($(this).parents('tr'));
+				pm.checkRow(tr);
 			}
-		}).delegate('tr', 'dblclick', function(e) {
+			pm.updateControls();
+		}).delegate('tr', 'dblclick', function(e){
 			var i = $(this);
 			pm.showPartInfo(i.data('id'));
 			app.log('dblclicked', i);
 		});
 
-		/*live search
-		$('form[name="search_parts_code"] input.text', pm.s).livesearch({
-			searchCallback: function(){ pm.s.find('form[name="search_parts_code"]').trigger('submit'); },
-			queryDelay: 2000,
-			innerText: "Код",
-			minimumSearchLength: 2
-		});
-		$('form[name="search_model_name"] input.text', pm.s).livesearch({
-			searchCallback: function(){ pm.s.find('form[name="search_model_name"]').trigger('submit'); },
-			queryDelay: 2000,
-			innerText: "Модель",
-			minimumSearchLength: 2
-		});
-		$('form[name="search_parts_name"] input.text', pm.s).livesearch({
-			searchCallback: function(){ pm.s.find('form[name="search_parts_name"]').trigger('submit'); },
-			queryDelay: 2000,
-			innerText: "Название",
-			minimumSearchLength: 2
-        });*/
-
-
 		//search bottoms clicks
-
 		pm.s.delegate('form[name="search_parts_code"]', 'submit', function(e){
 			e.preventDefault();
 			pm.setVendorLiActive(false, -1);
@@ -179,7 +166,6 @@ var partsManager = {
 			pm.s.find('input.text').removeClass('active');
 			pm.searchParts($(this).find('input.text').val(), $(this).find('input.parameter').val(), 1);
 		}).delegate('form[name="search_parts_name"]', 'submit', function(e){
-
 			e.preventDefault();
 			pm.setVendorLiActive(false, -1);
 			pm.setModelLiActive(false, -1);
@@ -190,12 +176,8 @@ var partsManager = {
 		// init check all
 		pm.pchbx.click(function(){
 			$(this).parents('table').find(':checkbox').attr('checked', this.checked);
+			pm.updateControls();
 		});
-
-		pm.initControls();
-
-		//if there is path in hash -> load it
-		pm.initLocationHash();
 
 		pm.pages.delegate('a', 'click', function(e){
 			e.preventDefault();
@@ -208,12 +190,16 @@ var partsManager = {
 
 			pm.initLocationHash();
 		});
+
+		pm.initControls();
+
+		//if there is path in hash -> load it
+		pm.initLocationHash();
 	},
 
 	/**
 	 * loads url saved in hash
 	 */
-
 	initLocationHash: function(){
 		var h = document.location.hash.substr(1),
 			pm = this;
@@ -276,7 +262,6 @@ var partsManager = {
 		}
 	},
 
-
 	getVendorModels: function(s, c){
 		var pm = this,
 			success = function(resp, cache){
@@ -322,32 +307,31 @@ var partsManager = {
 	},
 
 	formModel: function(model_id, vendor_id){
-		var pm = this;
-		var v = {
-				'id': '',
-				'name': '',
-				'model_image': '',
-				'cabinet_image': '',
-				'solder_image': '',
-				'type': 'create'
-			}
-		var html = '';
-		var model_name = '';
-		if(model_id == 0)
-		{
+		var pm = this,
+			v = {
+				id: '',
+				name: '',
+				model_image: '',
+				cabinet_image: '',
+				solder_image: '',
+				type: 'create'
+			},
+			html = '',
+			model_name = '';
+		if(model_id == 0){
 			html = _.template(pm.templates.formModel, v);
 			app.showPopup({html: html, c: function() {}});
 		}else{
 			_.each(pm.cache.models['/apanel/models/get_by_vendor/' + vendor_id].data, function(e, i) {
 				if(e.id == model_id ){
 					v = {
-						'id': e.id,
-						'name': e.name,
-						'model_image': e.image,
-						'cabinet_image': e.cabinet_image,
-						'solder_image': e.solder_image,
-						'type': 'edit'
-					}
+						id: e.id,
+						name: e.name,
+						model_image: e.image,
+						cabinet_image: e.cabinet_image,
+						solder_image: e.solder_image,
+						type: 'edit'
+					};
 					model_name = e.name;
 				}
 			html = _.template(pm.templates.formModel, v);
@@ -355,95 +339,87 @@ var partsManager = {
 			});
 		}
 		html = '';
-		pm.v.find('li').each(function(i) {
+		pm.v.find('li').each(function(i){
 			v = {
 					'id': $(this).data('id'),
 					'name': $(this).text(),
 					'vendor_id': vendor_id
-				  };
-		html += _.template(pm.templates.selectVendors, v);
+				};
+			html += _.template(pm.templates.selectVendors, v);
 		});
 		pm.pc.find('select#vendors_popup').html(html);
 
 		$('#model_image').uploadify(pm.getUploadifySettings(model_name, model_id, 'image'));
 		$('#solder_image').uploadify(pm.getUploadifySettings(model_name, model_id, 'solder_'));
 		$('#cabinet_image').uploadify(pm.getUploadifySettings(model_name, model_id, 'cabinet_'));
-	
 	},
 
 	getUploadifySettings: function(model_name, model_id, type ){
 		var v = $('#vendors_popup :selected').val();
 		var pm = partsManager;
 		return {
-		  'uploader'	: '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
-		  'script'		: '../../uploadify.php',
-		  'cancelImg'	: '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
-		  'folder'		: '/assets/images/phones/' +  model_name,
-		  'scriptData'	: {'modelId': model_id, 'img': type},
-		  'buttonText'	: 'browse',
-		  'onOpen'		: function() {pm.hasUploadQueue.push(1)},
-		  'onComplete'	: function() {
-							pm.hasUploadQueue.pop();
-							if(!pm.hasUploadQueue.length){
-								pm.clearCache('models', v);
-								pm.getVendorModels(v);
-								app.popup.add(app.splash).hide();
-							}
-						}};
+			uploader	: '/assets/js/apanel/uploadify-v2.1.4/uploadify.swf',
+			script		: '../../uploadify.php',
+			cancelImg	: '/assets/js/apanel/uploadify-v2.1.4/cancel.png',
+			folder		: '/assets/images/phones/' +  model_name,
+			scriptData	: {'modelId': model_id, 'img': type},
+			buttonText	: 'browse',
+			onOpen		: function(){ pm.hasUploadQueue.push(1) },
+			onComplete	: function(){
+					pm.hasUploadQueue.pop();
+					if(!pm.hasUploadQueue.length){
+						pm.clearCache('models', v);
+						pm.getVendorModels(v);
+						app.popup.add(app.splash).hide();
+					}
+				}
+		};
 	},
 
 	manageModel: function(url, m_id, v_id){
-		var model =  $('#model_name').val();
+		var model = $('#model_name').val();
 		$.ajax({
-				url: '/apanel/models/' + url,
-				type: 'post',
-				dataType: 'json',
-				data: {
-					id: m_id,
-					vendor_id: v_id,
-					name: model
-				},
-				success: function(resp) {
-					if (resp.status === 1) {
-						app.showMessage({html: resp.message});
-						var pm = partsManager;
-						if(m_id == '') {
-							var id = resp.item.id;
-							var m = resp.item.model;
-							var m_i = $('#model_image');
-							var s_i = $('#solder_image');
-							var c_i = $('#cabinet_image');
-							var v = $('#vendors_popup :selected').val();
-							m_i.uploadifySettings('scriptData', {'modelId': id});
-							s_i.uploadifySettings('scriptData', {'modelId': id});
-							c_i.uploadifySettings('scriptData', {'modelId': id});
-							m_i.uploadifySettings('folder' , '/assets/images/phones/' + m);
-							s_i.uploadifySettings('folder' , '/assets/images/phones/' + m);
-							c_i.uploadifySettings('folder', '/assets/images/phones/' + m);
-							m_i.uploadifyUpload();
-							c_i.uploadifyUpload();
-							s_i.uploadifyUpload();
-							pm.clearCache('models', v);
-							pm.getVendorModels(v);
-						}
-						if(url = 'remove'){
-							var v = $('#vendors li.active').data('id');
-							pm.clearCache('models', v);
-							pm.getVendorModels(v);
-						}
-					} else {
-						app.showMessage({html: resp.error});
+			url: '/apanel/models/' + url,
+			type: 'post',
+			dataType: 'json',
+			data: {
+				id: m_id,
+				vendor_id: v_id,
+				name: model
+			},
+			success: function(resp) {
+				if (resp.status === 1) {
+					app.showMessage({html: resp.message});
+					var pm = partsManager;
+					if(m_id == ''){
+						var id = resp.item.id,
+							m = resp.item.model,
+							m_i = $('#model_image'),
+							s_i = $('#solder_image'),
+							c_i = $('#cabinet_image'),
+							v = $('#vendors_popup :selected').val();
+						m_i.uploadifySettings('scriptData', {'modelId': id});
+						s_i.uploadifySettings('scriptData', {'modelId': id});
+						c_i.uploadifySettings('scriptData', {'modelId': id});
+						m_i.uploadifySettings('folder' , '/assets/images/phones/' + m);
+						s_i.uploadifySettings('folder' , '/assets/images/phones/' + m);
+						c_i.uploadifySettings('folder', '/assets/images/phones/' + m);
+						m_i.uploadifyUpload();
+						c_i.uploadifyUpload();
+						s_i.uploadifyUpload();
+						pm.clearCache('models', v);
+						pm.getVendorModels(v);
 					}
+					if(url = 'remove'){
+						v = $('#vendors li.active').data('id');
+						pm.clearCache('models', v);
+						pm.getVendorModels(v);
+					}
+				} else {
+					app.showMessage({html: resp.error});
 				}
+			}
 		});
-	},
-
-	editModel: function(id){
-		app.log('edit');
-	},
-
-	removeModel: function(id){
-		app.log('remove');
 	},
 
 	searchParts: function(query, param, p){
@@ -470,7 +446,6 @@ var partsManager = {
 							var html = '';
 							pm.cache.parts = resp.data.parts;
 							_.each(resp.data.parts, function(v, i){
-
 								v.i = i;
 								html += _.template(pm.templates.partTr, v);
 							});
@@ -511,7 +486,6 @@ var partsManager = {
 							var html = '';
 							pm.cache.parts = resp.data.parts;
 							_.each(resp.data.parts, function(v, i){
-
 								v.i = i;
 								html += _.template(pm.templates.partTr, v);
 							});
@@ -551,7 +525,6 @@ var partsManager = {
 
 	showMoveParts: function() {
 		var html = '<select id="move-vendors" name="vendor">',
-			val = '',
 			pm = partsManager;
 
 		pm.v.find('li').each(function(i) {
@@ -565,51 +538,101 @@ var partsManager = {
 		html += '</select>' +
 				'<select id="move-models" name="model"></select>' +
 				'<button name="move" type="submit">Переместить</button><br>';
-		pm.p.find(':checked').each(function(){
-			val += $(this).val() + ' ,';
-		});
+		var val = pm.getChecked().ids.join(' ,');
 		html += val + '<input type="hidden" name="move_parts_id" value="' + val + '">';
 		app.showPopup({html: html, c: function(){}});
 		pm.getVendorModels(-1, pm.v.find('li').first().data('id'));
 	},
 
-	changeCode: function(){
-		app.showPopup({html: _.template(pm.templates.changeCode, {}), c: function(){}});
+	showChangePartCode: function(){
+		var pm = this, c = pm.getChecked();
+
+		if (c.num !== 1) {
+			alert('Нужно выбрать только 1 деталь');
+			return;
+		}
+
+		var pn = $(c.rows[0]).find('td.code').text();
+		var v = pm.config.vendor_id;
+
+		app.showPopup({html: _.template(pm.templates.changeCode, {code: pn, vendor_id: v}), c: function(){
+			var f = $(this).find('form');
+			f.submit(function(e){
+				e.preventDefault();
+
+				if ($.trim($('#change-pn', f).val()) == '') {
+					alert('Введите новый парт-номер');
+					return;
+				}
+
+				$.ajax({
+					url: app.urls.changePN,
+					data: f.serialize(),
+					type: 'post',
+					success: function(resp){
+
+					}
+				});
+			});
+		}});
 	},
 
-	initControls: function() {
-		this.c.find('button').attr('disabled', false);
+	getChecked: function(){
+		var pm = this, r = pm.p.find(':checkbox:checked'), ids = [];
+		r.each(function(){
+			ids.push(this.value);
+		});
+		return {
+			rows: r.parents('tr').toArray(),
+			ids: ids,
+			num: r.size()
+		};
+	},
 
-		this.c.delegate('button.move', 'click',
-				function(e) {
+	initControls: function(){
+		var pm = this;
+
+		pm.c.delegate('button.move', 'click',
+				function(e){
 					e.preventDefault();
-					partsManager.showMoveParts();
+					pm.showMoveParts();
 					app.log('move');
 				}).delegate('button.remove', 'click',
-				function(e) {
+				function(e){
 					e.preventDefault();
 					app.log('remove');
-				}).delegate('button.change-pn', 'click', function(e) {
+				}).delegate('button.change-pn', 'click', function(e){
 					e.preventDefault();
-					app.log('change-pn');
-					partsManager.showChangePartCode();
+					pm.showChangePartCode();
 		});
+
+		pm.updateControls();
 	},
 
 	updateControls: function(){
-
+		var pm = this,
+			n = pm.getChecked();
+		if (n.num == 1) {
+			app.log('updateControls', 1);
+			this.c.find('button').attr('disabled', false);
+		} else if (n.num > 1) {
+			app.log('updateControls', '> 1');
+			this.c.find('button').attr('disabled', false)
+				.filter('.change-pn').attr('disabled', true);
+		} else {// n == 0
+			app.log('updateControls', 0);
+			this.c.find('button').attr('disabled', true);
+		}
 	},
 
 	checkRow: function(tr) {
 		var pm = this;
-		$(tr).addClass('checked');
-		pm.updateControls();
+		$(tr).addClass('checked').find(':checkbox').prop('checked', true);
 	},
 
 	uncheckRow: function(tr) {
 		var pm = this;
-		$(tr).removeClass('checked');
-		pm.updateControls();
+		$(tr).removeClass('checked').find(':checkbox').prop('checked', false);
 	},
 
 	updatePages: function(p){
@@ -624,4 +647,4 @@ var partsManager = {
 
 $(document).ready(function() {
 	partsManager.init();
-})
+});

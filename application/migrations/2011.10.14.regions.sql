@@ -1,1 +1,0 @@
-ALTER TABLE  `regions` ADD  `default` TINYINT( 1 ) NOT NULL DEFAULT  '0';

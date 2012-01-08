@@ -32,7 +32,8 @@ class Parts extends MY_Controller {
 		Modules::run('pages/_return_ap_page', $template);
 	}
 
-	public function search(){
+	public function search()
+	{
 		$this->load->model('phones_model');
 		$this->load->model('parts_model');
 
@@ -92,8 +93,8 @@ class Parts extends MY_Controller {
 		}
 	}
 
-	public function move(){
-
+	public function move()
+	{
 		$this->load->model('parts_model');
 
 		$move['model_id'] = $this->input->post('model_id');
@@ -111,6 +112,21 @@ class Parts extends MY_Controller {
 		} else {
 			$this->output->set_output(json_encode(array( 'status' => 0 )));
 			return;
+		}
+	}
+
+	public function change_pn()
+	{
+		$ch_pn = (string)$this->input->post('change_pn');
+		$pn = (string)$this->input->post('pn');
+		$v_id = (int)$this->input->post('vendor_id');
+
+		$this->load->model('parts_model');
+		$res = $this->parts_model->changePn($ch_pn, $pn, $v_id);
+		if ($res !== false) {
+			$this->output->set_output(json_encode(array('status' => 1, 'result' => $res)));
+		} else {
+			$this->output->set_output(json_encode(array('status' => 0)));
 		}
 	}
 }
