@@ -238,7 +238,11 @@ class Import_model extends CI_Model
 		}
 
 		foreach ($input as $rowN => $row) {
-			if (strlen($row['code']) < 4 || preg_match('/^x+/i', strtolower($row['code'])) || strtolower($row['code']) == 'code') {
+			if (strlen($row['code']) < 4
+					|| preg_match('/^x+/i', strtolower($row['code'])) // to small
+					|| strtolower($row['code']) == 'code' // string 'code'
+					|| $row['code'] == 'Партномер') // string 'Партномер'
+			{
 				unset($input[$rowN]);
 			}
 

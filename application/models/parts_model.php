@@ -95,6 +95,7 @@ class Parts_model extends CI_Model
 				);
 			$id = $part->num_rows() > 0 ? $part->row()->id : 0;
 		}
+		//die($id);
 
 		$data['last_updated'] = date('Y-m-d H:i:s');
 
@@ -115,9 +116,10 @@ class Parts_model extends CI_Model
 	{
 		$pp = $this->config->item('per_page');
 		$q = 'SELECT
-			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
-			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype,
-			  pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
+				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.old_code as old_code,
+				pa.name as name, pa.ptype,
+				pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype,
+				pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
 			  FROM `phones_parts` pp
 			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
@@ -135,6 +137,16 @@ class Parts_model extends CI_Model
 			  WHERE code = ?
 				AND vendor_id = ?';
 		return $this->db->query($q, array($pn, $v))->result_array();
+	}
+
+	function getPartsByVendor($v)
+	{
+		$q = 'SELECT
+				id, min_num, code, name, ptype, name_rus, price, ptype, type
+			  FROM `parts`
+			  WHERE
+				vendor_id = ?';
+		return $this->db->query($q, array($v))->result_array();
 	}
 
 	function countGetPartsByCode($number)
@@ -174,14 +186,15 @@ class Parts_model extends CI_Model
 		}
 
 		$q = 'SELECT
-			  pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.name as name, pa.ptype,
-			  pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype, pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
+				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.old_code as old_code,
+				pa.name as name, pa.ptype, pa.name_rus as name_rus, pa.price as price, pp.num as num,
+				pa.ptype as ptype, pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
 			  FROM `parts` pa
 			  LEFT JOIN `phones_parts` pp ON pp.part_id = pa.id
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
-			  LEFT JOIN `vendors` v ON pa.vendor_id = v.id ' . $where
-			. ' ORDER BY pa.code'
-			. ' LIMIT ' . ($page * $pp) . ', ' . $pp;
+			  LEFT JOIN `vendors` v ON pa.vendor_id = v.id ' . $where . '
+			  ORDER BY pa.code
+			  LIMIT ' . ($page * $pp) . ', ' . $pp;
 		return $this->db->query($q, $params)->result_array();
 	}
 

@@ -32,7 +32,8 @@ var app = {
 		getVendorModels: '/apanel/models/get_by_vendor/',
 		saveDataTpl: '/apanel/import/save_data_template/',
 		removeDataTpl: '/apanel/import/remove_data_template/',
-		changePN: '/apanel/parts/change_pn/'
+		changePN: '/apanel/parts/change_pn/',
+		getPart: '/apanel/parts/get/'
 	},
 
 	text: {

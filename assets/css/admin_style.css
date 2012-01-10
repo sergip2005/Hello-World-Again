@@ -450,6 +450,7 @@ table.desc select { min-width: 150px }
 .clearfix { zoom: 1; }
 .clear { clear: both }
 .w50 { width: 50px }
+.w450 { width: 450px }
 
 /**
  * Print styles.
@@ -902,6 +903,11 @@ table.desc select { min-width: 150px }
 }
 
 .pages ul li a.active { color: red; font-weight: bold; text-decoration: none }
+
+/** part info popup */
+#popup-content .part-info table td.tal {
+	padding: 0 5px;
+}
 
 .tar { text-align: right }
 .tal { text-align: left }

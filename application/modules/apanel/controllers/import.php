@@ -153,7 +153,9 @@ class Import extends MY_Controller {
 				 * phone_parts -> code => array of parts
 				 */
 				if ($sheets_data[$sheet]['type'] == 'prices') {
-					$sheets_data[$sheet]['prev_state'] = $this->phones_model->getParts($post_data['vendor_id'], 'all', 'all');
+					//$sheets_data[$sheet]['prev_state'] = $this->phones_model->getParts($post_data['vendor_id'], 'all', 'all');
+					//$this->parts_model->getPartsByVendor($post_data['vendor_id'])
+					$sheets_data[$sheet]['prev_state']['parts'] = $this->parts_model->getPartsByVendor($post_data['vendor_id']);
 					$sheets_data[$sheet]['prev_state']['parts'] = count($sheets_data[$sheet]['prev_state']['parts']) > 0 ? process_to_code_keyed_array($sheets_data[$sheet]['prev_state']['parts']) : array();
 				} else {
 					$sheets_data[$sheet]['prev_state'] = $this->phones_model->getPrevDataState(array_map('narrow_to_code_field_only', $sheets_data[$sheet]['data']), $post_data['vendor_id'], isset($existing_data['model']) ? $existing_data['model']['id'] : false);
@@ -170,7 +172,8 @@ class Import extends MY_Controller {
 				//echo '<pre style="text-align: left">' . print_r($existing_data['model_parts'], true) . '</pre>';
 			}
 
-			if ($sheets_data[$sheet]['type'] == 'prices') {// save prices data
+			// save prices data
+			if ($sheets_data[$sheet]['type'] == 'prices') {
 				$n = array('existing' => 0, 'new' => 0, 'excluded' => 0);//number of parts processed
 				$data = array('existing' => array(), 'new' => array(), 'excluded' => array());
 				foreach ($sheets_data[$sheet]['data'] as $row) {// for every row in price list
@@ -188,7 +191,7 @@ class Import extends MY_Controller {
 					}
 
 					// save or get part id
-					$this->parts_model->updateOrCreate($row, array('vendor_id' => $sheets_data[$sheet]['vendor_id']));
+					$part_ids[] = $this->parts_model->updateOrCreate($row, array('vendor_id' => $sheets_data[$sheet]['vendor_id']));
 				}
 				if (!empty($sheets_data[$sheet]['prev_state']['parts']) && count($sheets_data[$sheet]['prev_state']['parts']) > 0) {
 					$data['excluded'] = $sheets_data[$sheet]['prev_state']['parts'];
@@ -198,6 +201,7 @@ class Import extends MY_Controller {
 						$this->parts_model->save($part['id'], array('price' => 0));
 					}
 				}
+				//die(print_r($part_ids, true));
 
 				$m = $n['new'] > 0 ? 'Создано: ' . $n['new'] . '<br><br>' : '';
 				$m .= $n['existing'] > 0 ? 'Обновлено: ' . $n['existing'] . '<br><br>' : '';
