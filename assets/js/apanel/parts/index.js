@@ -65,44 +65,45 @@ var partsManager = {
 				'</table>' +
 			'</form>',
 
-		partInfo: '<form class="part-info">' +
+		partInfo: '<form class="part-info tal">' +
 				'<input type="hidden" name="id" value="<%= id %>">' +
+				'<input type="hidden" name="part_id" value="<%= part_id %>">' +
 				// available, cabinet_image, cct_ref, code, id, min_num, model_id,
 				// model_name, name, name_rus, num, part_id, price, ptype, type, vendor_id, vendor_name
-				'<h2>Информация о детали</h2>' +
+				'<h2>Информация о детали</h2><br>' +
 				'<table>' +
 					// if this part does not belong to phone
 					'<tr>' +
-						'<td class="tal">Парт-номер:</td><td><input type="text" value="<%= code %>" name="code" /></td>' +
-						'<td class="tal">Старый парт-номер:</td><td><input type="text" value="<%= old_code %>" name="old_code" /></td>' +
+						'<td>Парт-номер:</td><td><input type="text" value="<%= code %>" name="code" /></td>' +
+						'<td>Старый парт-номер:</td><td><input type="text" value="<%= old_code %>" name="old_code" /></td>' +
 					'</tr>' +
 					'<tr>' +
-						'<td class="tal">Производитель:</td><td><%= vendor_name %></td>' +
-						'<td class="tal">Модель:</td><td><%= model_name %></td>' +
+						'<td>Производитель:</td><td><%= vendor_name %></td>' +
+						'<td>Модель:</td><td><%= model_name %></td>' +
 					'</tr>' +
 					'<tr>' +
-						'<td class="tal">Вид детали:</td><td>' +
+						'<td>Вид детали:</td><td>' +
 							'<select name="type">' +
 								'<option value="s"<%= type == "s" ? \' selected="selected"\' : \'\' %>>паечная</option>' +
 								'<option value="c"<%= type == "c" ? \' selected="selected"\' : \'\' %>>корпусная</option>' +
 							'</select>' +
 						'</td>' +
-						'<td class="tal">Тип детали:</td><td><input type="text" name="ptype" value="<%= ptype %>" /></td>' +
+						'<td>Тип детали:</td><td><input type="text" name="ptype" value="<%= ptype %>" /></td>' +
 					'</tr>' +
-					'<tr><td class="tal">Ориг. имя:</td><td colspan="3"><input type="text" name="name" value="<%= name %>" /></td></tr>' +
-					'<tr><td class="tal">Имя:</td><td colspan="3"><input type="text" name="name_rus" value="<%= name_rus %>" /></td></tr>' +
+					'<tr><td>Ориг. имя:</td><td colspan="3"><input type="text" class="w450" name="name" value="<%= name %>" /></td></tr>' +
+					'<tr><td>Имя:</td><td colspan="3"><input type="text" class="w450" name="name_rus" value="<%= name_rus %>" /></td></tr>' +
 					'<tr>' +
-						'<td class="tal">Цена:</td><td class="tal"><input class="w50" type="text" name="price" value="<%= price %>" /></td>' +
-						'<td class="tal"><input class="w50" type="text" name="price1" value="<%= price %>" /></td>' +
-						'<td class="tal"><input class="w50" type="text" name="price2" value="<%= price %>" /></td>' +
-					'</tr>' +
-					'<tr>' +
-						'<td class="tal">Есть в наличии:</td><td><input type="checkbox" name="available" value="1" <%= available ? \' checked="checked"\' : \'\' %> /></td>' +
-						'<td class="tal">Мин. кол-во для заказа:</td><td><input type="text" name="min_num" value="<%= min_num %>" /></td>' +
+						'<td>Цена:</td><td class="tal"><input class="w50" type="text" name="price" value="<%= price %>" /></td>' +
+						'<td><input class="w50" type="text" name="price1" value="<%= price %>" /></td>' +
+						'<td><input class="w50" type="text" name="price2" value="<%= price %>" /></td>' +
 					'</tr>' +
 					'<tr>' +
-						'<td class="tal">Позиция в сборке:</td><td><input type="text" name="cct_ref" value="<%= cct_ref %>" /></td>' +
-						'<td class="tal">Используется в сборке:</td><td><input type="text" name="num" value="<%= num %>" /></td>' +
+						'<td>Есть в наличии:</td><td><input type="checkbox" name="available" value="1" <%= available ? \' checked="checked"\' : \'\' %> /></td>' +
+						'<td>Мин. кол-во для заказа:</td><td><input type="text" class="w50" name="min_num" value="<%= min_num %>" /></td>' +
+					'</tr>' +
+					'<tr>' +
+						'<td>Позиция в сборке:</td><td><input type="text" name="cct_ref" value="<%= cct_ref %>" /></td>' +
+						'<td>Используется в сборке:</td><td><input type="text" class="w50" name="num" value="<%= num %>" /></td>' +
 					'</tr>' +
 
 					'<tr><td class="tar" colspan="4"><input type="submit" value="Сохранить"></td></tr>' +

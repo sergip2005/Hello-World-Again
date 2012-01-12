@@ -905,8 +905,8 @@ table.desc select { min-width: 150px }
 .pages ul li a.active { color: red; font-weight: bold; text-decoration: none }
 
 /** part info popup */
-#popup-content .part-info table td.tal {
-	padding: 0 5px;
+#popup-content .part-info table td {
+	padding: 2px 5px;
 }
 
 .tar { text-align: right }

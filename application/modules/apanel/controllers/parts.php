@@ -66,6 +66,7 @@ class Parts extends MY_Controller {
 							$search_params['pagination']['items'] = $this->parts_model->countSearchParts($search_params['query'], 'part_name');
 						break;
 					}
+
 					if (count($parts) > 0) {
 						calculatePaginationParams($search_params['pagination']);
 						$this->output->set_output(json_encode(array( 'status' => 1, 'data' => array('parts' => $parts), 'pagination' => $search_params['pagination'])));
@@ -80,7 +81,6 @@ class Parts extends MY_Controller {
 					return;
 				}
 			}
-
 		}
 
 		$parts = $this->phones_model->getParts($search_params['vendor_id'], $search_params['model_id'], 'all', false, $search_params['page']);

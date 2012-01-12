@@ -30,5 +30,7 @@ $(document).ready(function () {
 	// if this is not price import
 	if ($(':checkbox.check-all').size() > 0) {
 		$('input[type="submit"]').prop('disabled', false);
+	} else {
+		$('input[type="submit"]').hide();
 	}
 });
