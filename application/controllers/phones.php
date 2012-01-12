@@ -34,7 +34,7 @@ class Phones extends My_Controller {
 
 		$vendor = sanitate_input_string($vendor);
 		$model  = sanitate_input_string($model);
-		$vendor_id = $this->vendors_model->getByName($vendor);
+		$vendor_obj = $this->vendors_model->getByName($vendor);
 		$default_region = $region == '' ? $this->regions_model->getDefault() : false;
 		$region = $region == 'all' ? $region : '';
 		if ($model == 'none')
@@ -42,31 +42,31 @@ class Phones extends My_Controller {
 			$model_id = 'none';
 			$search_params['pagination']['page'] = get_posted_page($page);
 			$search_params['vendor'] = $vendor;
-			$search_params['pagination']['items'] = $this->phones_model->countGetParts($vendor_id, $model_id, 'all');
-			$parts = $this->phones_model->getParts($vendor_id, $model_id, 'all', false, $search_params['pagination']['page']);
+			$search_params['pagination']['items'] = $this->phones_model->countGetParts($vendor_obj['id'], $model_id, 'all');
+			$parts = $this->phones_model->getParts($vendor_obj['id'], $model_id, 'all', false, $search_params['pagination']['page']);
 			calculatePaginationParams($search_params['pagination']);
 			$view = 'pages/parts/unsorted';
 		}
 		else
 		{
-			$model_id = $this->phones_model->getModelByName(prepare_phone_name($model));
+			$model_obj = $this->phones_model->getModelByName(prepare_phone_name($model));
 			$view = 'pages/phones/parts';
-			$parts = $this->phones_model->getParts($vendor_id, $model_id, $default_region === false ? 'all' : $default_region, false, 0);
+			$parts = $this->phones_model->getParts($vendor_obj['id'], $model_obj['id'], $default_region === false ? 'all' : $default_region, false, 0);
 			$search_params = '';
 		}
 		$data = array(
-			'title'			=> 'Раскладка ' . $vendor . ' ' . $model,
+			'title'			=> 'Раскладка деталей для телефона ' . $vendor_obj['name'] . ' модель ' . $model_obj['model'],
 			'js'			=> array('libs/jquery.jqzoom-core-pack.js', '/libs/jquery.metadata.js', '/libs/jquery.tablesorter.min.js', 'site/phones.js'),
 			'css'			=> array('jquery.jqzoom.css', 'jquery.tablesorter.blue.css'),
-			'description'	=> $vendor . ', ' . $model,
-			'keywords'		=> $vendor . ', ' . $model,
+			'description'	=> $vendor_obj['name'] . ', ' . $model_obj['model'],
+			'keywords'		=> $vendor_obj['name'] . ', ' . $model_obj['model'],
 			'body'			=> $this->load->view(
 									$view,
 									array(
 										'parts' => $parts,
 										'region' => $region,
-										'vendor' => $vendor,
-										'model' => $model,
+										'vendor' => $vendor_obj,
+										'model' => $model_obj,
 										'default_region' => $default_region,
 										'search_params' => $search_params,
 									),

@@ -596,3 +596,17 @@ table.separate{
 	border-top: 1px solid #DDDDDD;
 	padding: 5px 0;
 }
+
+.parts-content .model-title {
+	padding-bottom: 10px;
+}
+
+.parts-content .model-title h1 {
+	font-size: 24px
+}
+
+.parts-content .model-title img {
+	float: right;
+	max-height: 100px;
+	max-width: 100px;
+}

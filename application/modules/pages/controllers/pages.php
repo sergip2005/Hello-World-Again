@@ -36,6 +36,7 @@ class Pages extends MY_Controller {
 			$search['search_params'] = $data['search_params'];
 		}
 
+		$data['title'] .= ($data['title'] ? ' - ' : '' ) . 'originalspareparts.com.ua';
 		$data['top_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/top_menu', '', true);
 		$data['user_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/user_menu', '', true);
 		$data['bottom_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/bottom_menu', '', true);

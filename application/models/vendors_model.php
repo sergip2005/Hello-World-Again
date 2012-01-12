@@ -83,8 +83,16 @@ class Vendors_model extends CI_Model
 	}
 
 	public function getByName($name){
-		$q = 'SELECT id FROM `vendors` WHERE name = ? LIMIT 1';
-		return $this->db->query($q, $name)->row('id');
+		$q = 'SELECT
+				id, name
+			FROM `vendors`
+			WHERE name = ? LIMIT 1';
+		$res = $this->db->query($q, $name);
+		if ($res->num_rows() > 0) {
+			return $res->row_array();
+		} else {
+			return false;
+		}
 	}
 
 }
