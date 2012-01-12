@@ -133,3 +133,8 @@ function generate_pagination_html($p, $href)
 	}
 	return $html;
 }
+
+function prepare_phone_name($s)
+{
+	return str_replace(array('_'), array(' '), $s);
+}

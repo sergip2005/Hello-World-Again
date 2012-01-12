@@ -15,7 +15,6 @@ class Models extends MY_Controller {
 
 	public function index()
 	{
-
 		$template = array(
 			'title'			=> '',
 			'description'	=> '',
@@ -39,16 +38,16 @@ class Models extends MY_Controller {
 	public function save()
 	{
 		$id = intval($this->input->post('id'));
-		$name = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('name'));
-		$vendor_id = preg_replace('/[^а-яА-Яa-zA-Z0-9_\.\-\/ ]/', '', $this->input->post('vendor_id'));
+		$name = prepare_phone_name(sanitate_input_string($this->input->post('name')));
+		$vendor_id = sanitate_input_string($this->input->post('vendor_id'));
 		$data = array('model' => $name, 'vendor_id' => $vendor_id);
 
 		$data['id'] = $this->phones_model->saveModel($id, $data );
 		if ($data['id'] > 0) {
 			$this->output->set_output(json_encode(array(
-				'status'  => 1,
-				'item'    => $data,
-				'message' => Phones_model::SAVE_SUCCESS
+					'status'  => 1,
+					'item'    => $data,
+					'message' => Phones_model::SAVE_SUCCESS
 				)));
 		}else {
 			echo json_encode(array('status' => 0, 'error' => Phones_model::APP_SUBMIT_ERROR));
@@ -61,14 +60,15 @@ class Models extends MY_Controller {
 		if ($id > 0) {
 			$data = $this->phones_model->get($id);
 			$this->output->set_output( json_encode(array(
-				'status'  => 1,
-				'item'    => $data,
-				'message' => Phones_model::SAVE_SUCCESS
+					'status'  => 1,
+					'item'    => $data,
+					'message' => Phones_model::SAVE_SUCCESS
 				)));
 		} else {
 			$this->output->set_output(json_encode(array('status' => 0, 'error' => Phones_model::APP_SUBMIT_ERROR)));
 		}
 	}
+
 	public function remove()
 	{
 		$id = intval($this->input->post('id'));
@@ -76,24 +76,6 @@ class Models extends MY_Controller {
 			$this->output->set_output(json_encode(array('status' => 1, 'message' => Phones_model::REMOVE_SUCCESS)));
 		} else {
 			$this->output->set_output(json_encode(array('status' => 0, 'error' => Phones_model::APP_SUBMIT_ERROR)));
-		}
-
-    }
-	public function images_upload()
-	{
-		$config = array(
-				'upload_path'	=> $this->config->item('model_images_upload_path') . '/test/',
-				'allowed_types' => 'xls|xlsx|pdf|jpg|png|gif',
-				'max_size'		=> '0',
-			);
-
-		$this->load->library('upload', $config);
-
-		if (! $this->upload->do_upload('model_image')) {
-			$this->session->set_flashdata('message', $this->upload->display_errors());
-			redirect('apanel/parts/');
-		} else {
-			$this->output->set_output(json_encode($this->upload->data()));
 		}
 	}
 }

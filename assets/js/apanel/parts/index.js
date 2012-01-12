@@ -30,7 +30,8 @@ var partsManager = {
 					'<td class="min_num"><%= min_num %></td>' +
 				'</tr>',
 
-		selectVendors: '<option value="<%= id %>" <% if(vendor_id != "") {%><%= id == vendor_id ? "selected" : ""%> <% } %>><%= name %></option>' ,
+		option: '<option value="<%= value %>"><%= name %></option>',
+		selectedOption: '<option value="<%= value %>" selected="selected"><%= name %></option>',
 
 		pagination: '<p>Показано <%= current.begin + " - " + current.end %> из <%= items %> элементов на <%= pages + (pages == 1 || pages%10 == 1 ? " странице" : " страницах") %></p>' +
 				'<% if (pages > 1) { %>' +
@@ -105,6 +106,16 @@ var partsManager = {
 					'</tr>' +
 
 					'<tr><td class="tar" colspan="4"><input type="submit" value="Сохранить"></td></tr>' +
+				'</table>' +
+			'</form>',
+
+		moveParts: '<form>' +
+				'<table>' +
+					'<tr><td class="tal">Выберите модель телефона,<br>в которую будут перенесены запчасти:</td></tr>' +
+					'<tr><td class="tal"><select id="move-vendors" name="vendor"><%= vendors %></select></td></tr>' +
+					'<tr><td class="tal"><select id="move-models" name="model"></select></td></tr>' +
+					'<input type="hidden" name="move_parts_id" value="<%= ids %>">'+
+					'<tr><td class="tar"><button name="move" type="submit">Переместить</button></td></tr>' +
 				'</table>' +
 			'</form>'
 	},
@@ -335,6 +346,7 @@ var partsManager = {
 		if (s > 0) {
 			app.showLoading(pm.m);
 			pm.config.vendor_id = s;
+			pm.config.model_id = 0;
 			document.location.hash = s;
 			if (pm.cache.models.hasOwnProperty(app.urls.getVendorModels + s)) {
 				app.log('cache', pm.cache.models[app.urls.getVendorModels + s]);
@@ -395,13 +407,12 @@ var partsManager = {
 		html = '';
 		pm.v.find('li').each(function(i){
 			v = {
-					'id': $(this).data('id'),
-					'name': $(this).text(),
-					'vendor_id': vendor_id
+					value: $(this).data('id'),
+					name: $(this).text()
 				};
-			html += _.template(pm.templates.selectVendors, v);
+			html += _.template(v.value == vendor_id ? pm.templates.selectedOption : pm.templates.option, v);
 		});
-		pm.pc.find('select#vendors_popup').html(html);
+		pm.pc.find('#vendors_popup').html(html);
 
 		$('#model_image').uploadify(pm.getUploadifySettings(model_name, model_id, 'image'));
 		$('#solder_image').uploadify(pm.getUploadifySettings(model_name, model_id, 'solder_'));
@@ -571,7 +582,7 @@ var partsManager = {
 				parts_id: p,
 				model_id: m
 			},
-			success: function(resp) {
+			success: function(resp){
 				if (resp.status === 1) {
 
 				}
@@ -579,25 +590,29 @@ var partsManager = {
 		});
 	},
 
-	showMoveParts: function() {
-		var html = '<select id="move-vendors" name="vendor">',
+	showMoveParts: function(){
+		var html = '',
 			pm = partsManager;
 
-		pm.v.find('li').each(function(i) {
+		pm.v.find('li').each(function(i){
 			var li = $(this),
-				vnd = {
-					id: li.data('id'),
+				v = {
+					value: li.data('id'),
 					name: li.text()
 				};
-			html += _.template( pm.templates.selectVendors, vnd);
+			html += _.template(pm.config.vendor_id == v.value ? pm.templates.selectedOption : pm.templates.option, v);
 		});
-		html += '</select>' +
-				'<select id="move-models" name="model"></select>' +
-				'<button name="move" type="submit">Переместить</button><br>';
-		var val = pm.getChecked().ids.join(' ,');
-		html += val + '<input type="hidden" name="move_parts_id" value="' + val + '">';
-		app.showPopup({html: html, c: function(){}});
-		pm.getVendorModels(-1, pm.v.find('li').first().data('id'));
+
+		app.showPopup({
+			html: _.template(pm.templates.moveParts,
+					{
+						vendors: html,
+						ids: pm.getChecked().ids.join('|')
+					}),
+			c: function(){
+				pm.getVendorModels(-1, pm.v.find('li').first().data('id'));
+			}
+		});
 	},
 
 	showChangePartCode: function(){
@@ -652,7 +667,6 @@ var partsManager = {
 				function(e){
 					e.preventDefault();
 					pm.showMoveParts();
-					app.log('move');
 				}).delegate('button.remove', 'click',
 				function(e){
 					e.preventDefault();

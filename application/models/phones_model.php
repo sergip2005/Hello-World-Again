@@ -248,6 +248,7 @@ class Phones_model extends CI_Model
 	 */
 	public function getOrCreateModel($name, $vendor){
 		if (empty($name)) { return false; }
+		$name = prepare_phone_name($name);
 
 		$sql = 'SELECT id FROM `phones` WHERE `model` = ? AND `vendor_id` = ? LIMIT 1';
 		$id = 0;

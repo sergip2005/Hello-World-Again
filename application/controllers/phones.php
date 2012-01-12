@@ -46,8 +46,10 @@ class Phones extends My_Controller {
 			$parts = $this->phones_model->getParts($vendor_id, $model_id, 'all', false, $search_params['pagination']['page']);
 			calculatePaginationParams($search_params['pagination']);
 			$view = 'pages/parts/unsorted';
-		}else{
-			$model_id = $this->phones_model->getModelByName(str_replace('_', ' ', $model));
+		}
+		else
+		{
+			$model_id = $this->phones_model->getModelByName(prepare_phone_name($model));
 			$view = 'pages/phones/parts';
 			$parts = $this->phones_model->getParts($vendor_id, $model_id, $default_region === false ? 'all' : $default_region, false, 0);
 			$search_params = '';
