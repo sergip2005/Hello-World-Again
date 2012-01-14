@@ -3,7 +3,7 @@
 
 	<div class="model-title clearfix">
 		<img src="/assets/images/phones/<?php echo $model['image'] ?>" alt="<?php echo $vendor['name'] ?> - <?php echo $model['model'] ?>">
-		<h1>Раскладка деталей для телефона <?php echo $vendor['name'] ?> модель <?php echo $model['model'] ?></h1>
+		<h1><?php echo $vendor['name'] ?> - <?php echo $model['model'] ?></h1>
 		<div id="parts">
 			<span class="s selected">Корпусные </span>
 			<span class="c">Паечные </span>

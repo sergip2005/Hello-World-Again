@@ -74,8 +74,8 @@ var partsManager = {
 				'<table>' +
 					// if this part does not belong to phone
 					'<tr>' +
-						'<td>Парт-номер:</td><td><input type="text" value="<%= code %>" name="code" /></td>' +
-						'<td>Старый парт-номер:</td><td><input type="text" value="<%= old_code %>" name="old_code" /></td>' +
+						'<td>Парт-номер:</td><td><input type="text" value="<%= code %>" name="code" readonly="readonly" /></td>' +
+						'<td>Старый парт-номер:</td><td><input type="text" value="<%= old_code %>" name="old_code" readonly="readonly" /></td>' +
 					'</tr>' +
 					'<tr>' +
 						'<td>Производитель:</td><td><%= vendor_name %></td>' +
@@ -282,10 +282,27 @@ var partsManager = {
 	showPartInfo: function(i) {
 		var pm = this,
 			part = pm.getPartCache(i);
-		app.log(i, part);
 		app.showPopup({html: _.template(partsManager.templates.partInfo, part), c: function(){
+				pm.initPartInfoEvents(this);
+			}});
+	},
 
-		}});
+	initPartInfoEvents: function(elm){
+		elm = $(elm);
+
+		elm.find('form').submit(function(e){
+			e.preventDefault();
+
+			$.ajax({
+				url: app.urls.savePart,
+				type: 'post',
+				dataType: 'json',
+				data: $(this).serialize(),
+				success: function(resp){
+					app.log(resp);
+				}
+			});
+		});
 	},
 
 	getVendorElm: function(vId) {

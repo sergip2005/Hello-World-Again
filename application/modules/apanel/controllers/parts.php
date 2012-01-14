@@ -129,4 +129,35 @@ class Parts extends MY_Controller {
 			$this->output->set_output(json_encode(array('status' => 0)));
 		}
 	}
+
+	public function save()
+	{
+		//die(json_encode($_POST));
+
+		$this->load->model('phones_model');
+
+		$part_id = (int)$this->input->post('part_id');//"1033"
+		if ($part_id > 0) {
+			$data['mktel_has'] = (int)$this->input->post('available');//"1"
+			$data['min_num'] = (int)$this->input->post('min_num');//"1"
+			$data['price'] = (float)$this->input->post('price');//"0.00"
+			$data['price1'] = (float)$this->input->post('price1');//"0.00"
+			$data['price2'] = (float)$this->input->post('price2');//"0.00"
+			$data['ptype'] = (string)$this->input->post('ptype');//""
+			$data['type'] = in_array($this->input->post('type'), $this->parts_model->partType) ? $this->input->post('type') : 'c';//"c"
+			$data['name'] = (string)$this->input->post('name');//"A COVER ASSEMBLY MAT BLACK"
+			$data['name_rus'] = (string)$this->input->post('name_rus');//""
+			$this->parts_model->save($part_id, $data);
+		}
+
+		$id = (int)$this->input->post('id');//"185"
+		if ($id > 0) {
+			$data2['num'] = (int)$this->input->post('num');//"1"
+			$data2['cct_ref'] = (string)$this->input->post('cct_ref');//"I0001"
+			$this->phones_model->savePart($id, $data2);
+		}
+
+		//$data['code'] = $this->input->post('code');//"0253378"
+		//$data['old_code'] = $this->input->post('old_code');//"9999999"
+	}
 }

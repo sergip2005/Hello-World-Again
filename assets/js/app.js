@@ -33,7 +33,8 @@ var app = {
 		saveDataTpl: '/apanel/import/save_data_template/',
 		removeDataTpl: '/apanel/import/remove_data_template/',
 		changePN: '/apanel/parts/change_pn/',
-		getPart: '/apanel/parts/get/'
+		getPart: '/apanel/parts/get/',
+		savePart: '/apanel/parts/save/',
 	},
 
 	text: {
