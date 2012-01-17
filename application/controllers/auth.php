@@ -22,6 +22,11 @@ class Auth extends MY_Controller {
 	//log the user in
 	function login()
 	{
+		if ($this->ion_auth->logged_in())
+		{
+			redirect('/');
+		}
+
 		$this->data['title'] = "Login";
 
 		//validate form input
@@ -61,7 +66,14 @@ class Auth extends MY_Controller {
 				'type' => 'password',
 			);
 
-			$this->load->view('pages/auth/login', $this->data);
+			$template = array(
+				'description' => '',
+				'keywords' => '',
+				'title'	=> 'Войти на сайт',
+				'body'	=> $this->load->view('pages/auth/login', $this->data, true),
+			);
+
+			Modules::run('pages/_return_page', $template);
 		}
 	}
 
@@ -113,8 +125,14 @@ class Auth extends MY_Controller {
 				'value' => $user->id,
 			);
 
-			//render
-			$this->load->view('pages/auth/change_password', $this->data);
+			$template = array(
+				'description' => '',
+				'keywords' => '',
+				'title'	=> 'Изменить пароль',
+				'body'	=> $this->load->view('pages/auth/change_password', $this->data, true),
+			);
+
+			Modules::run('pages/_return_page', $template);
 		}
 		else
 		{
@@ -147,7 +165,14 @@ class Auth extends MY_Controller {
 			);
 			//set any errors and display the form
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-			$this->load->view('pages/auth/forgot_password', $this->data);
+			$template = array(
+				'description' => '',
+				'keywords' => '',
+				'title'	=> 'Восстановление пароля',
+				'body'	=> $this->load->view('pages/auth/forgot_password', $this->data, true),
+			);
+
+			Modules::run('pages/_return_page', $template);
 		}
 		else
 		{
@@ -257,23 +282,32 @@ class Auth extends MY_Controller {
 			redirect();
 		}
 
+		$min_l = $this->config->item('min_password_length', 'ion_auth');
+		$max_l = $this->config->item('max_password_length', 'ion_auth');
+
+		$this->form_validation->set_message('required', 'Поле "%s" обязательно для заполнения');
+		$this->form_validation->set_message('valid_email', 'Поле "%s" должно быть существующим адресом электронной почты');
+		$this->form_validation->set_message('min_length', 'Минимальная длина поля "%s" ' . $min_l . ' символов');
+		$this->form_validation->set_message('max_length', 'Максимальная длина поля "%s" ' . $min_l . ' символов');
+		$this->form_validation->set_message('matches', '"%s" не совпадает');
+
 		//validate form input
 		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-		$this->form_validation->set_rules('password', 'Пароль', 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
+		$this->form_validation->set_rules('password', 'Пароль', 'required|min_length[' . $min_l . ']|max_length[' . $max_l . ']|matches[password_confirm]');
 		$this->form_validation->set_rules('password_confirm', 'Подтверждение пароля', 'required');
 
 		if ($this->form_validation->run() == true)
 		{
 			$email = $this->input->post('email');
 			$password = $this->input->post('password');
-		}
 
-		if ($this->form_validation->run() == true && $this->ion_auth->register('', $password, $email, array()))
-		{ //check to see if we are creating the user
-			//redirect them back to the admin page
-			$this->session->set_flashdata('flashmessage', 'Пользователь "' . $email . '" создан');
-			//$this->output->set'Пользователь "' . $email . '" создан'
-			//redirect('/apanel/users/', 'refresh');
+			if ($this->ion_auth->register('', $password, $email, array()))
+			{ //check to see if we are creating the user
+				//redirect them back to the admin page
+				$this->session->set_flashdata('flashmessage', 'Пользователь "' . $email . '" создан');
+				//$this->output->set'Пользователь "' . $email . '" создан'
+				redirect('/', 'refresh');
+			}
 		}
 		else
 		{ //display the create user form
@@ -302,7 +336,7 @@ class Auth extends MY_Controller {
 			$template = array(
 				'description' => '',
 				'keywords' => '',
-				'title'	=> 'Управление пользователями',
+				'title'	=> 'Регистрация',
 				'body'	=> $this->load->view('pages/auth/register', $this->data, true),
 			);
 
