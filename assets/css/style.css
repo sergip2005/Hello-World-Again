@@ -610,3 +610,19 @@ table.separate{
 	max-height: 150px;
 	max-width: 150px;
 }
+
+/** HELPERS
+   ==============================*/
+#message {
+	background: #FFF;
+	border: 1px solid #F97272;
+	border-radius: 5px;
+	box-shadow: 0 0 5px #FC9999;
+	padding: 8px 30px 10px 10px;
+	position: fixed;
+	right: 10px;
+	top: 40px;
+	width: 250px;
+	z-index: 100;
+	display: none;
+}

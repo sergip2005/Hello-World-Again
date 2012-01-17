@@ -27,12 +27,12 @@
 	/**
 	 * Site Title, example.com
 	 */
-	$config['site_title']		   = "Dressminator.com";
+	$config['site_title']		   = 'Dressminator.com';
 	
 	/**
 	 * Admin Email, admin@example.com
 	 */
-	$config['admin_email']		   = "admin@example.com";
+	$config['admin_email']		   = 'admin@example.com';
 	
 	/**
 	 * Default group, use name
@@ -88,7 +88,7 @@
 	/**
 	 * Extend the users cookies everytime they auto-login
 	 **/
-	$config['user_extend_on_login'] = false;
+	$config['user_extend_on_login'] = true;
 	
 	/**
 	 * Type of email to send (HTML or text)
@@ -136,22 +136,22 @@
 	/**
 	 * Message Start Delimiter
 	 **/
-	$config['message_start_delimiter'] = '<p>';
+	$config['message_start_delimiter'] = '';
 	
 	/**
 	 * Message End Delimiter
 	 **/
-	$config['message_end_delimiter'] = '</p>';
+	$config['message_end_delimiter'] = '';
 	
 	/**
 	 * Error Start Delimiter
 	 **/
-	$config['error_start_delimiter'] = '<p>';
+	$config['error_start_delimiter'] = '';
 	
 	/**
 	 * Error End Delimiter
 	 **/
-	$config['error_end_delimiter'] = '</p>';
+	$config['error_end_delimiter'] = '';
 	
 /* End of file ion_auth.php */
 /* Location: ./system/application/config/ion_auth.php */

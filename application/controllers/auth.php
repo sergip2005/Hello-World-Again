@@ -31,7 +31,7 @@ class Auth extends MY_Controller {
 		if ($this->form_validation->run() == true)
 		{ //check to see if the user is logging in
 			//check for "remember me"
-			$remember = (bool) $this->input->post('remember');
+			$remember = (bool)$this->input->post('remember');
 
 			if ($this->ion_auth->login($this->input->post('email'), $this->input->post('password'), $remember))
 			{ //if the login is successful
@@ -244,6 +244,69 @@ class Auth extends MY_Controller {
 
 			//redirect them back to the auth page
 			redirect('auth', 'refresh');
+		}
+	}
+
+	//create a new user
+	function register()
+	{
+		$this->data['title'] = "Create User";
+
+		if ($this->ion_auth->logged_in())
+		{
+			redirect();
+		}
+
+		//validate form input
+		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
+		$this->form_validation->set_rules('password', 'Пароль', 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
+		$this->form_validation->set_rules('password_confirm', 'Подтверждение пароля', 'required');
+
+		if ($this->form_validation->run() == true)
+		{
+			$email = $this->input->post('email');
+			$password = $this->input->post('password');
+		}
+
+		if ($this->form_validation->run() == true && $this->ion_auth->register('', $password, $email, array()))
+		{ //check to see if we are creating the user
+			//redirect them back to the admin page
+			$this->session->set_flashdata('flashmessage', 'Пользователь "' . $email . '" создан');
+			//$this->output->set'Пользователь "' . $email . '" создан'
+			//redirect('/apanel/users/', 'refresh');
+		}
+		else
+		{ //display the create user form
+			//set the flash data error message if there is one
+			$this->data['flashmessage'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('flashmessage')));
+
+			$this->data['email'] = array(
+				'name' => 'email',
+				'id' => 'email',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('email'),
+			);
+			$this->data['password'] = array(
+				'name' => 'password',
+				'id' => 'password',
+				'type' => 'password',
+				'value' => $this->form_validation->set_value('password'),
+			);
+			$this->data['password_confirm'] = array(
+				'name' => 'password_confirm',
+				'id' => 'password_confirm',
+				'type' => 'password',
+				'value' => $this->form_validation->set_value('password_confirm'),
+			);
+
+			$template = array(
+				'description' => '',
+				'keywords' => '',
+				'title'	=> 'Управление пользователями',
+				'body'	=> $this->load->view('pages/auth/register', $this->data, true),
+			);
+
+			Modules::run('pages/_return_page', $template);
 		}
 	}
 

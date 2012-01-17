@@ -5,11 +5,11 @@
 	<li>
 		<a href=""><?php echo $this->session->userdata('email') ?></a>
 		<ul>
-			<li><a href="/apanel/">админ панель</a></li>
-			<li><a href="/logout">выйти</a></li>
-			<li><a href="/change_password">изменить пароль</a></li>
-			<li><a href="/reset_password">обнулить пароль</a></li>
-			<li><a href="/activate">активировать</a></li>
+			<li><a href="/apanel/">Админ панель</a></li>
+			<li><a href="/logout/">Выйти</a></li>
+			<li><a href="/change_password/">Изменить пароль</a></li>
+			<li><a href="/reset_password/">Обнулить пароль</a></li>
+			<li><a href="/activate/">Активировать</a></li>
 		</ul>
 	</li>
 </ul>
@@ -20,11 +20,10 @@
 	<li>
 		<a href=""><?php echo $this->session->userdata('email') ?></a>
 		<ul>
-			<li><a href="/logout">logout</a></li>
-			<li><a href="/logout">выйти</a></li>
-			<li><a href="/change_password">изменить пароль</a></li>
-			<li><a href="/reset_password">обнулить пароль</a></li>
-			<li><a href="/activate">активировать</a></li>
+			<li><a href="/logout/">Выйти</a></li>
+			<li><a href="/change_password/">Сменить пароль</a></li>
+			<li><a href="/reset_password/">Обнулить пароль</a></li>
+			<li><a href="/activate/">Активировать</a></li>
 		</ul>
 	</li>
 </ul>
@@ -34,9 +33,9 @@
 <?php } else { ?>
 
 <ul>
-	<li><a href="/login">login</a></li>
-	<li><a href="/register">register</a></li>
-	<li><a href="/forgot_password">forgot_password</a></li>
+	<li><a href="/login/">Войти</a></li>
+	<li><a href="/register/">Зарегистрироваться</a></li>
+	<li><a href="/forgot_password/">Забыли пароль?</a></li>
 </ul>
 
 <?php } ?>

@@ -93,19 +93,19 @@ class Ion_auth_model extends CI_Model
 	 **/
 	public function hash_password($password, $salt=false)
 	{
-	    if (empty($password))
-	    {
-	    	return FALSE;
-	    }
+		if (empty($password))
+		{
+			return FALSE;
+		}
 
-	    if ($this->store_salt && $salt)
-	    {
-		    return  sha1($password . $salt);
-	    }
+		if ($this->store_salt && $salt)
+		{
+			return  sha1($password . $salt);
+		}
 	    else
 	    {
-		$salt = $this->salt();
-		return  $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
+			$salt = $this->salt();
+			return  $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
 	    }
 	}
 
@@ -118,35 +118,34 @@ class Ion_auth_model extends CI_Model
 	 **/
 	public function hash_password_db($identity, $password)
 	{
-	   if (empty($identity) || empty($password))
-	   {
-		return FALSE;
-	   }
+		if (empty($identity) || empty($password))
+		{
+			return FALSE;
+		}
 
-	   $query = $this->db->select('password')
-			     ->select('salt')
-			     ->where($this->identity_column, $identity)
-			     ->where($this->ion_auth->_extra_where)
-			     ->limit(1)
-			     ->get($this->tables['users']);
+		$query = $this->db->select('password')
+			 ->select('salt')
+			 ->where($this->identity_column, $identity)
+			 ->where($this->ion_auth->_extra_where)
+			 ->limit(1)
+			 ->get($this->tables['users']);
 
-	    $result = $query->row();
+		$result = $query->row();
 
-	    if ($query->num_rows() !== 1)
-	    {
-		return FALSE;
-	    }
+		if ($query->num_rows() !== 1)
+		{
+			return FALSE;
+		}
 
-	    if ($this->store_salt)
-	    {
-		return sha1($password . $result->salt);
-	    }
-	    else
-	    {
-		$salt = substr($result->password, 0, $this->salt_length);
-
-		return $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
-	    }
+		if ($this->store_salt)
+		{
+			return sha1($password . $result->salt);
+		}
+		else
+		{
+			$salt = substr($result->password, 0, $this->salt_length);
+			return $salt . substr(sha1($salt . $password), 0, -$this->salt_length);
+		}
 	}
 
 	/**

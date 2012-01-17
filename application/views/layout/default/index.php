@@ -92,7 +92,14 @@
 		s.parentNode.insertBefore(g,s)}(document,'script'));
 		</script>
 		-->
-
+		<div id="message"<?php echo !empty($flashmessage) ? ' style="display:block"' : '' ?>>
+			<img title="Закрыть" class="close" src="/assets/images/icons/close.png">
+			<div id="message-content"><?php // echo flash message, if any
+				if (!empty($flashmessage)) {
+					echo $flashmessage;
+				}
+			?></div>
+		</div>
 		<noscript>
 			<div id="noscript-warning"><?php echo lang('noscript', array('vars' => array('domain' => $this->config->item('domain')))); ?></div>
 		</noscript>
