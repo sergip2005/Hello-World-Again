@@ -14,9 +14,10 @@
 | path to your installation.
 |
 */
-$url = ENVIRONMENT == 'development' ? 'osp.com' : 'originalspareparts.com.ua';
-
+//$url = ENVIRONMENT == 'development' ? 'osp.com' : 'originalspareparts.com.ua';
+$url = 'code';
 $config['base_url'] = 'http://' . $url . '/';
+
 
 /*
 |--------------------------------------------------------------------------
@@ -268,7 +269,7 @@ $config['sess_time_to_update']	= 300;
 |
 */
 $config['cookie_prefix']	= '';
-$config['cookie_domain']	= $url;
+$config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
 $config['cookie_secure']	= FALSE;
 
