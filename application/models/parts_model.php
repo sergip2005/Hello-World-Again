@@ -186,7 +186,7 @@ class Parts_model extends CI_Model
 		}
 
 		$q = 'SELECT
-				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.old_code as old_code,
+				pa.id as part_id,pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.old_code as old_code,
 				pa.name as name, pa.ptype, pa.name_rus as name_rus, pa.price as price, pp.num as num,
 				pa.ptype as ptype, pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
 			  FROM `parts` pa

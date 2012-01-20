@@ -20,4 +20,26 @@ class Basket_model extends CI_Model
 			$this->db->query($sql);
 		}
 	}
+
+	public function getBasket() {
+		$data = array();
+		$user = $this->session->all_userdata();
+		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
+		$session_id = $this->session->userdata('session_id');
+		if($user_id > 0) {
+			$str ="b.user_id=$user_id";
+		}
+		else {
+			$str ="b.session_id='$session_id'";
+		}
+		$sql = "SELECT * FROM basket b
+		LEFT JOIN parts p on p.id=b.part_id
+		WHERE $str";
+		$q = $this->db->query($sql);
+		foreach ($q->result_array() as $row)
+		{
+			$data[] = $row;
+		}
+		return $data;		
+	}
 }

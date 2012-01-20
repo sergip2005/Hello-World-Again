@@ -1,4 +1,5 @@
 <?php
+
 	$pages_html = generate_pagination_html($search_params['pagination'], '/parts/' . $search_params['query'] . '/%page%/');
 ?>
 <div class="parts-content">
@@ -18,6 +19,7 @@
 				<th class="header">Цена</th>
 				<th class="header">Вендор</th>
 				<th class="header">Модель</th>
+				<th class="">Корзина</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -33,6 +35,7 @@
 				<td><?php echo $p['price'] ?></td>
 				<td><a href="/phones/<?php echo url_title($p['vendor_name'], '_', TRUE) ?>/"><?php echo $p['vendor_name'] ?></a></td>
 				<td><a href="/phones/<?php echo url_title($p['vendor_name'], '_', TRUE) ?>/<?php echo url_title($p['model_name'], '_', TRUE) ?>/"><?php echo $p['model_name'] ?></a></td>
+				<td><a href="javascript://" onclick="addToBasket(<?php echo $p['id'] ?>)">добавить</a></td>
 			</tr>
 			<?php } ?>
 			</tbody>

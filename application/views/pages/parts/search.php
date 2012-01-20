@@ -9,7 +9,7 @@
 	<table class="tablesorter separate" >
 		<thead>
 			<tr>
-				<th class="header">Произв-ль</th>
+				<th class="header">Произв-ль </th>
 				<th class="header">Модель</th>
 				<th class="header">Позиция</th>
 				<th class="header">Тип</th>
@@ -19,9 +19,10 @@
 				<th class="header">Описание(рус)</th>
 				<th class="header">Кол-во</th>
 				<th class="header">Цена, грн</th>
+				<th class="">Корзина</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody>		
 			<?php foreach ($parts as $p) {
 				$p['price'] = $this->currency_model->convert('eur', 'hrn', $p['price']);
 				?>
@@ -36,6 +37,7 @@
 				<td><?php echo $p['name_rus'] ?></td>
 				<td class="num_inp"><input type="text" value="0" class="num w45" title="<?php echo $p['min_num'] > 1 ? 'минимальное количество для заказа: ' . $p['min_num'] : ''; ?>" data-price="<?php echo $p['price'] ?>"></td>
 				<td><?php echo $p['price'] ?></td>
+				<td><a href="javascript://" onclick="addToBasket(<?php echo $p['part_id'] ?>)">добавить</a></td>
 			</tr>
 			<?php } ?>
 		</tbody>
