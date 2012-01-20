@@ -199,7 +199,7 @@ function addToBasket(part_id) {
 	if (count =='') count = 0;
 	count = parseInt(count);
 	count = count + 1;
-	htmlText = 'Товаров в корзине <span>'+count+'</span>';
+	htmlText = '<a href="/basket">Товаров в корзине <span>'+count+'</span></a>';
 	
 	$.post("/ajax/insertintobasket", {  part_id: part_id },
 	function(data) {
