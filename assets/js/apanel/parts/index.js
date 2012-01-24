@@ -1,7 +1,6 @@
 //_.sortBy(partsManager.cache.parts, function(a){ return a.code; });
 var partsManager = {
 
-
 	config: {
 		vendor_id: 0,
 		model_id: 0
@@ -48,9 +47,9 @@ var partsManager = {
 					'<tr><td><label for="model_image">Изображение модели:</label></td><td></td></tr>' +
 						'<tr><td colspan="2" class="tac"><%=  model_image == "" ? "" : \'<a href="/assets/images/phones/\' + model_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="model_image" name="model_image" /></td></tr>' +
 					'<tr><td><label for="solder_image">Изображение корпусных деталей:</label></td><td></td></tr>' +
-						'<tr><td colspan="2" class="tac"><%=  solder_image == "" ? "" : \'<a href="/assets/images/phones/\' + solder_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="solder_image" name="solder_image" /></td></tr>' +
-					'<tr><td><label for="cabinet_image">Изображение паечных деталей:</label></td><td></td></tr>' +
 						'<tr><td colspan="2" class="tac"><%=  cabinet_image == "" ? "" : \'<a href="/assets/images/phones/\' + cabinet_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="cabinet_image" name="cabinet_image" /></td></tr>' +
+					'<tr><td><label for="cabinet_image">Изображение паечных деталей:</label></td><td></td></tr>' +
+						'<tr><td colspan="2" class="tac"><%=  solder_image == "" ? "" : \'<a href="/assets/images/phones/\' + solder_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="solder_image" name="solder_image" /></td></tr>' +
 					'<tr><td><button name="<%= type %>_model" <%=  type == "create" ? "disabled" : "" %>><%=  type == "create" ? "Создать" : "Изменить" %></button></td>' +
 						'<td><button name="close">Отмена</button></td></tr></table>',
 
@@ -448,6 +447,8 @@ var partsManager = {
 			scriptData	: {'modelId': model_id, 'img': type},
 			buttonText	: 'browse',
 			onOpen		: function(){ pm.hasUploadQueue.push(1) },
+			fileDesc	: 'jpg;bmp;png;gif;jpeg',
+			fileExt		: '*.jpg;*.bmp;*.png;*.gif;*.jpeg',
 			onComplete	: function(){
 					pm.hasUploadQueue.pop();
 					if(!pm.hasUploadQueue.length){
