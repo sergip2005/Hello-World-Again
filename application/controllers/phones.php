@@ -46,6 +46,17 @@ class Phones extends My_Controller {
 			$parts = $this->phones_model->getParts($vendor_obj['id'], $model_id, 'all', false, $search_params['pagination']['page']);
 			calculatePaginationParams($search_params['pagination']);
 			$view = 'pages/parts/unsorted';
+			$model_obj = array(
+				'id' => 0,
+				'vendor_id' => $vendor,
+				'model' => '',
+				'image' => '',
+				'solder_image' => '',
+				'cabinet_image' => '',
+				'rev_num' => '',
+				'rev_desc' => '',
+				'rev_date' => '',
+			);
 		}
 		else
 		{
@@ -58,8 +69,8 @@ class Phones extends My_Controller {
 			'title'			=> 'Раскладка деталей для телефона ' . $vendor_obj['name'] . ' модель ' . $model_obj['model'],
 			'js'			=> array('libs/jquery.jqzoom-core-pack.js', '/libs/jquery.metadata.js', '/libs/jquery.tablesorter.min.js', 'site/phones.js'),
 			'css'			=> array('jquery.jqzoom.css', 'jquery.tablesorter.blue.css'),
-			'description'	=> $vendor_obj['name'] . ', ' . $model_obj['model'],
-			'keywords'		=> $vendor_obj['name'] . ', ' . $model_obj['model'],
+			'description'	=> $vendor_obj['name'] . (isset($model_obj) ? ', ' . $model_obj['model'] : ''),
+			'keywords'		=> $vendor_obj['name'] . (isset($model_obj) ? ', ' . $model_obj['model'] : ''),
 			'body'			=> $this->load->view(
 									$view,
 									array(
