@@ -45,15 +45,16 @@ class Basket_model extends CI_Model
 	public function saveOrder() {
 		$user = $this->session->all_userdata();
 		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
-		if ($user_id) {
-			$basket = $this->getBasket();
+		if ($user_id  and $_POST) {			
 			$time = time();
 			$sql = "INSERT INTO orders (user_id,date) values ('$user_id','$time') ";
 			$this->db->query($sql);
 			$order_id = mysql_insert_id();
+			$basket = $this->input->post('basket');			
 			foreach ($basket as $key => $value) {
-				$part_id = $value['id'];
-				$sql = "INSERT INTO order_parts (order_id,part_id) values ('$order_id','$part_id')";
+				$part_id = $value['part_id'];
+				$min_num = $value['min_num'];
+				$sql = "INSERT INTO order_parts (order_id,part_id,min_num) values ('$order_id','$part_id','$min_num')";
 				$this->db->query($sql);
 			}
 			$sql = "DELETE from basket WHERE user_id = $user_id";

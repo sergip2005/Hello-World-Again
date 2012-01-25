@@ -58,7 +58,7 @@ class Basket extends My_Controller {
 		Modules::run('pages/_return_page', $data);
 	}
 
-	public function order() {
+	public function order() {		
 		$this->load->model('basket_model');
 		$basket = $this->basket_model->saveOrder();
 		redirect('basket/');

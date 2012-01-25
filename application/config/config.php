@@ -15,7 +15,7 @@
 |
 */
 //$url = ENVIRONMENT == 'development' ? 'osp.com' : 'originalspareparts.com.ua';
-$url = 'code';
+$url = 'cradmir';
 $config['base_url'] = 'http://' . $url . '/';
 
 

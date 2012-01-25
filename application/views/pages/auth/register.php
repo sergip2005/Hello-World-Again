@@ -4,7 +4,9 @@
 
 	<p>Введите информацию в поля ниже:</p>
 
+	
 	<?php echo form_open("register"); ?>
+	<input type="hidden" name="basket" value="<?php echo $actionBasket ?>"/>
 	<table>
 
 		<tr>
