@@ -304,9 +304,17 @@ class Auth extends MY_Controller {
 			if ($this->ion_auth->register('', $password, $email, array()))
 			{ //check to see if we are creating the user
 				//redirect them back to the admin page
+				
 				$this->session->set_flashdata('flashmessage', 'Пользователь "' . $email . '" создан');
-				//$this->output->set'Пользователь "' . $email . '" создан'
+				//$this->output->set'Пользователь "' . $email . '" создан'				
+				
+				if ($this->input->post('basket') == 1) {
+					$this->ion_auth->login($this->input->post('email'), $this->input->post('password'));
+					redirect('basket');
+				}
+				
 				redirect('/', 'refresh');
+				
 			}
 		}
 		else
@@ -333,13 +341,17 @@ class Auth extends MY_Controller {
 				'value' => $this->form_validation->set_value('password_confirm'),
 			);
 
+			$action = $this->uri->segments;
+			$actionBasket = isset($action[3]) ? 1 : 0;
+			$this->data['actionBasket'] = $actionBasket;
+			
 			$template = array(
 				'description' => '',
 				'keywords' => '',
 				'title'	=> 'Регистрация',
 				'body'	=> $this->load->view('pages/auth/register', $this->data, true),
 			);
-
+			
 			Modules::run('pages/_return_page', $template);
 		}
 	}

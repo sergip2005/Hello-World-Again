@@ -193,3 +193,20 @@ function round(amount, precision){
 	var a = Math.pow(10, precision);
 	return Math.round(amount * a) / a;
 }
+
+function addToBasket(part_id) {	
+	count = $('#basket').find('span').text();
+	if (count =='') count = 0;
+	count = parseInt(count);
+	count = count + 1;
+	htmlText = '<a href="/basket">Товаров в корзине <span>'+count+'</span></a>';
+	
+	$.post("/ajax/insertintobasket", {  part_id: part_id },
+	function(data) {
+		$('#basket').html(htmlText);
+		alert('Деталь добавлена в корзину');
+	});
+	
+	
+	//alert(part_id);
+}

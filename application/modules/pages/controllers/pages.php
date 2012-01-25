@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Pages extends MY_Controller {
-	
+
 	function __construct()
 	{
 		parent::__construct();
@@ -42,6 +42,21 @@ class Pages extends MY_Controller {
 		$data['bottom_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/bottom_menu', '', true);
 		$data['models_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/models_menu', array('catalog' => $catalog), true);
 		$data['search'] = $this->load->view($this->config->item('layout_dir') . 'partials/search', $search, true);
+
+		/// user basket count /////
+		$user = $this->session->all_userdata();
+		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
+		$session_id = $this->session->userdata('session_id');
+		if($user_id > 0) {
+			$sql ="SELECT COUNT(id) as count FROM basket WHERE user_id=$user_id";
+		}
+		else {
+			$sql ="SELECT COUNT(id) as count FROM basket WHERE session_id='$session_id'";
+		}
+		$q = $this->db->query($sql);
+		$res = $q->result_array();
+		$count = $res[0]['count'];
+		$data['count'] = $count;
 
 		$this->load->view($this->config->item('layout_dir') . 'index', $data);
 	}

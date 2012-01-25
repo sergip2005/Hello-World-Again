@@ -36,7 +36,7 @@
 						<thead>
 							<tr>
 								<th class="{sorter: false}">v.<?php echo !empty($model['rev_num']) ? $model['rev_num'] : ' ---' ?></th>
-								<th class="{sorter: false}" colspan="7"><?php
+								<th class="{sorter: false}" colspan="8"><?php
 									if ($region == '') {
 										echo 'Регион: ' . $default_region['name'];
 									} else {
@@ -53,6 +53,7 @@
 								<th class="header">Описание(рус)</th>
 								<th class="header">Кол-во</th>
 								<th class="header">Цена, грн</th>
+								<th class="">Корзина</th>
 							</tr>
 						</thead>
 
@@ -71,6 +72,7 @@
 								<td><?php echo $c['name_rus'] ?></td>
 								<td class="num_inp"><input type="text" value="0" class="num w45" title="<?php echo $c['min_num'] > 1 ? 'минимальное количество для заказа: ' . $c['min_num'] : ''; ?>" data-price="<?php echo $c['price'] ?>"></td>
 								<td class="price"><?php echo $c['price'] > 0 ? $c['price'] : 'нет данных' ?></td>
+								<td><a href="javascript://" onclick="addToBasket(<?php echo $c['part_id'] ?>)">добавить</a></td>
 							</tr>
 							<?php } ?>
 						<?php } else { ?>

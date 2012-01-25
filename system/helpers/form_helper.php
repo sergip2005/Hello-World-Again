@@ -59,6 +59,7 @@ if ( ! function_exists('form_open'))
 		$action OR $action = $CI->config->site_url($CI->uri->uri_string());
 
 		$form = '<form action="'.$action.'"';
+		
 
 		$form .= _attributes_to_string($attributes, TRUE);
 

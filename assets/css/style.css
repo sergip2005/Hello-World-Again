@@ -626,3 +626,8 @@ table.separate{
 	z-index: 100;
 	display: none;
 }
+.basket {
+	width:200px;
+	height:100px;
+	border: solid 1px #ccc;
+}
