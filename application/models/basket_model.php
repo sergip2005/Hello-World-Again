@@ -2,13 +2,6 @@
 
 class Basket_model extends CI_Model
 {
-	const SAVE_SUCCESS = 'Модель успешно сохранена';
-	const CREATE_SUCCESS = 'Модель успешно создана';
-	const REMOVE_SUCCESS = 'Модель успешно удалена';
-	const APP_SUBMIT_ERROR = 'Извините, но возникла проблема с обработкой полученных данных. Пожалуйста, попробуйте еще раз. Возможно имя модели не уникально.';
-	public $phonePartFields = array(
-	'cct_ref', 'num', 'comment'
-	);
 
 	public function InsertIntoBasket() {
 		$part_id = intval($_POST['part_id']);
@@ -32,9 +25,13 @@ class Basket_model extends CI_Model
 		else {
 			$str ="b.session_id='$session_id'";
 		}
-		$sql = "SELECT p.ptype,p.code,p.name,p.name_rus,p.min_num,p.price,p.id FROM basket b
-		LEFT JOIN parts p on p.id=b.part_id
-		WHERE $str";
+		$sql = "
+			SELECT
+				p.ptype, p.code, p.name, p.name_rus, p.min_num, p.price, p.id
+			FROM basket b
+			LEFT JOIN parts p
+				ON p.id = b.part_id
+			WHERE $str";
 		$q = $this->db->query($sql);
 		foreach ($q->result_array() as $row)
 		{
@@ -42,10 +39,11 @@ class Basket_model extends CI_Model
 		}
 		return $data;
 	}
+
 	public function saveOrder() {
 		$user = $this->session->all_userdata();
 		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
-		if ($user_id  and $_POST) {			
+		if ($user_id  and $_POST) {
 			$time = time();
 			$sql = "INSERT INTO orders (user_id,date) values ('$user_id','$time') ";
 			$this->db->query($sql);

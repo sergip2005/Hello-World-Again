@@ -76,7 +76,7 @@
 							</tr>
 							<?php } ?>
 						<?php } else { ?>
-							<tr><td colspan="8">Нет <?php echo $type == 'solder' ? 'паечных' : 'корпусных' ?> запчастей</td></tr>
+							<tr><td colspan="9">Нет <?php echo $type == 'solder' ? 'паечных' : 'корпусных' ?> запчастей</td></tr>
 						<?php } ?>
 						</tbody>
 

@@ -1,10 +1,12 @@
 <div class='mainInfo'>
 
-	<h1>Создание нового пользователя</h1>
+	<h1>РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ</h1>
 
-	<p>Введите информацию в поля ниже:</p>
+	<p>Р’РІРµРґРёС‚Рµ РёРЅС„РѕСЂРјР°С†РёСЋ РІ РїРѕР»СЏ РЅРёР¶Рµ:</p>
 
+	
 	<?php echo form_open("register"); ?>
+	<input type="hidden" name="basket" value="<?php echo $actionBasket ?>"/>
 	<table>
 
 		<tr>
@@ -13,17 +15,17 @@
 		</tr>
 
 		<tr>
-			<td class="label">Пароль (от <?php echo $this->config->item('min_password_length', 'ion_auth') ?> до <?php echo $this->config->item('max_password_length', 'ion_auth') ?> символов):</td>
+			<td class="label">РџР°СЂРѕР»СЊ (РѕС‚ <?php echo $this->config->item('min_password_length', 'ion_auth') ?> РґРѕ <?php echo $this->config->item('max_password_length', 'ion_auth') ?> СЃРёРјРІРѕР»РѕРІ):</td>
 			<td class="value"><?php echo form_input($password);?></td>
 		</tr>
 
 		<tr>
-			<td class="label">Подтверждение пароля:</td>
+			<td class="label">РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РїР°СЂРѕР»СЏ:</td>
 			<td class="value"><?php echo form_input($password_confirm);?></td>
 		</tr>
 
 		<tr>
-			<td colspan="2"><?php echo form_submit('submit', 'Зарегистрироваться');?></td>
+			<td colspan="2"><?php echo form_submit('submit', 'Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ');?></td>
 		</tr>
 
 	</table>

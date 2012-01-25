@@ -55,9 +55,9 @@
 			</div></div>
 			<div class="basket">			
 				<div id="basket">
-				<?php if($count>0):?>
+				<?php if (isset($count) && $count > 0):?>
 				<a href="/basket">
-					Товаров в корзине <span><?php echo $count?></span>
+					Товаров в корзине <span><?php echo $count ?></span>
 				</a>
 				<?php else:?>
 					Корзина пуста

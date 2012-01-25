@@ -20,8 +20,8 @@ class Ajax extends My_Controller {
 	}
 	
 	private function actionInsertIntoBasket() {
-		$basket = $this->load->model('basket_model');
-		$basket->InsertIntoBasket();
+		$this->load->model('basket_model');
+		$this->basket_model->InsertIntoBasket();
 		
 	}
 
