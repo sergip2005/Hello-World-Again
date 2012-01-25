@@ -554,6 +554,10 @@ class Ion_auth_model extends CI_Model
 
 	    $this->db->insert($this->tables['meta'], $data);
 
+	    $session_id = $this->session->userdata('session_id');
+		$user_id =$id;
+	    $sql = "UPDATE basket SET user_id = $user_id WHERE session_id = '$session_id'";
+	    $this->db->query($sql);
 	    return $this->db->affected_rows() > 0 ? $id : false;
 	}
 

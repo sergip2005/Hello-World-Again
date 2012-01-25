@@ -306,7 +306,9 @@ class Auth extends MY_Controller {
 				//redirect them back to the admin page
 				$this->session->set_flashdata('flashmessage', 'Пользователь "' . $email . '" создан');
 				//$this->output->set'Пользователь "' . $email . '" создан'
+				$this->ion_auth->login($this->input->post('email'), $this->input->post('password'));
 				redirect('/', 'refresh');
+				
 			}
 		}
 		else

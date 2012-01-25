@@ -32,7 +32,7 @@ class Basket_model extends CI_Model
 		else {
 			$str ="b.session_id='$session_id'";
 		}
-		$sql = "SELECT * FROM basket b
+		$sql = "SELECT p.ptype,p.code,p.name,p.name_rus,p.min_num,p.price,p.id FROM basket b
 		LEFT JOIN parts p on p.id=b.part_id
 		WHERE $str";
 		$q = $this->db->query($sql);
@@ -40,6 +40,24 @@ class Basket_model extends CI_Model
 		{
 			$data[] = $row;
 		}
-		return $data;		
+		return $data;
+	}
+	public function saveOrder() {
+		$user = $this->session->all_userdata();
+		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
+		if ($user_id) {
+			$basket = $this->getBasket();
+			$time = time();
+			$sql = "INSERT INTO orders (user_id,date) values ('$user_id','$time') ";
+			$this->db->query($sql);
+			$order_id = mysql_insert_id();
+			foreach ($basket as $key => $value) {
+				$part_id = $value['id'];
+				$sql = "INSERT INTO order_parts (order_id,part_id) values ('$order_id','$part_id')";
+				$this->db->query($sql);
+			}
+			$sql = "DELETE from basket WHERE user_id = $user_id";
+			$this->db->query($sql);
+		}
 	}
 }

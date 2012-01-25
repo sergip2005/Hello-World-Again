@@ -25,5 +25,5 @@
 </table>
 
 <input onclick="location='/basket/exel'" type="button" value="Экспорт в EXCEL"/>
-<?php if ($user_id) $href = '/basket/order'; else $href='/login'?>
+<?php if ($user_id) $href = '/basket/order'; else $href='/register'?>
 <input type="button" onclick="location.href='<?php echo $href?>'" value="Заказать"/>
