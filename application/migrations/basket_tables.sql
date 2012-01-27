@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 25, 2012 at 04:48 PM
+-- Generation Time: Jan 27, 2012 at 07:11 PM
 -- Server version: 5.1.40
 -- PHP Version: 5.2.12
 
@@ -24,8 +24,9 @@ CREATE TABLE IF NOT EXISTS `basket` (
   `part_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `session_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `amount` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=81 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=194 ;
 
 -- --------------------------------------------------------
 
@@ -37,8 +38,10 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `date` int(11) NOT NULL,
+  `totalAmount` int(11) NOT NULL,
+  `totalPrice` float NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -49,6 +52,6 @@ CREATE TABLE IF NOT EXISTS `orders` (
 CREATE TABLE IF NOT EXISTS `order_parts` (
   `order_id` int(11) NOT NULL,
   `part_id` int(11) NOT NULL,
-  `min_num` int(11) NOT NULL,
+  `amount` int(11) NOT NULL,
   KEY `order_id` (`order_id`,`part_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
