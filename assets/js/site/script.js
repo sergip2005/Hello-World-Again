@@ -194,19 +194,42 @@ function round(amount, precision){
 	return Math.round(amount * a) / a;
 }
 
-function addToBasket(part_id) {	
+function addToBasket(part_id,obj) {	
 	count = $('#basket').find('span').text();
 	if (count =='') count = 0;
-	count = parseInt(count);
+	count = parseInt(count,10);
 	count = count + 1;
 	htmlText = '<a href="/basket">Товаров в корзине <span>'+count+'</span></a>';
+	amount = parseInt($(obj).parent().parent().find('.amount').val(),10);
 	
-	$.post("/ajax/insertintobasket", {  part_id: part_id },
+	if (isNaN(amount)) amount =1;
+	
+	$.post("/basket/insertintobasket", {  part_id: part_id, amount:amount},
 	function(data) {
 		$('#basket').html(htmlText);
-		alert('Деталь добавлена в корзину');
+		mess = 'Количество '+amount+', итого в корзине '+count+' заказов';
+		alert(mess);
 	});
-	
-	
 	//alert(part_id);
+}
+
+function removeFromBasket(id,obj) {	
+	$(obj).parent().parent().remove();	
+	$.post("/basket/removefrombasket", {  id: id },function(data) {});
+}	
+function changeAmount(obj) {
+	amount = parseInt($(obj).val(),10);
+	
+	price = parseFloat($(obj).parent().parent().find('.price').text());
+	total = amount * price;
+	total = total.toFixed(2);		 
+	if (isNaN(amount) || amount==0) {
+		total = price;
+		$(obj).val(1);
+	}
+	$(obj).parent().parent().find('.totalPrice').html(total);	
+}
+function sendAmount(id,obj) {
+	amount = parseInt($(obj).val(),10);
+	$.post("/basket/sendamount", {  id: id,amount:amount },function(data) {});
 }
