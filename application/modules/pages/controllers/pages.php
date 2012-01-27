@@ -47,8 +47,9 @@ class Pages extends MY_Controller {
 		$user = $this->session->all_userdata();
 		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
 		$session_id = $this->session->userdata('session_id');
+		
 		if($user_id > 0) {
-			$sql ="SELECT COUNT(id) as count FROM basket WHERE user_id=$user_id";
+			$sql ="SELECT COUNT(id) as count FROM basket WHERE user_id=$user_id or session_id = '$session_id'";
 		}
 		else {
 			$sql ="SELECT COUNT(id) as count FROM basket WHERE session_id='$session_id'";
@@ -59,6 +60,7 @@ class Pages extends MY_Controller {
 		$data['count'] = $count;
 
 		$this->load->view($this->config->item('layout_dir') . 'index', $data);
+		
 	}
 
 	public function _return_ap_page($data)

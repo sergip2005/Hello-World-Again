@@ -554,12 +554,8 @@ class Ion_auth_model extends CI_Model
 
 		$this->db->insert($this->tables['meta'], $data);
 
-		if ($_POST['basket'] == 1) {
-			$session_id = $this->session->userdata('session_id');
-			$user_id =$id;
-			echo $sql = "UPDATE basket SET user_id = $user_id WHERE session_id = '$session_id'";
-			$this->db->query($sql);
-		}
+		
+		$this->saveBasketFromSESSION($id);		
 
 		return $this->db->affected_rows() > 0 ? $id : false;
 	}
@@ -610,7 +606,7 @@ class Ion_auth_model extends CI_Model
 				{
 					$this->remember_user($result->id);
 				}
-
+				$this->saveBasketFromSESSION($result->id);
 				return TRUE;
 			}
 		}
@@ -618,6 +614,14 @@ class Ion_auth_model extends CI_Model
 		return FALSE;
 	}
 
+	public function saveBasketFromSESSION($user_id) {
+		if ($this->input->post('basket') == 1) {
+			$session_id = $this->session->userdata('session_id');			 
+			$sql = "UPDATE basket SET user_id = $user_id WHERE session_id = '$session_id'";
+			$this->db->query($sql);
+		}
+	}
+	
 	/**
 	 * get_users
 	 *
