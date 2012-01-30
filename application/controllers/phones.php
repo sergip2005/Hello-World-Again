@@ -35,6 +35,7 @@ class Phones extends My_Controller {
 		$vendor = sanitate_input_string($vendor);
 		$model  = sanitate_input_string($model);
 		$vendor_obj = $this->vendors_model->getByName($vendor);
+		$this->vendor_obj = $vendor_obj;
 		$default_region = $region == '' ? $this->regions_model->getDefault() : false;
 		$region = $region == 'all' ? $region : '';
 		if ($model == 'none')
@@ -65,6 +66,7 @@ class Phones extends My_Controller {
 			$parts = $this->phones_model->getParts($vendor_obj['id'], $model_obj['id'], $default_region === false ? 'all' : $default_region, false, 0);
 			$search_params = '';
 		}
+		$this->model_obj = $model_obj;
 		$data = array(
 			'title'			=> 'Раскладка деталей для телефона ' . $vendor_obj['name'] . ' модель ' . $model_obj['model'],
 			'js'			=> array('libs/jquery.jqzoom-core-pack.js', '/libs/jquery.metadata.js', '/libs/jquery.tablesorter.min.js', 'site/phones.js'),
@@ -82,6 +84,7 @@ class Phones extends My_Controller {
 										'search_params' => $search_params,
 									),
 									true),
+			'data'			=> array('model' => $model_obj, 'vendor' => $vendor_obj),
 		);
 		Modules::run('pages/_return_page', $data);
 	}

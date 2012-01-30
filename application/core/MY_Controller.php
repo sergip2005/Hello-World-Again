@@ -58,6 +58,9 @@
 class MY_Controller extends MX_Controller {
 	public $cache_live_time = 0;
 
+	public $model_obj;
+	public $vendor_obj;
+
 	function __construct() {
 		parent::__construct();
 

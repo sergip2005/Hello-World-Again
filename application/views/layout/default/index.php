@@ -34,6 +34,7 @@
 		<link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
 
 		<script src="/assets/js/libs/jquery.1.6.4.min.js"></script>
+		<script src="/assets/js/site/plugins.js"></script>
 		<script src="/assets/js/site/script.js"></script>
 		<?php
 			if (isset($js) && count($js) > 0) {
@@ -47,26 +48,22 @@
 		<div class="container">
 			<div class="header clearfix"><div class="wrapper clearfix"></div></div>
 
-			<div class="main-menu clearfix"><div class="wrapper clearfix">
+			<div class="user-menu"><div class="wrapper">
+				<?php echo $user_menu ?>
+			</div></div>
+
+			<div class="basket"><div class="wrapper">
+				<?php echo $basket ?>
+			</div></div>
+
+			<div class="main-menu"><div class="wrapper">
 				<?php echo $top_menu ?>
 			</div></div>
+
 			<div class="search clearfix"><div class="wrapper clearfix">
 				<?php echo $search ?>
 			</div></div>
-			<div class="basket">			
-				<div id="basket">
-				<?php if (isset($count) && $count > 0):?>
-				<a href="/basket">
-					Товаров в корзине <span><?php echo $count ?></span>
-				</a>
-				<?php else:?>
-					Корзина пуста
-				<?php endif;?>				
-				</div>
-			</div>
-			<div class="user-menu clearfix"><div class="wrapper clearfix">
-				<?php echo $user_menu ?>
-			</div></div>
+
 			<div class="models-menu clearfix"><div class="wrapper clearfix"><?php echo $models_menu ?></div></div>
 
 			<div class="content"><div class="wrapper"><?php echo $body; ?></div></div>

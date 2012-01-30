@@ -1,5 +1,4 @@
-/** Main application settings object
- */
+/** Main application settings object */
 var app = {
 	settings: {
 		cacheTime: 600000,//10 * 1000 * 60
@@ -118,8 +117,34 @@ var app = {
 		});
 	},
 
+	initMenu: function(){
+		var mV = $('#menu-vendors'),
+			mG = $('#menu-groups'),
+			mM = $('#menu-models');
+
+		mV.delegate('li.vendor a', 'click', function(e){
+			e.preventDefault();
+			mG.html($(this).next().clone());
+			$(this).parent().addClass('active').siblings().removeClass('active');
+		});
+		mG.delegate('li.group:not(.unsorted) a', 'click', function(e){
+			e.preventDefault();
+			mM.html($(this).next().clone());
+			$(this).parent().addClass('active').siblings().removeClass('active');
+		});
+
+		if (mV.find('li.vendor.active').size() > 0) {
+			mG.html(mV.find('li.vendor.active').contents('ul').clone());
+		}
+
+		if (mG.find('li.group.active:not(.unsorted)').size() > 0) {
+			mM.html(mV.find('li.group.active').contents('ul').clone());
+		}
+	},
+
 	/** @TODO INIT */
 	init: function(){
+		this.initMenu();
 		this.initMessages();
 		//this.initSlideable();
 
@@ -171,6 +196,8 @@ $(document).ready(function () {
 				window.location.href = '/parts/search/' + encodeURI($(this).find('input.text').val());
 			}
 	});
+
+	app.init();
 });
 
 jQuery.fn.ForceNumericOnly = function(){

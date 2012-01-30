@@ -40,23 +40,9 @@ class Pages extends MY_Controller {
 		$data['top_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/top_menu', '', true);
 		$data['user_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/user_menu', '', true);
 		$data['bottom_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/bottom_menu', '', true);
-		$data['models_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/models_menu', array('catalog' => $catalog), true);
-		$data['search'] = $this->load->view($this->config->item('layout_dir') . 'partials/search', $search, true);
-
-		/// user basket count /////
-		$user = $this->session->all_userdata();
-		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
-		$session_id = $this->session->userdata('session_id');
-		if($user_id > 0) {
-			$sql ="SELECT COUNT(id) as count FROM basket WHERE user_id=$user_id";
-		}
-		else {
-			$sql ="SELECT COUNT(id) as count FROM basket WHERE session_id='$session_id'";
-		}
-		$q = $this->db->query($sql);
-		$res = $q->result_array();
-		$count = $res[0]['count'];
-		$data['count'] = $count;
+		$data['models_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/models_menu', array('catalog' => $catalog, 'model_obj' => $data['data']['model'], 'vendor_obj' => $data['data']['vendor']), true);
+		$data['search'] = $this->load->view($this->config->item('layout_dir') . 'partials/search', '', true);
+		$data['basket'] = $this->load->view($this->config->item('layout_dir') . 'partials/basket', '', true);
 
 		$this->load->view($this->config->item('layout_dir') . 'index', $data);
 	}

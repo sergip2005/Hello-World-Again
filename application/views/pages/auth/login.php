@@ -1,29 +1,31 @@
 <div class='mainInfo'>
 
-	<div class="pageTitle">Войти</div>
-	<div class="pageTitleBorder"></div>
 	<p>Введите ваш адрес электронной почты и пароль в поля ниже.</p>
-	
+
 	<div id="infoMessage"><?php echo $message;?></div>
-	
+
 	<?php echo form_open("auth/login");?>
 
-	<p>
-		<label for="email">Email:</label>
-		<?php echo form_input($email);?>
-	</p>
+	<table>
+		<tr>
+			<td><label for="email">Email:</label></td>
+			<td><?php echo form_input($email);?></td>
+		</tr>
 
-	<p>
-		<label for="password">Пароль:</label>
-		<?php echo form_input($password);?>
-	</p>
+		<tr>
+			<td><label for="password">Пароль:</label></td>
+			<td><?php echo form_input($password);?></td>
+		</tr>
 
-	<p>
-		<label for="remember">Запомнить меня:</label>
-		<?php echo form_checkbox('remember', '1', FALSE);?>
-	</p>
+		<tr>
+			<td><label for="remember">Запомнить меня:</label></td>
+			<td><?php echo form_checkbox('remember', '1', TRUE);?></td>
+		</tr>
 
-	<p><?php echo form_submit('submit', 'Войти');?></p>
+		<tr>
+			<td colspan="2"><?php echo form_submit('submit', 'Войти');?></td>
+		</tr>
+	</table>
 
 	<?php echo form_close();?>
 

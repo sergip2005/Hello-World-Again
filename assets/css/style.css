@@ -262,19 +262,10 @@ body {
 	clear: both;
 }
 
-.models-menu ul {
-	list-style: none;
-	margin: 0;
-}
-
-.models-menu li li { padding-left: 10px }
-
 /** USER-MENU
 ---------------------*/
 .user-menu {
-	position: absolute;
-	top: 10px;
-	right: 10px;
+	float: right
 }
 
 .user-menu ul {
@@ -297,12 +288,19 @@ body {
 
 .user-menu ul li ul {
 	display: none;
+	position: absolute;
 }
 
 .user-menu ul li {
 	text-align: right;
 }
 
+/* basket */
+.basket {
+	width:200px;
+	border: solid 1px #ccc;
+	float: right;
+}
 
  
  
@@ -591,12 +589,6 @@ table.separate{
 .parts-content .pages ul { list-style: none; margin: 0; padding: 0; }
 .parts-content .pages ul li { float: left; margin-right: 5px }
 
-.models-menu .wrapper {
-	border-bottom: 1px solid #DDDDDD;
-	border-top: 1px solid #DDDDDD;
-	padding: 5px 0;
-}
-
 .parts-content .model-title {
 	padding-bottom: 10px;
 }
@@ -610,6 +602,43 @@ table.separate{
 	max-height: 150px;
 	max-width: 150px;
 }
+
+/** models menu */
+.models-menu .wrapper {
+	border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
+	padding: 5px 0;
+}
+
+.models-menu ul {
+	list-style: none;
+	margin: 0;
+}
+
+.models-menu li li { padding-left: 10px }
+
+.models-menu ul.vendors {}
+.models-menu li.vendor {}
+.models-menu li.vendor ul { display: none }
+
+.models-menu ul.groups {}
+.models-menu li.group {}
+.models-menu li.group ul { display: none }
+
+.models-menu ul.models {}
+.models-menu li.model {}
+
+#menu-vendors { clear: both }
+#menu-groups { clear: both }
+#menu-models { clear: both }
+
+#menu-vendors li.active a { font-weight: bold }
+#menu-groups li.active a { font-weight: bold }
+#menu-models li.active a { font-weight: bold }
+
+#menu-vendors li { float: left; margin-right: 10px }
+#menu-groups li { float: left; margin-right: 10px }
+#menu-models li { float: left; margin-right: 10px }
 
 /** HELPERS
    ==============================*/
@@ -625,9 +654,4 @@ table.separate{
 	width: 250px;
 	z-index: 100;
 	display: none;
-}
-.basket {
-	width:200px;
-	height:100px;
-	border: solid 1px #ccc;
 }

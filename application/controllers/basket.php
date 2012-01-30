@@ -40,6 +40,7 @@ class Basket extends My_Controller {
 		$objWriter->save('php://output');
 		exit;
 	}
+
 	public function index() {
 		$dataController = array();
 		$this->load->model('basket_model');
@@ -48,12 +49,12 @@ class Basket extends My_Controller {
 		$user = $this->session->all_userdata();
 		$dataController['user_id'] =  isset($user['user_id']) ? $user['user_id'] : 0;
 		$data = array(
-		'title' 		=> 'Корзина: ' ,
-		'description' 	=> '',
-		'keywords' 		=> '',
-		'css'			=> array('jquery.tablesorter.blue.css'),
-		'js'			=> array('site/parts.js', '/libs/jquery.tablesorter.min.js'),
-		'body' 			=> $this->load->view('pages/basket/index', $dataController, true),
+			'title' 		=> 'Корзина' ,
+			'description' 	=> '',
+			'keywords' 		=> '',
+			'css'			=> array('jquery.tablesorter.blue.css'),
+			'js'			=> array('site/parts.js', '/libs/jquery.tablesorter.min.js'),
+			'body' 			=> $this->load->view('pages/basket/index', $dataController, true),
 		);
 		Modules::run('pages/_return_page', $data);
 	}
