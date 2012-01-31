@@ -40,7 +40,7 @@ class Pages extends MY_Controller {
 		$data['top_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/top_menu', '', true);
 		$data['user_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/user_menu', '', true);
 		$data['bottom_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/bottom_menu', '', true);
-		$data['models_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/models_menu', array('catalog' => $catalog, 'model_obj' => $data['data']['model'], 'vendor_obj' => $data['data']['vendor']), true);
+		$data['models_menu'] = $this->load->view($this->config->item('layout_dir') . 'partials/models_menu', array('catalog' => $catalog, 'model_obj' => isset($data['data']) ? $data['data']['model'] : array('model' => '', 'id' => 0), 'vendor_obj' => isset($data['data']) ? $data['data']['vendor'] : array('name' => '', 'id' => 0)), true);
 		$data['search'] = $this->load->view($this->config->item('layout_dir') . 'partials/search', '', true);
 		$data['basket'] = $this->load->view($this->config->item('layout_dir') . 'partials/basket', '', true);
 

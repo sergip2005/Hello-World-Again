@@ -34,6 +34,7 @@
 		<link rel="stylesheet" media="handheld" href="css/handheld.css?v=2">  -->
 
 		<script src="/assets/js/libs/jquery.1.6.4.min.js"></script>
+		<script src="/assets/js/libs/underscore-min.js"></script>
 		<script src="/assets/js/site/plugins.js"></script>
 		<script src="/assets/js/site/script.js"></script>
 		<?php
@@ -108,6 +109,11 @@
 				}
 			?></div>
 		</div>
+		<div id="popup">
+			<img src="/assets/images/icons/close.png" class="close" title="Закрыть" />
+			<div id="popup-content"></div>
+		</div>
+		<div id="splash"></div>
 		<noscript>
 			<div id="noscript-warning"><?php echo lang('noscript', array('vars' => array('domain' => $this->config->item('domain')))); ?></div>
 		</noscript>

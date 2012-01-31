@@ -26,7 +26,7 @@
 		<?php } ?>
 				</ul>
 			</li>
-			<li class="group unsorted<?php echo empty($model_obj['model']) ? ' active' : '' ?>"><a href="/phones/<?php echo url_title($vendor, 'underscore', TRUE) ?>/none">Несортированные</a></li>
+			<li class="group unsorted<?php echo empty($model_obj['model']) && !empty($vendor_obj['name']) ? ' active' : '' ?>"><a href="/phones/<?php echo url_title($vendor, 'underscore', TRUE) ?>/none">Несортированные</a></li>
 		</ul>
 	<?php } ?>
 	</li>
