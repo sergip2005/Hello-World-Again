@@ -14,8 +14,8 @@
 | path to your installation.
 |
 */
-//$url = ENVIRONMENT == 'development' ? 'osp.com' : 'originalspareparts.com.ua';
-$url = 'cradmir';
+$url = ENVIRONMENT == 'development' ? 'osp.com' : 'originalspareparts.com.ua';
+//$url = 'cradmir';
 $config['base_url'] = 'http://' . $url . '/';
 
 
@@ -255,7 +255,7 @@ $config['sess_use_database']	= TRUE;
 $config['sess_table_name']		= 'sessions_data';
 $config['sess_match_ip']		= FALSE;
 $config['sess_match_useragent']	= TRUE;
-$config['sess_time_to_update']	= 300;
+$config['sess_time_to_update']	= 3600;
 
 /*
 |--------------------------------------------------------------------------
