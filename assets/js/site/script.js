@@ -195,33 +195,30 @@ function round(amount, precision){
 }
 
 function addToBasket(part_id,obj) {	
-	count = $('#basket').find('span').text();
+	var count = $('#basket').find('span').text();
 	if (count =='') count = 0;
 	count = parseInt(count,10);
 	count = count + 1;
-	htmlText = '<a href="/basket">Товаров в корзине <span>'+count+'</span></a>';
-	amount = parseInt($(obj).parent().parent().find('.amount').val(),10);
-	
-	if (isNaN(amount)) amount =1;
-	
+	var htmlText = '<a href="/basket">Товаров в корзине <span>'+count+'</span></a>';
+	var amount = parseInt($(obj).parent().parent().find('.amount').val(),10);	
+	if (isNaN(amount)) amount =1;	
 	$.post("/basket/insertintobasket", {  part_id: part_id, amount:amount},
 	function(data) {
 		$('#basket').html(htmlText);
-		mess = 'Количество '+amount+', итого в корзине '+count+' заказов';
+		mess = 'Количество '+amount+', итого в корзине '+count+' элементов';
 		alert(mess);
 	});
-	//alert(part_id);
 }
 
 function removeFromBasket(id,obj) {	
 	$(obj).parent().parent().remove();	
 	$.post("/basket/removefrombasket", {  id: id },function(data) {});
 }	
-function changeAmount(obj) {
-	amount = parseInt($(obj).val(),10);
-	
-	price = parseFloat($(obj).parent().parent().find('.price').text());
-	total = amount * price;
+
+function changeAmount(obj) {	
+	var amount = parseInt($(obj).val(),10);	
+	var price = parseFloat($(obj).parent().parent().find('.price').text());
+	var total = amount * price;
 	total = total.toFixed(2);		 
 	if (isNaN(amount) || amount==0) {
 		total = price;
@@ -229,7 +226,8 @@ function changeAmount(obj) {
 	}
 	$(obj).parent().parent().find('.totalPrice').html(total);	
 }
+
 function sendAmount(id,obj) {
-	amount = parseInt($(obj).val(),10);
+	var amount = parseInt($(obj).val(),10);
 	$.post("/basket/sendamount", {  id: id,amount:amount },function(data) {});
 }
