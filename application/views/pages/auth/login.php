@@ -5,7 +5,7 @@
 	<div id="infoMessage"><?php echo $message;?></div>
 
 	<?php echo form_open("auth/login");?>
-
+	<input type="hidden" name="basket" value="1"/>
 	<table>
 		<tr>
 			<td><label for="email">Email:</label></td>

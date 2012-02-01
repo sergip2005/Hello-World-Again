@@ -50,9 +50,9 @@
 								<th class="header">Парт-<br>номер</th>
 								<th class="header">Исп-<br>ольз.</th>
 								<th class="header">Описание(eng)</th>
-								<th class="header">Описание(рус)</th>
-								<th class="header">Кол-во</th>
+								<th class="header">Описание(рус)</th>								
 								<th class="header">Цена, грн</th>
+								<th class="header">Кол-во</th>
 								<th class="">Корзина</th>
 							</tr>
 						</thead>
@@ -69,10 +69,15 @@
 								<td class="code"><?php echo $c['code'] ?></td>
 								<td class="num"><?php echo $c['num'] ?></td>
 								<td><?php echo $c['name'] ?></td>
-								<td><?php echo $c['name_rus'] ?></td>
-								<td class="num_inp"><input type="text" value="0" class="num w45" title="<?php echo $c['min_num'] > 1 ? 'минимальное количество для заказа: ' . $c['min_num'] : ''; ?>" data-price="<?php echo $c['price'] ?>"></td>
+								<td><?php echo $c['name_rus'] ?></td>								
 								<td class="price"><?php echo $c['price'] > 0 ? $c['price'] : 'нет данных' ?></td>
-								<td><a href="javascript://" onclick="addToBasket(<?php echo $c['part_id'] ?>)">добавить</a></td>
+								<td class="num_inp">
+								<a class="tooltip" title="Минимальное количество для заказа этого товара <?php echo $c['min_num']?>">
+								<input type="text" value="1" class="num w45 amount" title="<?php echo $c['min_num'] > 1 ? 'минимальное количество для заказа: ' . $c['min_num'] : ''; ?>" data-price="<?php echo $c['price'] ?>">
+								</a>
+								
+								</td>
+								<td><a href="javascript://" onclick="addToBasket(<?php echo $c['part_id'] ?>,this)">добавить</a></td>
 							</tr>
 							<?php } ?>
 						<?php } else { ?>
