@@ -22,7 +22,6 @@
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 		<link rel="stylesheet" href="/assets/css/style.css?v=2">
-		<link rel="stylesheet" href="/assets/css/tip.css">
 		<?php
 			if (isset($css) && count($css) > 0) {
 				foreach ($css as $name) {
@@ -37,7 +36,6 @@
 		<script src="/assets/js/libs/jquery.1.6.4.min.js"></script>
 		<script src="/assets/js/libs/underscore-min.js"></script>
 		<script src="/assets/js/site/plugins.js"></script>
-		<script src="/assets/js/libs/jtip.js"></script>
 		<script src="/assets/js/site/script.js"></script>
 		<?php
 			if (isset($js) && count($js) > 0) {
@@ -49,14 +47,13 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="header clearfix"><div class="wrapper clearfix"></div></div>
-
-			<div class="user-menu"><div class="wrapper">
-				<?php echo $user_menu ?>
-			</div></div>
-
-			<div class="basket"><div class="wrapper">
-				<?php echo $basket ?>
+			<div class="header clearfix"><div class="wrapper clearfix">
+				<div class="user-menu"><div class="wrapper">
+					<?php echo $user_menu ?>
+				</div></div>
+				<div class="basket"><div class="wrapper">
+					<?php echo $basket ?>
+				</div></div>
 			</div></div>
 
 			<div class="main-menu"><div class="wrapper">

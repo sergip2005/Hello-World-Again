@@ -460,7 +460,7 @@ border-right: 1px solid #69C;
 
 .select-and-input {
 	height: 50px;
-	width: 320px;
+	width: 260px;
 	display: inline-block;
 	margin-bottom: 7px;
 	position: relative;
@@ -511,7 +511,7 @@ border-right: 1px solid #69C;
 	left: 0;
 	height: 20px;
 	padding: 0;
-	width: 282px;
+	width: 215px;
 	border:solid 1px #848388;
 	background-color: white;
 	float: left;
@@ -717,4 +717,13 @@ table.separate{
 	-moz-opacity: 0.7;
 	-khtml-opacity: 0.7;
 	opacity: 0.7;
+}
+
+#tooltip{
+	position:absolute;
+	border:1px solid #333;
+	background:#f7f5d1;
+	padding:2px 5px;
+	color:#333;
+	display:none;
 }
