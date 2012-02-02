@@ -8,8 +8,8 @@ class Parts_model extends CI_Model
 	);
 
 	public $partTypeName = array(
-		'c' => 'корпусной',
-		's' => 'паечный'
+		'c' => 'механический',
+		's' => 'электрический'
 	);
 
 	public $partFields = array(

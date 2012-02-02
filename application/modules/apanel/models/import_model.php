@@ -27,8 +27,8 @@ class Import_model extends CI_Model
 	);
 
 	public $sheet_types = array(
-			'cabinet' => 'Корпусные элементы',
-			'solder' => 'Паечные элементы',
+			'cabinet' => 'Механические элементы',
+			'solder' => 'Электрические элементы',
 			'prices' => 'Изменения цен',
 	);
 

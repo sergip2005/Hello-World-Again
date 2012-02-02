@@ -29,7 +29,7 @@
 			<tr>
 				<td><a href="/phones/<?php echo url_title($p['vendor_name'], '_', TRUE) ?>"><?php echo $p['vendor_name'] ?></a></td>
 				<td><?php echo $p['cct_ref'] ?></td>
-				<td><?php echo $p['type'] == 'c' ? 'паечный' : 'корпусной' ?></td>
+				<td><?php echo $p['type'] == 'c' ? 'электрический' : 'механический' ?></td>
 				<td><?php echo $p['ptype'] ?></td>
 				<td><a href="/parts/<?php echo url_title($p['code'], '_', TRUE) ?>/<?php echo url_title($p['name'], '_', TRUE) ?>/"><?php echo $p['code'] ?></a></td>
 				<td><?php echo $p['num'] ?></td>

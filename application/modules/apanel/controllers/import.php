@@ -4,8 +4,8 @@ class Import extends MY_Controller {
 
 	public $sheetTypes = array(
 			'rev' => 'История ревизий',
-			'cabinet' => 'Корпусные элементы',
-			'solder' => 'Паечные элементы',
+			'cabinet' => 'Механические элементы',
+			'solder' => 'Электрические элементы',
 			'prices' => 'Изменения цен',
 		);
 

@@ -46,9 +46,9 @@ var partsManager = {
 						'<td><select id="vendors_popup" name="vendors"></select></td></tr>' +
 					'<tr><td><label for="model_image">Изображение модели:</label></td><td></td></tr>' +
 						'<tr><td colspan="2" class="tac"><%=  model_image == "" ? "" : \'<a href="/assets/images/phones/\' + model_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="model_image" name="model_image" /></td></tr>' +
-					'<tr><td><label for="solder_image">Изображение корпусных деталей:</label></td><td></td></tr>' +
+					'<tr><td><label for="solder_image">Изображение механических деталей:</label></td><td></td></tr>' +
 						'<tr><td colspan="2" class="tac"><%=  cabinet_image == "" ? "" : \'<a href="/assets/images/phones/\' + cabinet_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="cabinet_image" name="cabinet_image" /></td></tr>' +
-					'<tr><td><label for="cabinet_image">Изображение паечных деталей:</label></td><td></td></tr>' +
+					'<tr><td><label for="cabinet_image">Изображение электрических деталей:</label></td><td></td></tr>' +
 						'<tr><td colspan="2" class="tac"><%=  solder_image == "" ? "" : \'<a href="/assets/images/phones/\' + solder_image + \'" target="_blank">Просмотреть</a>\'  %><input type="file" id="solder_image" name="solder_image" /></td></tr>' +
 					'<tr><td><button name="<%= type %>_model" <%=  type == "create" ? "disabled" : "" %>><%=  type == "create" ? "Создать" : "Изменить" %></button></td>' +
 						'<td><button name="close">Отмена</button></td></tr></table>',
@@ -83,8 +83,8 @@ var partsManager = {
 					'<tr>' +
 						'<td>Вид детали:</td><td>' +
 							'<select name="type">' +
-								'<option value="s"<%= type == "s" ? \' selected="selected"\' : \'\' %>>паечная</option>' +
-								'<option value="c"<%= type == "c" ? \' selected="selected"\' : \'\' %>>корпусная</option>' +
+								'<option value="s"<%= type == "s" ? \' selected="selected"\' : \'\' %>>электрическая</option>' +
+								'<option value="c"<%= type == "c" ? \' selected="selected"\' : \'\' %>>механическая</option>' +
 							'</select>' +
 						'</td>' +
 						'<td>Тип детали:</td><td><input type="text" name="ptype" value="<%= ptype %>" /></td>' +

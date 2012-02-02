@@ -5,8 +5,8 @@
 		<img src="/assets/images/phones/<?php echo $model['image'] ?>" alt="<?php echo $vendor['name'] ?> - <?php echo $model['model'] ?>">
 		<h1><?php echo $vendor['name'] ?> - <?php echo $model['model'] ?></h1>
 		<div id="parts">
-			<span class="s selected">Корпусные </span>
-			<span class="c">Паечные </span>
+			<span class="s selected">Механические </span>
+			<span class="c">Электрические </span>
 		</div>
 	</div>
 
@@ -23,7 +23,7 @@
 		}
 
 		foreach ($types as $type => $type_parts) {
-			$name1 = $type == 'solder' ? 'паечные' : 'корпусные';
+			$name1 = $type == 'solder' ? 'электрические' : 'механические';
 	?>
 				<div class="<?php echo $type ?>">
 					<?php if (!empty($model[$type . '_image'])) { ?>
@@ -81,7 +81,7 @@
 							</tr>
 							<?php } ?>
 						<?php } else { ?>
-							<tr><td colspan="9">Нет <?php echo $type == 'solder' ? 'паечных' : 'корпусных' ?> запчастей</td></tr>
+							<tr><td colspan="9">Нет <?php echo $type == 'solder' ? 'электрических' : 'механических' ?> запчастей</td></tr>
 						<?php } ?>
 						</tbody>
 
