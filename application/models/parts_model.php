@@ -116,10 +116,12 @@ class Parts_model extends CI_Model
 	{
 		$pp = $this->config->item('per_page');
 		$q = 'SELECT
-				pp.id, pa.min_num as min_num, pp.cct_ref as cct_ref, pa.code as code, pa.old_code as old_code,
-				pa.name as name, pa.ptype,
-				pa.name_rus as name_rus, pa.price as price, pp.num as num, pa.ptype as ptype,
-				pa.type as type, p.model as model_name, v.name as vendor_name, pa.mktel_has as available
+				pp.id, pp.num as num, pp.cct_ref as cct_ref,
+				pa.code as code, pa.old_code as old_code, pa.name as name, pa.min_num as min_num,
+				pa.ptype, pa.name_rus as name_rus, pa.price as price, pa.ptype as ptype,
+				pa.type as type, pa.mktel_has as available,
+				p.id as model_id, p.model as model_name,
+				v.name as vendor_name, v.id as vendor_id
 			  FROM `phones_parts` pp
 			  LEFT JOIN `parts` pa ON pp.part_id = pa.id
 			  LEFT JOIN `phones` p ON pp.phone_id = p.id
