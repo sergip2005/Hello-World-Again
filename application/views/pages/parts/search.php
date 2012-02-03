@@ -41,7 +41,12 @@
 				<input type="text" value="1" class="num w45 amount" title="<?php echo $p['min_num'] > 1 ? 'минимальное количество для заказа: ' . $p['min_num'] : ''; ?>" data-price="<?php echo $p['price'] ?>"></td>
 				</a>
 				
-				<td><a href="javascript://" onclick="addToBasket(<?php echo $p['part_id'] ?>,this)">добавить</a></td>
+				<td>
+				<?php if ($p['price'] > 0):?>
+				<a href="javascript://" onclick="addToBasket(<?php echo $p['part_id'] ?>,this)">добавить</a>
+				<?php endif;?>
+				</td>
+				
 			</tr>
 			<?php } ?>
 		</tbody>
