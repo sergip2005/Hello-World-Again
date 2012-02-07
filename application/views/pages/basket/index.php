@@ -5,7 +5,7 @@
 	<div class="select-and-input">		
 			<div class="search_field search_code">
 			<form  action="" method="GET">
-				<input type="text" value="<?php echo $parts_code?>" name="parts_code" class="text"/>
+				<input placeholder="Парт-номер (6300314)" type="text" value="<?php echo $parts_code?>" name="parts_code" class="text"/>
 				<div class="button"></div>
 				<input type="submit" value="Sub" class="submit"/>
 				<input type="hidden" value="parts_code" class="parameter"/>
@@ -16,7 +16,7 @@
 	<div class="select-and-input">		
 			<div class="search_field search_code">
 			<form  action="" method="GET">
-				<input type="text" value="<?php echo $name?>" name="name" class="text"/>
+				<input placeholder="Описание(eng)" type="text" value="<?php echo $name?>" name="name" class="text"/>
 				<div class="button"></div>
 				<input type="submit" value="Sub" class="submit"/>
 				<input type="hidden" value="parts_code" class="parameter"/>
@@ -27,7 +27,7 @@
 	<div class="select-and-input">		
 			<div class="search_field search_code">
 			<form action="" method="GET">
-				<input type="text" value="<?php echo $name_rus?>" name="name_rus" class="text"/>
+				<input placeholder="Описание(рус)" type="text" value="<?php echo $name_rus?>" name="name_rus" class="text"/>
 				<div class="button"></div>
 				<input type="submit" value="Sub" class="submit"/>
 				<input type="hidden" value="parts_code" class="parameter"/>				
@@ -40,7 +40,7 @@
 <div style="clear: both;"/>
 
 
-<form action="/basket/order" method="POST">
+<form id="basketForm" action="/basket/order" method="POST">
 
 <input onclick="location='/basket/exel'" type="button" value="Экспорт в EXCEL"/>
 <?php if ($user_id):?>
@@ -48,7 +48,7 @@
 <?php else :?>
 <input type="button" onclick="location.href='/auth/register/basket'" value="Заказать"/>
 <?php endif;?>
-<input onclick="document.location=''" type="button" value="Пересчитать"/>
+<input onclick="$('#basketForm').attr('action', '/basket/count');$('#basketForm').submit();" type="button" value="Пересчитать"/>
 <table class="tablesorter separate clearfix">
 	<thead>		
 		<tr>			
@@ -72,8 +72,11 @@
 			<td><?php echo $c['name'] ?></td>
 			<td><?php echo $c['name_rus'] ?></td>
 			<td class="num_inp">
-			<input onblur="sendAmount(<?php echo $c['basket_id']?>,this)" onkeyup="changeAmount(this)" name="basket[<?php echo $key?>][amount]" type="text" value="<?php echo $c['amount']?>"/>
+			<a class="tooltip" title="Минимальное количество для заказа этого товара <?php echo $c['min_num']?>">
+				<input style="text-align:center;" class="num w45 amount" onblur="sendAmount(<?php echo $c['basket_id']?>,this)" onkeyup="changeAmount(this)" name="basket[<?php echo $key?>][amount]" type="text" value="<?php echo $c['amount']?>"/>
+			</a>
 			<input type="hidden" name="basket[<?php echo $key?>][part_id]" value="<?php echo $c['id']?>"/>
+			<input type="hidden" name="basket[<?php echo $key?>][basket_id]" value="<?php echo $c['basket_id']?>"/>
 			
 			</td>			
 			<td class="totalPrice">
@@ -102,5 +105,4 @@
 		</tr>
 	<tbody>
 </table>
-
 </form>

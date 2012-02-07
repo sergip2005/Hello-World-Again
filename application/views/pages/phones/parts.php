@@ -77,7 +77,12 @@
 								</a>
 								
 								</td>
-								<td><a href="javascript://" onclick="addToBasket(<?php echo $c['part_id'] ?>,this)">добавить</a></td>
+								<td>
+								<?php if ($c['price'] > 0):?>
+									<a href="javascript://" onclick="addToBasket(<?php echo $c['part_id'] ?>,this)">добавить</a>
+								<?php endif;?>
+								</td>
+								
 							</tr>
 							<?php } ?>
 						<?php } else { ?>

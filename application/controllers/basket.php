@@ -92,6 +92,10 @@ class Basket extends My_Controller {
 		$basket = $this->load->model('basket_model');
 		$basket->sendAmount();	
 	}
-	
+	public function count() {
+		$this->load->model('basket_model');
+		$this->basket_model->saveCount();
+		redirect('basket/');
+	}
 }
 ?>

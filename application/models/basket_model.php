@@ -47,7 +47,7 @@ class Basket_model extends CI_Model
 		if ($name_rus) {$str.= " and name_rus like '%$name_rus%'";}
 		$sql = "
 			SELECT
-				p.ptype, p.code, p.name, p.name_rus, b.amount, p.price, p.price as price_grn, p.id,b.id as basket_id
+				p.ptype, p.code, p.name, p.name_rus, b.amount, p.price, p.price as price_grn, p.id,b.id as basket_id,p.min_num
 			FROM basket b
 			LEFT JOIN parts p
 				ON p.id = b.part_id
@@ -55,7 +55,7 @@ class Basket_model extends CI_Model
 		$q = $this->db->query($sql);
 		$Currency_model = $this->load->model('Currency_model');
 		foreach ($q->result_array() as $row)
-		{			
+		{
 			$row['price_grn'] = $Currency_model->convert('eur','hrn',$row['price']);
 			$data[] = $row;
 		}
@@ -86,6 +86,17 @@ class Basket_model extends CI_Model
 			}
 			$sql = "DELETE from basket WHERE user_id = $user_id";
 			$this->db->query($sql);
+		}
+	}
+
+	public function saveCount() {
+		$basket = $this->input->post('basket');
+		foreach ($basket as $value) {
+			$data = array(
+			'amount' => $value['amount'],			
+			);
+			$this->db->where('id', $value['basket_id']);
+			$this->db->update('basket', $data);
 		}
 	}
 }
