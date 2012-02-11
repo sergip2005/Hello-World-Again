@@ -45,7 +45,8 @@
 
 		<div class="models-list">
 			<h3>Модели</h3>
-			<ul id="models"></ul>
+			<ul id="groups" class="clearfix"></ul>
+			<ul id="models" class="clearfix"></ul>
 		</div>
 	</div>
 

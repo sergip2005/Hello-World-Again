@@ -124,6 +124,7 @@ var partsManager = {
 		this.v = $('#vendors');
 		this.m = $('#models');
 		this.p = $('#parts');
+		this.g = $('#groups');
 		this.pchbx = this.p.parent().find(':checkbox.check-all');
 		this.c = $('#controls');
 		this.s = $('#search');
@@ -144,10 +145,21 @@ var partsManager = {
 		});
 
 		// dynamic models list
-		pm.m.delegate('li:not(.add)', 'click', function(e) {
+		pm.m.delegate('li', 'click', function(e) {
 			pm.s.find('input.text').removeClass('active');
 			pm.setModelLiActive(this, false);
 			pm.getModelParts($(this).data('id'), 1);
+		});
+		pm.g.delegate('li:not(.add):not(.group)', 'click', function(e) {
+			pm.s.find('input.text').removeClass('active');
+			pm.setModelLiActive(this, false);
+			pm.getModelParts($(this).data('id'), 1);
+		});
+
+		pm.g.delegate('li.group', 'click', function(e) {
+			pm.s.find('input.text').removeClass('active');
+			pm.setModelLiActive(this, false);
+			pm.m.html($(this).contents('ul').html());
 		});
 
 		pm.m.delegate('li span.edit-item', 'click', function(e) {
@@ -160,7 +172,8 @@ var partsManager = {
 				pm.manageModel('remove', $(this).data('id'), '');
 			}
 		});
-		pm.m.delegate('li.add', 'click', function(e) {
+
+		pm.g.delegate('li.add', 'click', function(e) {
 			e.stopPropagation();
 			pm.formModel(0, $(this).data('vendor_id'));
 		});
@@ -264,11 +277,12 @@ var partsManager = {
 					pm.getVendorModels(v, function() {
 						pm.setVendorLiActive(false, v);
 						if (parseInt(h[1], 10) > 0 || h[1] == 'all' || h[1] == 'none') {
+							console.log(h[1], parseInt(h[2], 10));
 							pm.getModelParts(h[1], parseInt(h[2], 10));
 							pm.setModelLiActive(false, h[1]);
 						}
 					});
-				}else{
+				} else {
 					if(h[0] == 'model_name' || h[0] == 'parts_code' || h[0] == 'parts_name')
 					{
 						pm.searchParts(h[1], h[0], parseInt(h[2], 10));
@@ -309,7 +323,11 @@ var partsManager = {
 	},
 
 	getModelElm: function(mId) {
-		return this.m.contents('li[data-id="' + mId + '"]');
+		if (mId != 'all' && mId != 'none') {
+			return this.m.contents('li[data-id="' + mId + '"]');
+		} else {
+			return this.g.contents('li[data-id="' + mId + '"]');
+		}
 	},
 
 	setVendorLiActive: function(elm, id) {
@@ -328,7 +346,11 @@ var partsManager = {
 		var pm = this;
 		if (elm !== false) {
 			$(elm).addClass('active').siblings().removeClass('active');
-		} else if (id > 0 || id == 'all' || id == 'none') {
+		} else if (id == 'all' || id == 'none') {
+			pm.getModelElm(id).addClass('active').siblings().removeClass('active');
+		} else if (id > 0) {
+			var model = _.find(pm.cache.models['/apanel/models/get_by_vendor/' + pm.config.vendor_id].data, function(a){ return a.id == id; });
+			pm.g.find('li[data-group="' + model.name[0] + '"]').trigger('click');
 			pm.getModelElm(id).addClass('active').siblings().removeClass('active');
 		} else {
 			$('#models li').removeClass('active');
@@ -343,16 +365,36 @@ var partsManager = {
 				cache = typeof cache !== 'boolean' ? false : !! cache;
 				var html = '<li data-id="add_model" data-vendor_id="' + s + '" class="fixed add">создать модель</li><li data-id="all" class="fixed">все</li><li data-id="none" class="fixed">без модели</li>';
 				if (resp.status === 1) {
+					var groups = {};
+					// form groups array
+					_.each(resp.data, function(v) {
+						if (!groups.hasOwnProperty(v.name[0])) {
+							groups[v.name[0]] = [];
+						}
+						groups[v.name[0]].push(v);
+					});
+					// form html from groups
+					_.each(groups, function(a, i) {
+						html += '<li data-group="' + i + '" class="group">' + i + '<ul class="models">';
+						_.each(a, function(v) {
+							html += '<li data-id="' + v.id + '">' + v.name + '<span data-id="' + v.id + '" class="remove-item icon-container fr" title="Удалить модель '+ v.name +'">' +
+									'<span class="ui-icon ui-icon-close"></span></span><span data-id="' + v.id + '" class="edit-item icon-container fr" title="Редактировать модель '+ v.name +'">' +
+									'<span class="ui-icon ui-icon-pencil"></span></span></li>';
+						});
+						html += '</ul></li>';
+					});
+/*
 					_.each(resp.data, function(v) {
 						html += '<li data-id="' + v.id + '">' + v.name + '<span data-id="' + v.id + '" class="remove-item icon-container fr" title="Удалить модель '+ v.name +'">' +
 								'<span class="ui-icon ui-icon-close"></span></span><span data-id="' + v.id + '" class="edit-item icon-container fr" title="Редактировать модель '+ v.name +'">' +
 								'<span class="ui-icon ui-icon-pencil"></span></span></li>';
 					});
+*/
 				}
 				if (!cache) {
 					pm.cache.models[app.urls.getVendorModels + s] = resp;
 				}
-				pm.m.html(html);
+				pm.g.html(html);
 				pm.updateControls();
 				if (_.isFunction(c)) {
 					c();

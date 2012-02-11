@@ -744,7 +744,6 @@ table.desc select { min-width: 150px }
 .parts-navigation .vendors-list {
 	width: 200px;
 	float: left;
-	border-right: 1px solid #DDD;
 }
 
 .parts-navigation .vendors-list ul { margin: 0 }
@@ -755,7 +754,11 @@ table.desc select { min-width: 150px }
 	color: red
 }
 
-.parts-navigation .models-list { margin-left: 220px }
+.parts-navigation .models-list {
+	border-left: 1px solid #DDDDDD;
+    margin-left: 200px;
+    padding-left: 20px;
+}
 .parts-navigation .models-list ul { margin: 0 }
 .parts-navigation .models-list li.add {color:green; font-weight: bold;}
 .parts-navigation .models-list li.button {width: 15px; padding: 2px 1px;}
@@ -772,6 +775,7 @@ table.desc select { min-width: 150px }
 	font-weight: bold;
 	color: red
 }
+.parts-navigation .models-list ul.models { display: none; }
 
 .parts-navigation .parts-table {
 	margin-top: 5px;
