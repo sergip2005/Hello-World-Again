@@ -62,6 +62,7 @@ class Phones extends My_Controller {
 		else
 		{
 			$model_obj = $this->phones_model->getModelByName(prepare_phone_name($model));
+			$debug = array(prepare_phone_name($model), $model_obj);
 			$view = 'pages/phones/parts';
 			$parts = $this->phones_model->getParts($vendor_obj['id'], $model_obj['id'], $default_region === false ? 'all' : $default_region, false, 0);
 			$search_params = '';
@@ -82,6 +83,7 @@ class Phones extends My_Controller {
 										'model' => $model_obj,
 										'default_region' => $default_region,
 										'search_params' => $search_params,
+										//'debug' => $debug,
 									),
 									true),
 			'data'			=> array('model' => $model_obj, 'vendor' => $vendor_obj),

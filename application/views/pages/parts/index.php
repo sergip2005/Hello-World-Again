@@ -1,5 +1,4 @@
 <?php
-
 	$pages_html = generate_pagination_html($search_params['pagination'], '/parts/' . $search_params['query'] . '/%page%/');
 ?>
 <div class="parts-content">

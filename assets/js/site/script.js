@@ -125,6 +125,7 @@ var app = {
 		mV.delegate('li.vendor a', 'click', function(e){
 			e.preventDefault();
 			mG.html($(this).next().clone());
+			mM.empty();
 			$(this).parent().addClass('active').siblings().removeClass('active');
 		});
 		mG.delegate('li.group:not(.unsorted) a', 'click', function(e){
@@ -222,7 +223,7 @@ function addToBasket(part_id, obj) {
 function removeFromBasket(id,obj) {
 	$(obj).parent().parent().remove();
 	$.post("/basket/removefrombasket", {id: id}, function(data){});
-}	
+}
 
 function changeAmount(obj) {
 	var amount = parseInt($(obj).val(), 10);

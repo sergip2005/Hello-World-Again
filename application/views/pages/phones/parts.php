@@ -50,7 +50,7 @@
 								<th class="header">Парт-<br>номер</th>
 								<th class="header">Исп-<br>ольз.</th>
 								<th class="header">Описание(eng)</th>
-								<th class="header">Описание(рус)</th>								
+								<th class="header">Описание(рус)</th>
 								<th class="header">Цена, грн</th>
 								<th class="header">Кол-во</th>
 								<th class="">Корзина</th>
@@ -66,20 +66,17 @@
 							<tr>
 								<td class="cct_ref"><?php echo $c['cct_ref'] ?></td>
 								<td class="ptype"><?php echo $c['ptype'] ?></td>
-								<td class="code"><?php echo $c['code'] ?></td>
+								<td class="code"><a href="/parts/<?php echo url_title($c['code'], '_', TRUE) ?>/<?php echo url_title($c['name'], '_', TRUE) ?>/"><?php echo $c['code'] ?></a></td>
 								<td class="num"><?php echo $c['num'] ?></td>
 								<td><?php echo $c['name'] ?></td>
-								<td><?php echo $c['name_rus'] ?></td>								
+								<td><?php echo $c['name_rus'] ?></td>
 								<td class="price"><?php echo $c['price'] > 0 ? $c['price'] : 'нет данных' ?></td>
 								<td class="num_inp">
-								<a class="tooltip" title="Минимальное количество для заказа этого товара <?php echo $c['min_num']?>">
-								<input type="text" value="1" class="num w45 amount" title="<?php echo $c['min_num'] > 1 ? 'минимальное количество для заказа: ' . $c['min_num'] : ''; ?>" data-price="<?php echo $c['price'] ?>">
-								</a>
-								
+									<input type="text" value="0" class="num w45 amount tooltip" title="Минимальное количество для заказа этого товара <?php echo $c['min_num']?>" data-price="<?php echo $c['price'] ?>">
 								</td>
 								<td>
 								<?php if ($c['price'] > 0):?>
-									<a href="javascript://" onclick="addToBasket(<?php echo $c['part_id'] ?>,this)">добавить</a>
+									<a href="#" onclick="addToBasket(<?php echo $c['part_id'] ?>, this)">добавить</a>
 								<?php endif;?>
 								</td>
 								

@@ -143,26 +143,6 @@ var partsManager = {
 			pm.s.find('input.text').removeClass('active');
 		});
 
-		//popup form
-		 pm.pc.delegate('select[name="vendor"]', 'change', function(e) {
-			pm.getVendorModels(-1, $('select[name="vendor"] option:selected').val());
-		 }).delegate('button[name="move"]', 'click', function(e) {
-			pm.moveParts(pm.pc.find('#move-models :selected').val(), pm.pc.find('input[name="move_parts_id"]').val())
-		 }).delegate('button[name="create_model"]', 'click', function(e) {
-			pm.manageModel('save', '', $('#vendors_popup :selected').val());
-		 }).delegate('button[name="edit_model"]', 'click', function(e) {
-			pm.manageModel('save', $('#model_name').data('id'), $('#vendors_popup :selected').val());
-			$('#model_image').uploadifyUpload();
-			$('#cabinet_image').uploadifyUpload();
-			$('#solder_image').uploadifyUpload();
-			pm.clearCache('models', $('#vendors_popup :selected').val());
-			pm.getVendorModels($('#vendors_popup :selected').val());
-		 }).delegate('button[name="close"]', 'click', function(e) {
-			app.popup.add(app.splash).hide();
-		 }).delegate('input[name="model_name"]', 'keyup', function(e) {
-			pm.pc.find('button[name="create_model"]').prop('disabled', false);
-		 });
-
 		// dynamic models list
 		pm.m.delegate('li:not(.add)', 'click', function(e) {
 			pm.s.find('input.text').removeClass('active');
@@ -184,6 +164,26 @@ var partsManager = {
 			e.stopPropagation();
 			pm.formModel(0, $(this).data('vendor_id'));
 		});
+
+		//popup form
+		 pm.pc.delegate('select[name="vendor"]', 'change', function(e) {
+			pm.getVendorModels(-1, $('select[name="vendor"] option:selected').val());
+		 }).delegate('button[name="move"]', 'click', function(e) {
+			pm.moveParts(pm.pc.find('#move-models :selected').val(), pm.pc.find('input[name="move_parts_id"]').val())
+		 }).delegate('button[name="create_model"]', 'click', function(e) {
+			pm.manageModel('save', '', $('#vendors_popup :selected').val());
+		 }).delegate('button[name="edit_model"]', 'click', function(e) {
+			pm.manageModel('save', $('#model_name').data('id'), $('#vendors_popup :selected').val());
+			$('#model_image').uploadifyUpload();
+			$('#cabinet_image').uploadifyUpload();
+			$('#solder_image').uploadifyUpload();
+			pm.clearCache('models', $('#vendors_popup :selected').val());
+			pm.getVendorModels($('#vendors_popup :selected').val());
+		 }).delegate('button[name="close"]', 'click', function(e) {
+			app.popup.add(app.splash).hide();
+		 }).delegate('input[name="model_name"]', 'keyup', function(e) {
+			pm.pc.find('button[name="create_model"]').prop('disabled', false);
+		 });
 
 		// init sortables
 		pm.p.parents('table').tablesorter({ headers: { 0: { sorter: false} }, widgets: ['zebra', 'repeatHeaders'] });

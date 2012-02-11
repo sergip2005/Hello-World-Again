@@ -18,7 +18,7 @@
 
 					<?php $curr_group = $m[0]; ?>
 
-					<li class="group<?php echo !empty($model_obj['model']) && $m[0] == $model_obj['model'][0] ? ' active' : '' ?>">
+					<li class="group<?php echo !empty($model_obj['model']) && $m[0] == $model_obj['model'][0] && $vendor == $vendor_obj['name'] ? ' active' : '' ?>">
 						<a href="#"><?php echo $m[0] ?></a>
 						<ul class="models">
 				<?php } ?>

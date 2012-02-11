@@ -5,8 +5,8 @@ class Basket extends My_Controller {
 	function __construct()
 	{
 		parent::__construct();
-
 	}
+
 	public function exel() {
 		$dataController = array();
 		$this->load->model('basket_model');
@@ -33,7 +33,7 @@ class Basket extends My_Controller {
 			$totalPriceGRN = $totalPriceGRN + $c['price'];
 			$totalAmount = $totalAmount + $c['amount'];
 			foreach ($c as $key=>$value) {
-				if ($column<=6){					
+				if ($column<=6){
 					$aSheet->setCellValueByColumnAndRow($column,$row,$value);
 					$column++;
 				}
@@ -81,16 +81,16 @@ class Basket extends My_Controller {
 	
 	public function InsertIntoBasket() {
 		$basket = $this->load->model('basket_model');
-		$basket->InsertIntoBasket();	
+		$basket->InsertIntoBasket();
 	}
 		
 	public function removeFromBasket() {
 		$basket = $this->load->model('basket_model');
-		$basket->removeFromBasket();	
+		$basket->removeFromBasket();
 	}
 	public function sendAmount() {
 		$basket = $this->load->model('basket_model');
-		$basket->sendAmount();	
+		$basket->sendAmount();
 	}
 	public function count() {
 		$this->load->model('basket_model');
@@ -98,4 +98,3 @@ class Basket extends My_Controller {
 		redirect('basket/');
 	}
 }
-?>

@@ -16,13 +16,13 @@
 				<th class="header">Парт-<br>номер</th>
 				<th class="header">Исп-<br>ольз.</th>
 				<th class="header">Описание(eng)</th>
-				<th class="header">Описание(рус)</th>				
+				<th class="header">Описание(рус)</th>
 				<th class="header">Цена, грн</th>
 				<th class="header">Кол-во</th>
 				<th class="">Корзина</th>
 			</tr>
 		</thead>
-		<tbody>		
+		<tbody>
 			<?php foreach ($parts as $p) {
 				$p['price'] = $this->currency_model->convert('eur', 'hrn', $p['price']);
 				?>
@@ -37,16 +37,13 @@
 				<td><?php echo $p['name_rus'] ?></td>
 				<td><?php echo $p['price'] ?></td>
 				<td class="num_inp">
-				<a class="tooltip" title="Минимальное количество для заказа этого товара <?php echo $p['min_num']?>">
-				<input type="text" value="1" class="num w45 amount" title="<?php echo $p['min_num'] > 1 ? 'минимальное количество для заказа: ' . $p['min_num'] : ''; ?>" data-price="<?php echo $p['price'] ?>"></td>
-				</a>
-				
+					<input type="text" value="0" class="num w45 amount tooltip" title="Минимальное количество для заказа этого товара <?php echo $p['min_num']?>" data-price="<?php echo $p['price'] ?>"></td>
 				<td>
 				<?php if ($p['price'] > 0):?>
 				<a href="javascript://" onclick="addToBasket(<?php echo $p['part_id'] ?>,this)">добавить</a>
 				<?php endif;?>
 				</td>
-				
+
 			</tr>
 			<?php } ?>
 		</tbody>
