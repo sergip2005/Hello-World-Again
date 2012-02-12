@@ -383,13 +383,6 @@ var partsManager = {
 						});
 						html += '</ul></li>';
 					});
-/*
-					_.each(resp.data, function(v) {
-						html += '<li data-id="' + v.id + '">' + v.name + '<span data-id="' + v.id + '" class="remove-item icon-container fr" title="Удалить модель '+ v.name +'">' +
-								'<span class="ui-icon ui-icon-close"></span></span><span data-id="' + v.id + '" class="edit-item icon-container fr" title="Редактировать модель '+ v.name +'">' +
-								'<span class="ui-icon ui-icon-pencil"></span></span></li>';
-					});
-*/
 				}
 				if (!cache) {
 					pm.cache.models[app.urls.getVendorModels + s] = resp;

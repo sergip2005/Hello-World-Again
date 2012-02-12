@@ -32,6 +32,9 @@ class Phones extends My_Controller {
 		$this->load->model('currency_model');
 		$this->load->model('vendors_model');
 
+		$model = explode('/', $_SERVER['REQUEST_URI']);
+		$model = $model[3];
+		$debug = array(explode('/', $_SERVER['REQUEST_URI']));
 		$vendor = sanitate_input_string($vendor);
 		$model  = sanitate_input_string($model);
 		$vendor_obj = $this->vendors_model->getByName($vendor);
@@ -62,7 +65,6 @@ class Phones extends My_Controller {
 		else
 		{
 			$model_obj = $this->phones_model->getModelByName(prepare_phone_name($model));
-			$debug = array(prepare_phone_name($model), $model_obj);
 			$view = 'pages/phones/parts';
 			$parts = $this->phones_model->getParts($vendor_obj['id'], $model_obj['id'], $default_region === false ? 'all' : $default_region, false, 0);
 			$search_params = '';
