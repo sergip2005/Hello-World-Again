@@ -9,13 +9,36 @@ class Basket_model extends CI_Model
 		$user = $this->session->all_userdata();
 		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
 		if ($part_id > 0) {
-			$data = array(
+			if ($user_id > 0) {
+				$str ="(b.user_id=$user_id or b.session_id='$session_id')";
+			} else {
+				$str ="b.session_id='$session_id'";
+			}
+			$str.= " AND b.part_id=".$part_id;
+			$sql = "SELECT b.amount FROM basket b WHERE $str";
+			$q = $this->db->query($sql);
+
+			if ($q->num_rows > 0) {
+				foreach ($q->result() as $row);
+				$amount = $row->amount + intval($this->input->post('amount'));
+				$sql = "UPDATE basket b SET b.amount = $amount WHERE $str";
+				$this->db->query($sql);
+			}
+			else {
+				$amount = intval($this->input->post('amount'));
+				$data = array(
 				'part_id' => $part_id ,
 				'session_id' => $session_id ,
 				'user_id' => $user_id,
-				'amount' => intval($this->input->post('amount'))
-			);
-			$this->db->insert('basket', $data);
+				'amount' => $amount
+				);
+				$this->db->insert('basket', $data);
+			}
+			$basket = $this->getBasket();
+			$count = count($basket);
+			$data = array('amount'=>$amount,'count'=>$count);
+			echo json_encode($data);
+			exit;
 		}
 	}
 
@@ -78,20 +101,20 @@ class Basket_model extends CI_Model
 		if ($user_id  and $_POST) {
 			$time = time();
 			$data = array(
-					'user_id' => $user_id,
-					'date' => $time,
-					'totalPrice'=> $this->input->post('totalPrice'),
-					'totalAmount'=> intval($this->input->post('totalAmount')),
-				);
+			'user_id' => $user_id,
+			'date' => $time,
+			'totalPrice'=> $this->input->post('totalPrice'),
+			'totalAmount'=> intval($this->input->post('totalAmount')),
+			);
 			$this->db->insert('orders', $data);
 			$order_id = $this->db->insert_id();
 			$basket = $this->input->post('basket');
 			foreach ($basket as $key => $value) {
 				$data = array(
-						'part_id' => intval($value['part_id']) ,
-						'amount' => intval($value['amount']),
-						'order_id' => $order_id ,
-					);
+				'part_id' => intval($value['part_id']) ,
+				'amount' => intval($value['amount']),
+				'order_id' => $order_id ,
+				);
 				$this->db->insert('order_parts', $data);
 			}
 			$sql = "DELETE from basket WHERE user_id = $user_id";
@@ -103,7 +126,7 @@ class Basket_model extends CI_Model
 		$basket = $this->input->post('basket');
 		foreach ($basket as $value) {
 			$data = array(
-				'amount' => $value['amount'],
+			'amount' => $value['amount'],
 			);
 			$this->db->where('id', $value['basket_id'])->update('basket', $data);
 		}
