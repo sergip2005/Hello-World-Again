@@ -209,20 +209,43 @@ function addToBasket(part_id, obj) {
 	var amount = parseInt($(obj).parent().parent().find('.amount').val(), 10);
 	if (!isNaN(amount) && amount>0) {
 		$.post(
-				"/basket/insertintobasket",
-				{part_id: part_id, amount: amount},
-				function(data){
-					var val = jQuery.parseJSON(data);
-					var htmlText = '<a href="/basket">Товаров в корзине <span>' + val.count + '</span></a>';
-					$('#basket').html(htmlText);
-					
-					/* @TODO указывать кол-во единиц текущей позиции. Например, я добавил 2 детали №35 в корзину, а там уже лежит 3 таких, тогда сообщение скажет: добавлено 2, итого в корзине 5 */					
-					var mess = 'Добавлено запчастей ' + amount + ' №'+part_id+', итого в корзине ' + val.amount + '';					
-					app.showPopup({html: mess, c: function() {}});
-				});
+		"/basket/insertintobasket",
+		{part_id: part_id, amount: amount},
+		function(data){
+			var val = jQuery.parseJSON(data);
+			var htmlText = '<a href="/basket">Товаров в корзине <span>' + val.count + '</span></a>';
+			$('#basket').html(htmlText);
+
+			/* @TODO указывать кол-во единиц текущей позиции. Например, я добавил 2 детали №35 в корзину, а там уже лежит 3 таких, тогда сообщение скажет: добавлено 2, итого в корзине 5 */
+			var mess = 'Добавлено запчастей ' + amount + ' №'+part_id+', итого в корзине ' + val.amount + '';
+			app.showPopup({html: mess, c: function() {}});
+		});
 	}
 }
 
+function addToBasketAll()  {
+	var i = 0;
+	var parsedData = [];
+	$(".amount").each(function() {
+		var value = Array();
+		var amount = parseInt($(this).val(),10);
+		var partId = parseInt($(this).parent().find('.partId').val(),10);
+		var price = parseFloat($(this).parent().find('.price').val());		
+		if (amount > 0 && price>0) {			
+			parsedData.push({
+			'amount': amount,
+			'partId': partId,
+			});
+			i++;
+		}
+	});
+	$.post("/basket/insertintobasketall", {data: parsedData}, function(data){
+		var htmlText = '<a href="/basket">Товаров в корзине <span>' + data + '</span></a>';
+		$('#basket').html(htmlText);
+		var mess = 'Добавлено ' + i + ' товаров';
+		app.showPopup({html: mess, c: function() {}});
+	} );
+}
 function removeFromBasket(id,obj) {
 	$(obj).parent().parent().remove();
 	$.post("/basket/removefrombasket", {id: id}, function(data){});
