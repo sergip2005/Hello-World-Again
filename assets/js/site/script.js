@@ -37,16 +37,16 @@ var app = {
 	popup: null,
 	popupContent: null,
 	/**
-	 * @param object s
-	 * s.w - width
-	 * s.h - height
-	 * s.html - content
-	 * s.c - callback
-	 */
+	* @param object s
+	* s.w - width
+	* s.h - height
+	* s.html - content
+	* s.c - callback
+	*/
 	showPopup: function (s) { // makes popup to show
 		var c = this.popupContent, p = this.popup, total_w = $(window).width(),
-			w = typeof s.w === 'undefined' || s.w <= 0 ? 'auto' : s.w,
-			h = typeof s.h === 'undefined' || s.h <= 0 ? 'auto' : s.h;
+		w = typeof s.w === 'undefined' || s.w <= 0 ? 'auto' : s.w,
+		h = typeof s.h === 'undefined' || s.h <= 0 ? 'auto' : s.h;
 		// resize box
 		c.html(s.html).width(w).height(h);
 		// show popup
@@ -65,8 +65,8 @@ var app = {
 	message: null,
 	messageContent: null,
 	/**
-	 * @param s - object with structure {html:string, c: function}
-	 */
+	* @param s - object with structure {html:string, c: function}
+	*/
 	showMessage: function (s) {
 		var c = this.messageContent, p = this.message;
 		c.html(s.html);
@@ -119,8 +119,8 @@ var app = {
 
 	initMenu: function(){
 		var mV = $('#menu-vendors'),
-			mG = $('#menu-groups'),
-			mM = $('#menu-models');
+		mG = $('#menu-groups'),
+		mM = $('#menu-models');
 
 		mV.delegate('li.vendor a', 'click', function(e){
 			e.preventDefault();
@@ -151,10 +151,10 @@ var app = {
 		tooltip();
 
 		$('body').ajaxStart(function() {
-				$(this).addClass('loading');
+			$(this).addClass('loading');
 		}).ajaxStop(function(){
-				$(this).removeClass('loading');
-			});
+			$(this).removeClass('loading');
+		});
 	},
 
 	templates: {
@@ -165,38 +165,38 @@ $(document).ready(function () {
 	var search = $(".select-and-input");
 
 	/*$('form[name="search_parts_code"] input.text', search).livesearch({
-		searchCallback: function(){ search.find('form[name="search_parts_code"]').trigger('submit'); },
-		queryDelay: 250,
-		innerText: "Код",
-		minimumSearchLength: 2
+	searchCallback: function(){ search.find('form[name="search_parts_code"]').trigger('submit'); },
+	queryDelay: 250,
+	innerText: "Код",
+	minimumSearchLength: 2
 	});
 	$('form[name="search_model_name"] input.text', search).livesearch({
-		searchCallback: function(){ search.find('form[name="search_model_name"]').trigger('submit'); },
-		queryDelay: 250,
-		innerText: "Модель",
-		minimumSearchLength: 2
+	searchCallback: function(){ search.find('form[name="search_model_name"]').trigger('submit'); },
+	queryDelay: 250,
+	innerText: "Модель",
+	minimumSearchLength: 2
 	});
 	$('form[name="search_parts_name"] input.text', search).livesearch({
-		searchCallback: function(){ search.find('form[name="search_parts_name"]').trigger('submit'); },
-		queryDelay: 250,
-		innerText: "Название",
-		minimumSearchLength: 2
+	searchCallback: function(){ search.find('form[name="search_parts_name"]').trigger('submit'); },
+	queryDelay: 250,
+	innerText: "Название",
+	minimumSearchLength: 2
 	});*/
 	search.delegate('form[name="search_parts_code"]', 'submit', function(e){
-			e.preventDefault();
-			if($.trim($(this).find('input.text').val()) !== '') {
-				window.location.href = '/parts/' + encodeURI($(this).find('input.text').val());
-			}
-		}).delegate('form[name="search_model_name"]', 'submit', function(e){
-			e.preventDefault();
-			if($.trim($(this).find('input.text').val()) !== '') {
-				window.location.href = '/parts/models/' + encodeURI($(this).find('input.text').val());
-			}
-		}).delegate('form[name="search_parts_name"]', 'submit', function(e){
-			e.preventDefault();
-			if($.trim($(this).find('input.text').val()) !== '') {
-				window.location.href = '/parts/search/' + encodeURI($(this).find('input.text').val());
-			}
+		e.preventDefault();
+		if($.trim($(this).find('input.text').val()) !== '') {
+			window.location.href = '/parts/' + encodeURI($(this).find('input.text').val());
+		}
+	}).delegate('form[name="search_model_name"]', 'submit', function(e){
+		e.preventDefault();
+		if($.trim($(this).find('input.text').val()) !== '') {
+			window.location.href = '/parts/models/' + encodeURI($(this).find('input.text').val());
+		}
+	}).delegate('form[name="search_parts_name"]', 'submit', function(e){
+		e.preventDefault();
+		if($.trim($(this).find('input.text').val()) !== '') {
+			window.location.href = '/parts/search/' + encodeURI($(this).find('input.text').val());
+		}
 	});
 
 	app.init();
@@ -206,18 +206,21 @@ function addToBasket(part_id, obj) {
 	var count = $('#basket').find('span').text();
 	if (count == '') count = 0;
 	count = parseInt(count, 10) + 1;
-	var htmlText = '<a href="/basket">Товаров в корзине <span>' + count + '</span></a>';
 	var amount = parseInt($(obj).parent().parent().find('.amount').val(), 10);
-	if (isNaN(amount)) amount = 1;
-	$.post(
-			"/basket/insertintobasket",
-			{part_id: part_id, amount: amount},
-			function(data){
-				$('#basket').html(htmlText);
-				/* @TODO указывать кол-во единиц текущей позиции. Например, я добавил 2 детали №35 в корзину, а там уже лежит 3 таких, тогда сообщение скажет: добавлено 2, итого в корзине 5 */
-				var mess = 'Количество ' + amount + ', итого в корзине ' + count + ' элементов';
-				alert(mess);/* @TODO app.showPopup */
-			});
+	if (!isNaN(amount) && amount>0) {
+		$.post(
+				"/basket/insertintobasket",
+				{part_id: part_id, amount: amount},
+				function(data){
+					var val = jQuery.parseJSON(data);
+					var htmlText = '<a href="/basket">Товаров в корзине <span>' + val.count + '</span></a>';
+					$('#basket').html(htmlText);
+					
+					/* @TODO указывать кол-во единиц текущей позиции. Например, я добавил 2 детали №35 в корзину, а там уже лежит 3 таких, тогда сообщение скажет: добавлено 2, итого в корзине 5 */					
+					var mess = 'Добавлено запчастей ' + amount + ' №'+part_id+', итого в корзине ' + val.amount + '';					
+					app.showPopup({html: mess, c: function() {}});
+				});
+	}
 }
 
 function removeFromBasket(id,obj) {
