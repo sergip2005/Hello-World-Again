@@ -37,7 +37,10 @@
 				<td><?php echo $p['name_rus'] ?></td>
 				<td><?php echo $p['price'] ?></td>
 				<td class="num_inp">
-					<input type="text" value="0" class="num w45 amount tooltip" title="Минимальное количество для заказа этого товара <?php echo $p['min_num']?>" data-price="<?php echo $p['price'] ?>"></td>
+					<input type="text" value="0" class="num w45 amount tooltip" title="Минимальное количество для заказа этого товара <?php echo $p['min_num']?>" data-price="<?php echo $p['price'] ?>">
+					<input type="hidden" value="<?php echo $p['part_id'] ?>" class="partId"/>
+					<input type="hidden" value="<?php echo $p['price'] ?>" class="price"/>
+				</td>
 				<td>
 				<?php if ($p['price'] > 0):?>
 				<a href="javascript://" onclick="addToBasket(<?php echo $p['part_id'] ?>,this)">добавить</a>
@@ -49,7 +52,7 @@
 		</tbody>
 
 		<tfoot>
-			<tr><td colspan="8"></td><td class="label">Всего:</td><td class="value"><span id="total">0</span> грн</td></tr>
+			<tr><td colspan="8"></td><td class="label">Всего:</td><td class="value"><span id="total">0</span> грн</td><td align="center"><a onclick="addToBasketAll();" href="javascript://">Добавить все выбранные</a></td></tr>
 		</tfoot>
 	</table>
 

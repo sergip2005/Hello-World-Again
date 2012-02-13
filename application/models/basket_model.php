@@ -5,43 +5,57 @@ class Basket_model extends CI_Model
 
 	public function InsertIntoBasket() {
 		$part_id = intval($this->input->post('part_id'));
+		$amount =  intval($this->input->post('amount'));
 		$session_id = $this->session->userdata('session_id');
 		$user = $this->session->all_userdata();
 		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
 		if ($part_id > 0) {
-			if ($user_id > 0) {
-				$str ="(b.user_id=$user_id or b.session_id='$session_id')";
-			} else {
-				$str ="b.session_id='$session_id'";
-			}
-			$str.= " AND b.part_id=".$part_id;
-			$sql = "SELECT b.amount FROM basket b WHERE $str";
-			$q = $this->db->query($sql);
-
-			if ($q->num_rows > 0) {
-				foreach ($q->result() as $row);
-				$amount = $row->amount + intval($this->input->post('amount'));
-				$sql = "UPDATE basket b SET b.amount = $amount WHERE $str";
-				$this->db->query($sql);
-			}
-			else {
-				$amount = intval($this->input->post('amount'));
-				$data = array(
-				'part_id' => $part_id ,
-				'session_id' => $session_id ,
-				'user_id' => $user_id,
-				'amount' => $amount
-				);
-				$this->db->insert('basket', $data);
-			}
+			$amount = $this->InsertIntoBasketItem($user_id, $session_id, $part_id, $amount);
 			$basket = $this->getBasket();
 			$count = count($basket);
 			$data = array('amount'=>$amount,'count'=>$count);
 			echo json_encode($data);
-			exit;
 		}
 	}
 
+	public function InsertIntoBasketItem($user_id, $session_id, $part_id, $amount) {
+		if ($user_id > 0) {
+			$str ="(b.user_id=$user_id or b.session_id='$session_id')";
+		} else {
+			$str ="b.session_id='$session_id'";
+		}
+		$str.= " AND b.part_id=".$part_id;
+		$sql = "SELECT b.amount FROM basket b WHERE $str";
+		$q = $this->db->query($sql);
+
+		if ($q->num_rows > 0) {
+			foreach ($q->result() as $row);
+			$amount = $row->amount + $amount;
+			$sql = "UPDATE basket b SET b.amount = $amount WHERE $str";
+			$this->db->query($sql);
+		}
+		else {			
+			$data = array(
+			'part_id' => $part_id ,
+			'session_id' => $session_id ,
+			'user_id' => $user_id,
+			'amount' => $amount
+			);
+			$this->db->insert('basket', $data);
+		}
+		return $amount;
+	}
+	public function InsertIntoBasketAll() {
+		$session_id = $this->session->userdata('session_id');
+		$user = $this->session->all_userdata();
+		$user_id = isset($user['user_id']) ? $user['user_id'] : 0;
+		$data = $this->input->post('data');
+		foreach ($data as $value) {
+			$amount = $this->InsertIntoBasketItem($user_id, $session_id, $value['partId'], $value['amount']);
+		}
+		$basket = $this->getBasket();
+		echo $count = count($basket);
+	}
 	public function removeFromBasket() {
 		$id = intval($this->input->post('id'));
 		$sql = "DELETE from basket WHERE id = $id";

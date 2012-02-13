@@ -73,6 +73,8 @@
 								<td class="price"><?php echo $c['price'] > 0 ? $c['price'] : 'нет данных' ?></td>
 								<td class="num_inp">
 									<input type="text" value="0" class="num w45 amount tooltip" title="Минимальное количество для заказа этого товара <?php echo $c['min_num']?>" data-price="<?php echo $c['price'] ?>">
+									<input type="hidden" value="<?php echo $c['part_id'] ?>" class="partId"/>
+									<input type="hidden" value="<?php echo $c['price'] ?>" class="price"/>
 								</td>
 								<td>
 								<?php if ($c['price'] > 0):?>
@@ -88,7 +90,7 @@
 						</tbody>
 
 						<tfoot>
-							<tr><td colspan="6"></td><td class="label">Всего:</td><td class="value"><span id="total">0</span> грн</td></tr>
+							<tr><td colspan="5"></td><td class="label">Всего:</td><td class="value"><span id="total">0</span> грн</td><td align="center"><a onclick="addToBasketAll();" href="javascript://">Добавить все выбранные</a></td></tr>
 						</tfoot>
 
 					</table>

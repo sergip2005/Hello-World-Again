@@ -82,6 +82,13 @@ class Basket extends My_Controller {
 	public function InsertIntoBasket() {
 		$basket = $this->load->model('basket_model');
 		$basket->InsertIntoBasket();
+		exit;
+	}
+	
+	public function InsertIntoBasketAll() {
+		$basket = $this->load->model('basket_model');
+		$basket->InsertIntoBasketALL();
+		exit;
 	}
 		
 	public function removeFromBasket() {
